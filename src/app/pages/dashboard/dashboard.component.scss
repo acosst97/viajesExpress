@@ -1,0 +1,95 @@
+#dashboard {
+    display: flex;
+    flex: 1;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+
+    .left-cont {
+        position: absolute;
+
+        .icon-pos {
+            align-items: center;
+            display: grid;
+            height: 100%;
+            grid-template-rows: 1fr 2fr 1fr;
+            padding: 20px;
+            position: fixed;
+            pointer-events: none;
+            width: 220px;
+            z-index: 1;
+
+            .blank1 {
+                margin-top: 10px;
+                height: 161.66px;
+
+                .edit-profile-image {
+                    background: url(/src/assets/icons/edit.svg) no-repeat center / 70%;
+                    background-color: rgb(33, 33, 77);
+                    border-radius: 100px;
+                    border: 2px solid #1C294A;
+                    cursor: pointer;
+                    height: 25px;
+                    left: 113px;
+                    pointer-events: auto;
+                    position: relative;
+                    top: 73px;
+                    transition: 0.4s;
+                    width: 25px;
+
+                    &:hover {
+                        background-color: rgb(24, 24, 44);
+                        transition: 0.4s;
+                    }
+                }
+            }
+
+            .blank2 {
+                min-height: 180px;
+                pointer-events: none;
+            }
+
+            .blank3 {
+                pointer-events: none;
+            }
+
+        }
+    }
+
+    .main-cont {
+        margin-left: 220px;
+        width: 100%; //-webkit-fill-available;
+        width: -moz-available;
+        background-color: #F8F8F8; //
+        min-height: 100vh;
+
+        .header {
+            background-color: gray;
+            display: block;
+            min-height: 120px;
+            min-width: 300px;
+            position: absolute;
+            top: 0;
+            width: -webkit-fill-available;
+            width: -moz-available;
+            z-index: 1;
+        }
+
+        .content {
+            display: block;
+            //height: 100vh;
+            margin: 120px auto 70px;
+            max-width: 1280px;
+            padding: 20px;
+        }
+
+        .footer {
+            background-color: #e7e7e7;
+            bottom: 0;
+            display: block;
+            height: 70px;
+            position: fixed;
+            width: -webkit-fill-available;
+            width: -moz-available;
+   }
+  } 
+}

@@ -1,0 +1,78 @@
+
+.scale {
+    animation: scale 1s ease-in-out alternate infinite;
+}
+
+.modal-detalles-pdf .contenido-modal {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.contenido-modal {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    padding-bottom: 25px;
+    position: relative;
+    border-radius: 16px;
+    background: var(--sombra-100, #1d415e96);
+    box-shadow: 0px 8px 24px 0px rgba(13, 152, 170, 0.562);
+    margin: 35px;
+    z-index: 99;
+    
+}
+
+.cierre-modal {
+    align-items: center;
+    border-radius: 25px;
+    color: white;
+    display: flex;
+    font-weight: bold;
+    height: 32px;
+    justify-content: center;
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    width: 32px;
+    z-index: 2;
+    background-color: rgb(179, 178, 199);
+}
+
+.cierre-modal:hover,
+.cierre-modal label:hover {
+    cursor: pointer;
+    animation: cerrarModal 0.7 ease;
+}
+
+.cerrar-Modal {
+    animation: cerrarModal 0.7s ease;
+}
+
+@keyframes cerrarModal {
+    from {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.slide-from-top {
+    animation: slideFromTop 0.6s ease;
+}
+
+@keyframes slideFromTop {
+    from {
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

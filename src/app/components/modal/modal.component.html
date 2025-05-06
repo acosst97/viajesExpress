@@ -1,0 +1,13 @@
+<div [ngClass]="{'slide-from-top': showModal}" id="modal" *ngIf="showModal"
+    class="modal-recuperar" (click)="cerrarModal($event)" >
+    <div class="contenido-modal" (wheel)="cancelarEvento($event)">
+        <!-- <div class="contenido-modal  animate__animated animate__zoomIn" [ngStyle]="{'width': modalProps.width + 'vw', 'height': modalProps.height + 'vh'}"> -->
+        <div>
+            <img id="cierre" [ngClass]="{'slide-to-top': !showModal}" class="cierre-modal" (click)="cerrarModal($event)"
+                src="../../../assets/icons/close-modal.svg" alt="icono" />
+        </div>
+        <div>
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>
