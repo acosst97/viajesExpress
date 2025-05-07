@@ -1,5 +1,3 @@
-
-
 <app-nav></app-nav>
 <section class="page-section bg-light" id="portfolio">
   <div class="container">
@@ -18,16 +16,20 @@
             <form [formGroup]="loginForm" (ngSubmit)="login()">
               <input type="email" id="correoElectronico" formControlName="correoElectronico" placeholder="Correo">
               <div *ngIf="loginForm.get('correoElectronico')?.invalid && loginForm.get('correoElectronico')?.touched">
-                <div *ngIf="loginForm.get('correoElectronico')?.errors?.['required']" class="error-message">Correo electrónico es requerido.</div>
-                <div *ngIf="loginForm.get('correoElectronico')?.errors?.['email']" class="error-message">Correo electrónico no válido.</div>
+                <div *ngIf="loginForm.get('correoElectronico')?.errors?.['required']" class="error-message">Correo
+                  electrónico es requerido.</div>
+                <div *ngIf="loginForm.get('correoElectronico')?.errors?.['email']" class="error-message">Correo
+                  electrónico no válido.</div>
               </div>
               <input type="password" name="p" placeholder="Contraseña" formControlName="contrasena">
-              <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched" class="error-message">
+              <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched"
+                class="error-message">
                 Contraseña es requerida.
               </div>
               <div *ngIf="loginError" class="error-message">{{ loginError }}</div>
 
-              <button type="submit" class="btn btn-primary btn-block btn-large" [disabled]="loginForm.invalid">Ingresar</button>
+              <button type="submit" class="btn btn-primary btn-block btn-large"
+                [disabled]="loginForm.invalid">Ingresar</button>
               <div class="btn btn-primary btn-block btn-large" (click)="openModal()">Registro</div>
             </form>
 
@@ -38,50 +40,57 @@
         </div>
       </div>
 
-
-      <app-modal #AbriModal id="registro-modal">
-        <div class="main-cont">
-          <div class="login">
-            <h1>Registro</h1>
-            <form [formGroup]="registroForm" (ngSubmit)="registre()">
-              <input type="text" formControlName="primerNombre" placeholder="Nombres" required />
-              <div *ngIf="registroForm.get('primerNombre')?.invalid && registroForm.get('primerNombre')?.touched" class="error-message">Nombre es requerido.</div>
-
-              <input type="text" formControlName="segundoNombre" placeholder="Segundo Nombre" />
-
-              <input type="text" formControlName="primerApellido" placeholder="Apellidos" required />
-              <div *ngIf="registroForm.get('primerApellido')?.invalid && registroForm.get('primerApellido')?.touched" class="error-message">Apellido es requerido.</div>
-
-              <input type="text" formControlName="segApellido" placeholder="Segundo Apellido" />
-
-              <input type="date" formControlName="fechaNacimiento" placeholder="Fecha de Nacimiento" required />
-              <div *ngIf="registroForm.get('fechaNacimiento')?.invalid && registroForm.get('fechaNacimiento')?.touched" class="error-message">Fecha de Nacimiento es requerida.</div>
-
-              <input type="number" formControlName="experiencia" placeholder="Experiencia (años)" required />
-              <div *ngIf="registroForm.get('experiencia')?.invalid && registroForm.get('experiencia')?.touched">
-                <div *ngIf="registroForm.get('experiencia')?.errors?.['required']" class="error-message">Experiencia es requerida.</div>
-                <div *ngIf="registroForm.get('experiencia')?.errors?.['min']" class="error-message">La experiencia no puede ser negativa.</div>
-              </div>
-
-              <input type="tel" formControlName="telefono" placeholder="Teléfono" required />
-              <div *ngIf="registroForm.get('telefono')?.invalid && registroForm.get('telefono')?.touched" class="error-message">Teléfono es requerido.</div>
-
-              <input type="email" formControlName="correo" placeholder="Correo" required />
-              <div *ngIf="registroForm.get('correo')?.invalid && registroForm.get('correo')?.touched">
-                <div *ngIf="registroForm.get('correo')?.errors?.['required']">Correo electrónico es requerido.</div>
-                <div *ngIf="registroForm.get('correo')?.errors?.['email']">Correo electrónico no válido.</div>
-              </div>
-
-              <input type="password" formControlName="password" placeholder="Contraseña" required />
-              <div *ngIf="registroForm.get('password')?.invalid && registroForm.get('password')?.touched" class="error-message">Contraseña es requerida.</div>
-
-              <div *ngIf="registroError" class="error-message">{{ registroError }}</div>
-
-              <button class="btn btn-primary btn-block btn-large" type="submit" [disabled]="registroForm.invalid">Guardar</button>
-            </form>
-          </div>
-        </div>
-      </app-modal>
     </div>
   </div>
+  <app-modal #AbriModal id="registro-modal">
+    <div class="main-cont">
+      <div class="login">
+        <h1>Registro</h1>
+        <form [formGroup]="registroForm" (ngSubmit)="registre()">
+          <input type="text" formControlName="primerNombre" placeholder="Nombres" required />
+          <div *ngIf="registroForm.get('primerNombre')?.invalid && registroForm.get('primerNombre')?.touched"
+            class="error-message">Nombre es requerido.</div>
+
+          <input type="text" formControlName="segundoNombre" placeholder="Segundo Nombre" />
+
+          <input type="text" formControlName="primerApellido" placeholder="Apellidos" required />
+          <div *ngIf="registroForm.get('primerApellido')?.invalid && registroForm.get('primerApellido')?.touched"
+            class="error-message">Apellido es requerido.</div>
+
+          <input type="text" formControlName="segApellido" placeholder="Segundo Apellido" />
+
+          <input type="date" formControlName="fechaNacimiento" placeholder="Fecha de Nacimiento" required />
+          <div *ngIf="registroForm.get('fechaNacimiento')?.invalid && registroForm.get('fechaNacimiento')?.touched"
+            class="error-message">Fecha de Nacimiento es requerida.</div>
+
+          <input type="number" formControlName="experiencia" placeholder="Experiencia (años)" required />
+          <div *ngIf="registroForm.get('experiencia')?.invalid && registroForm.get('experiencia')?.touched">
+            <div *ngIf="registroForm.get('experiencia')?.errors?.['required']" class="error-message">Experiencia es
+              requerida.</div>
+            <div *ngIf="registroForm.get('experiencia')?.errors?.['min']" class="error-message">La experiencia no puede
+              ser negativa.</div>
+          </div>
+
+          <input type="tel" formControlName="telefono" placeholder="Teléfono" required />
+          <div *ngIf="registroForm.get('telefono')?.invalid && registroForm.get('telefono')?.touched"
+            class="error-message">Teléfono es requerido.</div>
+
+          <input type="email" formControlName="correo" placeholder="Correo" required />
+          <div *ngIf="registroForm.get('correo')?.invalid && registroForm.get('correo')?.touched">
+            <div *ngIf="registroForm.get('correo')?.errors?.['required']">Correo electrónico es requerido.</div>
+            <div *ngIf="registroForm.get('correo')?.errors?.['email']">Correo electrónico no válido.</div>
+          </div>
+
+          <input type="password" formControlName="password" placeholder="Contraseña" required />
+          <div *ngIf="registroForm.get('password')?.invalid && registroForm.get('password')?.touched"
+            class="error-message">Contraseña es requerida.</div>
+
+          <div *ngIf="registroError" class="error-message">{{ registroError }}</div>
+
+          <button class="btn btn-primary btn-block btn-large" type="submit"
+            [disabled]="registroForm.invalid">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </app-modal>
 </section>

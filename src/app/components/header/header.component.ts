@@ -14,6 +14,6 @@ export class HeaderComponent {
   logout() {
     // Aquí podrías agregar lógica para limpiar la sesión del usuario
     localStorage.removeItem('token'); // Ejemplo: eliminar un token del localStorage
-    this.router.navigate(['/galeria']); // Redirige al usuario a la ruta '/home'
+    this.router.navigate(['/home']); // Redirige al usuario a la ruta '/home'
   }
 }

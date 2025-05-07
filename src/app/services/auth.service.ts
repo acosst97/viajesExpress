@@ -9,20 +9,20 @@ import { LoginRequest, Usuario } from '../interfaces/loginRequest';
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/usuarios'; // Ajusta la URL si es diferente
+  private apiUrl = 'http://localhost:8080/usuarios';
 
 
 
-  login(credentials: LoginRequest): Observable<Usuario> { 
+  login(credentials: LoginRequest): Observable<Usuario> {
     return this.http.post<Usuario>(`${this.apiUrl}/login`, credentials);
   }
-  
+
   private tokenKey = 'authToken';
-  private expirationTime: number = 3 * 60 * 1000; 
-  private tokenCheckInterval: number = 1 * 60 * 1000; 
+  private expirationTime: number = 3 * 60 * 1000;
+  private tokenCheckInterval: number = 1 * 60 * 1000;
   private intervalSubscription: Subscription | undefined;
 
-  constructor(private router: Router ,private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient) { }
 
   getToken(): string | null {
     return sessionStorage.getItem(this.tokenKey);
@@ -57,13 +57,13 @@ export class AuthService {
   }
 
   checkTokenExpiration(): void {
-  
+
     const token = this.getToken();
     if (!token) {
       alert('AuthService: Token no encontrado. Redirigiendo al login.');
       this.redirectToLogin();
     } else {
-      console.log('AuthService: Token aún presente.'); 
+      console.log('AuthService: Token aún presente.');
     }
   }
 
