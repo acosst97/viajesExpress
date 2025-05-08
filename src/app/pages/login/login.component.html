@@ -33,7 +33,8 @@
               <div class="btn btn-primary btn-block btn-large" (click)="openModal()">Registro</div>
             </form>
 
-
+            <button type="submit" class="btn btn-primary btn-block btn-large" (click)="openRecovery()">Recuperar
+              contraseña</button>
           </div>
 
 
@@ -42,6 +43,26 @@
 
     </div>
   </div>
+  <div id="password-recovery-modal">
+    <app-modal #RecoveryModal>
+      <div class="modal-cont">
+        <div class="icon"></div>
+        <h3>Olvidaste tu Contraseña</h3>
+        <p>Enviaremos un link de recuperación<br> a tu Correo Electrónico registrado:</p>
+        <div class="input-label">
+          <p class="blue-label">Correo Electrónico</p>
+          <input [formControl]="email" class="ohinput" type="email" placeholder="correoelectrónico@empresa.com.co" fo>
+
+        </div>
+        <p>Sigue los pasos que encontrarás allí para reestablecer tu contraseña</p>
+        <!-- (click)="showModal('confirm-recovery-password')" -->
+        <button class="btn btn-primary btn-block btn-large" (click)="generateEmail(this.email)">Confirmar</button>
+        <button class="btn btn-primary btn-block btn-large">validar contraseña</button>
+        <p>No recibí ningún correo,Reenviar Mensaje</p>
+      </div>
+    </app-modal>
+  </div>
+
   <app-modal #AbriModal id="registro-modal">
     <div class="main-cont">
       <div class="login">
@@ -90,7 +111,11 @@
           <button class="btn btn-primary btn-block btn-large" type="submit"
             [disabled]="registroForm.invalid">Guardar</button>
         </form>
+
       </div>
     </div>
   </app-modal>
+
+
+
 </section>

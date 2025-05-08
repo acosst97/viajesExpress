@@ -1,0 +1,66 @@
+<!-- *Modal Recovery password -->
+
+<!--*Modal Recovery password  Confirmacion-->
+<div id="recovery-password">
+    <div class="modal">
+        <div class="modal-cont">
+            <div class="title">
+                <div class="icon"></div>
+                <b>Actualización de Contraseña</b>
+                <p>Por favor crea una nueva contraseña <br> para acceder al portal <b
+                        style="color: #2E4C99;font-weight: bold;">PayCash.</b></p>
+            </div>
+            <form class="cont" [formGroup]="validRecoveryForm">
+                <div>
+                    <p class="blue-label">Nueva Contraseña</p>
+                    <div class="ohinput-pw">
+                        <div class="icon-lock"></div>
+                        <input formControlName="recoveryKey" type="{{newPasswordView ?'text':'password'}}" name=""
+                            placeholder="***********" (copy)="disableCopy($event)" (paste)="disablePaste($event)"
+                            (contextmenu)="disableContextMenu($event)">
+                        <div class="{{newPasswordView ?'icon-eye-opened':'icon-eye-closed'}}"
+                            (click)="showHideNewPassword()"></div>
+                    </div>
+                    <div *ngFor="let validation of getErrorRecoveryPassword('recoveryKey')">
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="blue-label">confirma Contraseña</p>
+                    <div class="ohinput-pw">
+                        <div class="icon-lock"></div>
+                        <input formControlName="recoveryconfirm" type="{{repeatPasswordView ?'text':'password'}}"
+                            placeholder="***********" (copy)="disableCopy($event)" (paste)="disablePaste($event)"
+                            (contextmenu)="disableContextMenu($event)">
+                        <div class="{{repeatPasswordView ?'icon-eye-opened':'icon-eye-closed'}}"
+                            (click)="showHideRepeatPassword()"></div>
+                    </div>
+                    @if (validRecoveryForm.hasError('noCoincide')) {
+                    <div class="warning">
+                        La contraseña no Coincide
+                    </div>
+                    }
+                </div>
+                <div>
+
+                    <p class="disclaimer">
+                        La contraseña debe contener:<br>
+                        Mínimo 8 caracteres<br>
+                        Al menos una mayúscula<br>
+                        Un carácter especial #$%&
+                    </p>
+                </div>
+            </form>
+            <div class="align-btn">
+                <button [disabled]="loadingData()" class="btn-general" (click)="onSubmitRecoveryConfirm()">
+                    Cambiar contraseña
+                </button>
+                @if (loadingData()) {
+                <div class="gif"></div>
+                }@if (loadingData()=== false) {}
+            </div>
+        </div>
+    </div>
+</div>
