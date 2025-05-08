@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   restablecerContrasena(token: string, nuevaContrasena: string): Observable<any> {
-    const body: any = { token, nuevaContrasena };
+    const body: Object = { token, nuevaContrasena };
     return this.http.post(this.urlRestablecerContrasena, body);
   }
   private tokenKey = 'authToken';
