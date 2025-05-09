@@ -34,7 +34,7 @@ export class RecoveryComponent {
     this.token = this.getUrlParams();
     this.validRecoveryForm = this.formSrv.initFormRecovery();
   }
-  constructor(private router: Router) {
+  constructor(private router: Router, private authSrv: AuthService) {
     this.getUrlParams();
   }
 
@@ -77,6 +77,8 @@ export class RecoveryComponent {
       this.validRecoveryForm.markAsTouched();
     }
   }
+
+  recuperar
 
   //**  Metodo para cambiar el hidden de contraseñas**/
   showHideNewPassword() {
