@@ -64,7 +64,7 @@ export class AuthService {
     this.intervalSubscription = interval(this.tokenCheckInterval).subscribe(() => {
       this.checkTokenExpiration();
     });
-  }
+  } 
 
   stopTokenExpirationTimer(): void {
     if (this.intervalSubscription) {
