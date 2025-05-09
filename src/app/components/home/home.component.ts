@@ -6,6 +6,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CrearServicioVehiculoDto, ListarServicioVehiculoDto, MensajeDto } from '../../interfaces/serviciosVehiculos';
 import { ModalComponent } from "../modal/modal.component";
 import { CommonModule } from '@angular/common';
+import { ListarReservaciones } from '../../interfaces/reservaciones';
+import { error } from 'console';
 
 @Component({
   selector: 'app-home',
@@ -17,8 +19,9 @@ import { CommonModule } from '@angular/common';
 export class HomeComponent {
 
   @ViewChild("AbriModalRegister") abriModalRegister: any;
-
+  @ViewChild("OpenReservationModal") openReservationModal: any;
   servicios: ListarServicioVehiculoDto[] = [];
+  lstReservaciones: ListarReservaciones[] = [];
   errorMessage: string = '';
   servicioForm: FormGroup;
   mensajeRespuesta: string = '';
@@ -37,6 +40,8 @@ export class HomeComponent {
       images: [''],
     });
     this.cargarServicios();
+    this.loadReservation();
+    this.registrer = new FormGroup([]);
   }
 
   registrarServicio(): void {
@@ -67,10 +72,9 @@ export class HomeComponent {
 
   cargarServicios(): void {
     this.srv.listarServiciosVehiculos().subscribe(
-      (data) => {
-        this.servicios = data;
-        console.log("Lista de vehiculos", this.servicios);
-
+      (data: any) => {
+        this.servicios = data?.servicios;
+        console.log("Lista de servicios  vehiculos", this.servicios);
         this.errorMessage = '';
       },
       (error) => {
@@ -80,6 +84,25 @@ export class HomeComponent {
     );
   }
   openRegister() {
-    this.abriModalRegister.showModal = true;
+    this.abriModalRegister.showModal = true
   }
+
+  //Servicio para reservaciones
+  loadReservation() {
+    this.srv.ListarReservaciones().subscribe(
+      (data: any) => {
+        this.lstReservaciones = data.reservaciones;
+        console.log("Lista de reservaciones", this.lstReservaciones);
+      },
+      (error) => {
+        console.log("error de servicio", error);
+      }
+    )
+  }
+
+  openFormReservation() {
+    this.openReservationModal.showModal = true;
+  }
+
+  registrer: any
 }
