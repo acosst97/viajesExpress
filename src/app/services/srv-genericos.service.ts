@@ -16,7 +16,7 @@ export class SrvGenericosService {
 
   //------------ servicios servicios de viaje --------------  // 
   listarServiciosVehiculos(): Observable<ListarServicioVehiculoDto[]> {
-    return this.http.get<ListarServicioVehiculoDto[]>(`${this.apiUrl}/listarVehiculos`);
+    return this.http.get<ListarServicioVehiculoDto[]>(`${this.apiUrl}/listarServiciosVehiculos`);
   }
 
   registrarServicioVehiculo(crearServicio: CrearServicioVehiculoDto): Observable<MensajeDto> {
@@ -26,8 +26,8 @@ export class SrvGenericosService {
   eliminarServicioVehiculo(id: number): Observable<MensajeDto> {
     return this.http.delete<MensajeDto>(`${this.apiUrl}/${id}`);
   }
-  //------------ servicios Reservaciones --------------  //
 
+  //------------ servicios Reservaciones --------------  //
   ListarReservaciones(): Observable<ListarReservaciones[]> {
     return this.http.get<ListarReservaciones[]>(`${this.apiUrlReserva}/lstReservaciones`);
   }
