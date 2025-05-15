@@ -7,7 +7,7 @@ import { NavBoardComponent } from "../../components/nav-board/nav-board.componen
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [HeaderComponent, NavBoardComponent,RouterOutlet],
+  imports: [HeaderComponent, NavBoardComponent, RouterOutlet],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -19,14 +19,14 @@ export class DashboardComponent {
   ) { }
 
   ngOnInit(): void {
-    console.log('DashboardComponent: ngOnInit llamado.'); // <--- LOG
+    console.log('DashboardComponent: ngOnInit llamado.');
     if (!this.authService.isAuthenticated()) {
-      console.log('DashboardComponent: Usuario no autenticado, redirigiendo.'); // <--- LOG
+      console.log('DashboardComponent: Usuario no autenticado, redirigiendo.');
       this.authService.redirectToLogin();
       return;
     }
     this.authService.startTokenExpirationTimer();
-    console.log('DashboardComponent: Temporizador de verificación del token iniciado.'); // <--- LOG
+    console.log('DashboardComponent: Temporizador de verificación del token iniciado.');
   }
   ngOnDestroy(): void {
     this.authService.stopTokenExpirationTimer(); // Limpiar el intervalo al destruir el componente

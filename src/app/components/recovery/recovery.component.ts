@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormvalidationService } from '../../services/formvalidation.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CustomSrvService } from '../../services/custom-srv.service';
 
 @Component({
   selector: 'app-recovery',
@@ -14,6 +15,8 @@ import { CommonModule } from '@angular/common';
 })
 export class RecoveryComponent {
   formSrv = inject(FormvalidationService)
+  customSrv = inject(CustomSrvService);
+
   text = 'string';
   validRecoveryForm: FormGroup;;
   repeatPasswordView: boolean;
@@ -26,11 +29,12 @@ export class RecoveryComponent {
   dataUrl: any;
   @ViewChild('RecoveryPassword') recoveryPassword: any;
   token: any;
-
+  nuevaContrasena: string = '';  // Nueva contraseña ingresada por el usuario
+  confirmacionContrasena: string = '';
   ngOnInit() {
-    // this.customSrv.toast$.subscribe((message) => {
-    //   this.showResponseModal = !!message;
-    // });
+    this.customSrv.toast$.subscribe((message) => {
+      this.showResponseModal = !!message;
+    });
     this.token = this.getUrlParams();
     this.validRecoveryForm = this.formSrv.initFormRecovery();
   }
@@ -58,9 +62,21 @@ export class RecoveryComponent {
   //---------------------------------------------------------------------------------------// 
   //   //************** Servicio  confirmacion Recovery Pássword  **********               //                                                                                   
   //-------------------------------------------------------------------------------------- //
-  async recoveryPassworsdConfirm() {
+  async recoveryPasswordConfirm() {
+    const password = this.validRecoveryForm.get('recoveryKey').value;
 
+    try {
+      const response = await this.authSrv.restablecerContrasena(this.token, password);
+      this.customSrv.showToast({ text: 'Contraseña restablecida con éxito', type: 'success-white', duration: 2000 });
+      console.log('Contraseña restablecida con éxito', response);
+      alert('Contraseña restablecida con éxito');
+      this.router.navigate(['/login']);
 
+    } catch (error) {
+      // Si ocurre un error, manejarlo aquí
+      console.error('Error al restablecer la contraseña', error);
+      alert('Ocurrió un error. Intenta de nuevo más tarde');
+    }
   }
   //NOTE Validacion Formulario Recovery
   getErrorRecoveryPassword(fieldName: string) {
@@ -72,13 +88,13 @@ export class RecoveryComponent {
   }
   onSubmitRecoveryConfirm() {
     if (this.validRecoveryForm.valid) {
-      this.recoveryPassworsdConfirm();
+      this.recoveryPasswordConfirm();
     } else {
       this.validRecoveryForm.markAsTouched();
     }
   }
 
-  recuperar
+
 
   //**  Metodo para cambiar el hidden de contraseñas**/
   showHideNewPassword() {

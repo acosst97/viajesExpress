@@ -1,1 +1,3 @@
-<p>alert works!</p>
+<div [ngClass]="{'contenedor-alerta':true, 'verde': verde, 'rojo': rojo}" [className]="getType(alerData?.type)">
+    <img class="svg" src="/../../../assets/icons/{{alerData?.type}}.svg"><label>{{alerData?.text}}</label>
+</div>

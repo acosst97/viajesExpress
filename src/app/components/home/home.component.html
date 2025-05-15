@@ -76,65 +76,82 @@
             </div>
             }
 
-            <div id="request-apertura">
-                <app-modal #OpenReservationModal>
-                    <div class="modal-cont">
-                        <div class="cont-title">
-                            <h1 style="font-weight: bold;"> Solicitar Viaje <b></b></h1>
-                            <div class="text">
-                                <p>Para poder realizar el proceso de Viajes , deben tener <br> una
-                                    Cuenta activa con <b>Viajes Express</b></p>
-                                <p>Puedes solicitar la apertura de una cuenta haciendo el registro</p>
-                            </div>
-                            <form class="inputs-table">
-                                <div>
-                                    <p>Detalles del Pago <span class="warning">*</span></p>
-                                    <input class="ohinput" type="text" name="primerNombre" id="primerNombre"
-                                        placeholder="Nombre" required>
 
-                                </div>
-                                <div>
-                                    <p>Valor Pago</p>
-                                    <input class="ohinput" type="text" name="" id="" placeholder="Nombre">
+            <app-modal #OpenReservationModal>
+                <div id="request-apertura">
+                    <div class="modal">
 
+                        <div class="modal-cont">
+                            <div class="cont-title">
+                                <h1 style="font-weight: bold;"> Solicitar Viaje <b></b></h1>
+                                <div class="text">
+                                    <p>Para poder realizar el proceso de Viajes , deben tener <br> una
+                                        Cuenta activa con <b>Viajes Express</b></p>
+                                    <p>Puedes solicitar la apertura de una cuenta haciendo el registro</p>
                                 </div>
-                                <div>
-                                    <p>fecha Reserva<span class="warning">*</span></p>
-                                    <input class="ohinput" type="date" name="" id="" placeholder="Apellido">
-
-                                </div>
-                                <div>
-                                    <p>Fecha Viaje</p>
-                                    <input class="ohinput" type="date" name="" id="" placeholder="Apellido">
-
-                                </div>
-                                <div>
-                                    <p>Documento<span class="warning">*</span></p>
-                                    <div class="adjust">
-                                        <input class="ohinput" type="number" name="" id="" placeholder="123456789">
+                                <form [formGroup]="reservacionForm" class="inputs-table" (ngSubmit)="onSubmit()">
+                                    <div>
+                                        <p>Detalles del Pago <span class="warning">*</span></p>
+                                        <input class="ohinput" type="text" formControlName="detallePago"
+                                            placeholder="detalles" required>
                                     </div>
-                                </div>
-                                <div>
-                                    <p>Teléfono <span class="warning">*</span></p>
-                                    <input class="ohinput" type="number" name="telefono" id="telefono"
-                                        placeholder="000 000 0000">
 
-                                </div>
-                                <div>
-                                    <p>Correo Electrónico <span class="warning">*</span></p>
-                                    <input class="ohinput" type="email" name="correo" id="correo"
-                                        placeholder="colaborador3@empresa.com.co">
-                                </div>
-                            </form>
-                            <div class="align-btns">
-                                <button class="btn-general"> Solicitar Depósito </button>
+                                    <div>
+                                        <p>Valor Pago</p>
+                                        <input class="ohinput" type="text" formControlName="valorPago"
+                                            placeholder="valor">
+                                    </div>
+
+                                    <div>
+                                        <p>Fecha Reserva<span class="warning">*</span></p>
+                                        <input class="ohinput" type="date" formControlName="fechaReserva"
+                                            placeholder="fecha reserva">
+                                    </div>
+
+                                    <div>
+                                        <p>Fecha Viaje</p>
+                                        <input class="ohinput" type="date" formControlName="fechaViaje"
+                                            placeholder="fecha viaje">
+                                    </div>
+
+                                    <div>
+                                        <p>Documento<span class="warning">*</span></p>
+                                        <div class="adjust">
+                                            <input class="ohinput" type="text" formControlName="documentoUsuario"
+                                                placeholder="123456789">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p>Teléfono <span class="warning">*</span></p>
+                                        <input class="ohinput" type="number" formControlName="telefono"
+                                            placeholder="000 000 0000">
+                                    </div>
+
+                                    <div>
+                                        <p>Correo Electrónico <span class="warning">*</span></p>
+                                        <input class="ohinput" type="email" formControlName="correo"
+                                            placeholder="colaborador3@empresa.com.co">
+                                    </div>
+
+                                    <div class="align-btns">
+                                        <button class="btn-general" type="submit" [disabled]="reservacionForm.invalid">
+                                            Solicitar Reservación </button>
+                                        <button class="btn-general" (click)="home()"> Volver </button>
+                                    </div>
+                                    <pre>{{reservacionForm.value | json}}</pre>
+                                </form>
                             </div>
-
                         </div>
                     </div>
-                </app-modal>
-            </div>
+                </div>
 
+                @if (showResponseModal) {
+                <div class="popup-alert">
+                    <app-alert></app-alert>
+                </div>
+                }
+            </app-modal>
 
         </div>
     </div>

@@ -1,0 +1,38 @@
+.contenedor-alerta {
+    display: inline-flex;
+    padding: 36px 40px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    border-radius: 8px;
+    box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.25);
+    font-size: 1.25em;
+    z-index: 999;
+    position: absolute;
+    bottom: 34vh;
+
+}
+
+.verde {
+    background: var(--exito-500, #33BB71);
+}
+
+.rojo {
+    background: var(--error-500, #DD5B72);
+}
+
+.svg {
+    width: 32px;
+    height: 32px;
+}
+
+label {
+    color: var(--sombra-100, #FFF);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Poppins;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
+    z-index: 999;
+}

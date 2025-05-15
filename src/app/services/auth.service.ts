@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { interval, Observable, Subscription } from 'rxjs';
 import { LoginRequest, RegistroRequest, Usuario } from '../interfaces/loginRequest';
+import { FormControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,7 @@ import { LoginRequest, RegistroRequest, Usuario } from '../interfaces/loginReque
 export class AuthService {
 
   private apiUrl = 'http://localhost:8080/usuarios';
-  private urlEmail = 'http://localhost:8080/auth';
-  private urlRestablecerContrasena = 'http://localhost:8080/auth/reset-password';
+  private urlAuth = 'http://localhost:8080/auth';
 
 
   registrarUsuario(userData: RegistroRequest): Observable<Usuario> {
@@ -24,14 +24,16 @@ export class AuthService {
 
   recoveryPassword(correo: string): Observable<any> {
     const body: any = { correo };
-    console.log('URL de la petición:', `${this.urlEmail}/solicitar-recuperacion`);
+    console.log('URL de la petición:', `${this.urlAuth}/solicitar-recuperacion`);
     console.log('Cuerpo de la petición:', body);
-    return this.http.post(`${this.urlEmail}/solicitar-recuperacion`, body);
+    return this.http.post(`${this.urlAuth}/solicitar-recuperacion`, body);
   }
 
-  restablecerContrasena(token: string, nuevaContrasena: string): Observable<any> {
+  restablecerContrasena(token: string, nuevaContrasena: any): Observable<any> {
     const body: Object = { token, nuevaContrasena };
-    return this.http.post(this.urlRestablecerContrasena, body);
+    console.log("body recovery", body);
+    console.log('URL de la petición:', `${this.urlAuth}/reset-password`);
+    return this.http.post(`${this.urlAuth}/reset-password`, body);
   }
   private tokenKey = 'authToken';
   private expirationTime: number = 3 * 60 * 1000;
@@ -64,7 +66,7 @@ export class AuthService {
     this.intervalSubscription = interval(this.tokenCheckInterval).subscribe(() => {
       this.checkTokenExpiration();
     });
-  } 
+  }
 
   stopTokenExpirationTimer(): void {
     if (this.intervalSubscription) {

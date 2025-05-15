@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CrearServicioVehiculoDto, ListarServicioVehiculoDto, MensajeDto } from '../interfaces/serviciosVehiculos';
 import { CrearReservacion, ListarReservaciones } from '../interfaces/reservaciones';
+import { ListarUsuarioDto } from '../interfaces/usuarios';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,11 @@ import { CrearReservacion, ListarReservaciones } from '../interfaces/reservacion
 export class SrvGenericosService {
 
   private apiUrl = 'http://localhost:8080/services';
-  private apiUrlReserva = 'http://localhost:8080/reservaciones'
+  private apiUrlReserva = 'http://localhost:8080/reservaciones';
   private apiUrlVehiculos = '';
   constructor(private http: HttpClient) { }
+
+  private apiUsuarios = 'http://localhost:8080/usuarios';
 
   //------------ servicios servicios de viaje --------------  // 
   listarServiciosVehiculos(): Observable<ListarServicioVehiculoDto[]> {
@@ -35,5 +38,8 @@ export class SrvGenericosService {
   registrarReservaciones(objectReservas: CrearReservacion): Observable<MensajeDto> {
     return this.http.post<MensajeDto>(`${this.apiUrlReserva}/registrarReservacion`, objectReservas);
   }
-
+  //---------------usuarios------------------
+  listarUsuarios(): Observable<ListarUsuarioDto[]> {
+    return this.http.get<ListarUsuarioDto[]>(`${this.apiUsuarios}/listar`);
+  }
 }
