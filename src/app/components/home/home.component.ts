@@ -91,6 +91,7 @@ export class HomeComponent {
   cargarServicios(): void {
     this.srv.listarServiciosVehiculos().subscribe(
       (data: any) => {
+
         this.servicios = data?.servicios;
         console.log("Lista de servicios  vehiculos", this.servicios);
         this.errorMessage = '';

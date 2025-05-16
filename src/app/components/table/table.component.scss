@@ -37,7 +37,7 @@
         margin: 5px 0px;
 
         .search {
-            border: 1px solid $primary-blue-mid;
+            border: 1px solid rgb(29, 50, 110);
             display: flex;
             border-radius: 50px;
             margin-left: auto;
@@ -46,7 +46,7 @@
 
             .search-icon {
                 align-items: center;
-                background: url($search-darkblue) no-repeat 65% / 55%;
+                // background: url($search-darkblue) no-repeat 65% / 55%;
                 display: flex;
                 justify-content: center;
                 height: 32px;
@@ -68,7 +68,7 @@
             }
 
             .close-icon {
-                background: url($close-darkblue) no-repeat center;
+                // background: url($close-darkblue) no-repeat center;
                 cursor: pointer;
                 height: 32px;
                 width: 32px;
@@ -111,23 +111,15 @@
                 width: 32px;
 
                 &:hover {
-                    background-color: $primary-blue-clear;
+                    background-color: rgb(16, 39, 152);
 
                     &:active {
-                        background-color: $primary-blue-dark;
+                        background-color: rgb(12, 10, 63);
                     }
                 }
             }
 
-            .icon-eye {
-                background: url($eye-open-white) no-repeat center / 16px;
-                background-color: $primary-blue-mid;
-            }
 
-            .icon-trash {
-                background: url($trash-white) no-repeat center / 16px;
-                background-color: $primary-blue-mid;
-            }
         }
 
         table {
@@ -170,20 +162,20 @@
             width: auto;
         }
 
-        .green-text {
-            color: $primary-green-mid;
-            font-weight: bold;
-        }
+        // .green-text {
+        //     color: $primary-green-mid;
+        //     font-weight: bold;
+        // }
 
-        .red-text {
-            color: $primary-red-mid;
-            font-weight: bold;
-        }
+        // .red-text {
+        //     color: $primary-red-mid;
+        //     font-weight: bold;
+        // }
 
-        .yellow-text {
-            color: #E89C08;
-            font-weight: bold;
-        }
+        // .yellow-text {
+        //     color: #E89C08;
+        //     font-weight: bold;
+        // }
 
 
     }

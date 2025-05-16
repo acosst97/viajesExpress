@@ -32,19 +32,13 @@
                 }
                 <ng-container [ngTemplateOutlet]="lastTH"></ng-container>
             </tr>
-            @for (data of tableProps.data; track $index) {
+            @for (data of tableProps.data | filter:searchText:searchColumn; track $index) {
             <tr>
                 <ng-container [ngTemplateOutlet]="firstTD"></ng-container>
                 @for (column of columnsBox; track $index) {
                 <ng-container>
                     @if (columnsBox[$index].active) {
-                    <td [ngClass]="{'hidden': $index === 0 || columnsBox[$index].nombre === 'naturaleza' || columnsBox[$index].nombre === 'id' || columnsBox[$index].nombre === 'personaId', 'red-text': Object.keys(data)[$index] === 'Valor' && data.naturaleza === 'DEBITO' || Object.values(data)[$index] === 'DEBITO'  || Object.values(data)[$index] === 'Denegado' || Object.values(data)[$index] === 'sin activar' ||  Object.values(data)[$index] === 'SIN PAGO' || Object.values(data)[$index] === 'Por completar' ||  Object.values(data)[$index] === 'INACTIVO'  
-                    || Object.values(data)[$index] === 'Rechazado' ||  Object.values(data)[$index] === 'Por completar'
-                        || Object.values(data)[$index] === 'CANCELADO'  || Object.values(data)[$index] === 'EN ERROR' || Object.values(data)[$index] === ' ' || Object.values(data)[$index] === 'Bloqueado',
-                        'green-text': Object.values(data)[$index] === 'CREDITO' || Object.values(data)[$index] === 'PROCESADO' 
-                        || Object.values(data)[$index] === 'Legalizado'   || Object.values(data)[$index] === 'Activo'  || Object.values(data)[$index] === 'activo' || Object.values(data)[$index] === 'ACTIVO'
-                         || Object.values(data)[$index] === 'Completado' || Object.values(data)[$index] === 'PAGADO PROCESADO' ||  Object.keys(data)[$index] === 'Valor' && data.naturaleza === 'CREDITO',  
-                        'yellow-text': Object.values(data)[$index] === 'Por Legalizar', 
+                    <td [ngClass]="{'hidden': $index === 0 || columnsBox[$index].nombre === 'naturaleza' || columnsBox[$index].nombre === 'id' || columnsBox[$index].nombre === 'personaId', 
                          }">
                         {{Object.values(data)[$index]}}
                     </td>
@@ -68,4 +62,3 @@
     <div style="width: 100%; text-align: center;">No hay datos para mostrar</div>
     }
 </div>
-
