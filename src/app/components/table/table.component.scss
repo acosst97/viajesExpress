@@ -1,0 +1,190 @@
+.container-table.non-striped {
+    text-align-last: center;
+
+    .data-table {
+
+
+        tr {
+            background-color: #ffffff;
+            height: 0;
+        }
+
+        th {
+            background-color: #e7e7e7;
+            height: 44px;
+        }
+
+        td {
+            background-color: #fff;
+            border-bottom: 1px solid #e7e7e7;
+            height: 51px;
+            text-align: center;
+        }
+    }
+}
+
+.container-table {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+
+    .box-filters {
+        background-color: white;
+        padding: 5px 5px;
+        display: flex;
+        margin: 5px 0px;
+
+        .search {
+            border: 1px solid $primary-blue-mid;
+            display: flex;
+            border-radius: 50px;
+            margin-left: auto;
+            padding-right: 3px;
+            width: auto;
+
+            .search-icon {
+                align-items: center;
+                background: url($search-darkblue) no-repeat 65% / 55%;
+                display: flex;
+                justify-content: center;
+                height: 32px;
+                padding-left: 10px;
+                padding-right: 10px;
+                width: 30px;
+            }
+
+            .search-icon:hover {
+                cursor: pointer;
+            }
+
+            input {
+                padding: 7px 10px;
+                outline: none;
+                width: 200px;
+                display: block;
+                border: none;
+            }
+
+            .close-icon {
+                background: url($close-darkblue) no-repeat center;
+                cursor: pointer;
+                height: 32px;
+                width: 32px;
+            }
+        }
+
+        .focused {
+            -webkit-box-shadow: 0px 0px 5px 2px #2e4c9950;
+            -moz-box-shadow: 0px 0px 5px 2px #2e4c9950;
+            box-shadow: 0px 0px 5px 2px #2e4c9950;
+        }
+    }
+
+    .no-data {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .data-table {
+        border-top: none;
+        overflow-x: auto;
+        overflow-y: visible;
+        max-height: 50vh;
+        padding-right: 10px;
+
+        .hidden {
+            display: none;
+        }
+
+        .btns {
+            display: flex;
+            gap: 10px;
+
+            .option {
+                border-radius: 8px;
+                cursor: pointer;
+                height: 32px;
+                width: 32px;
+
+                &:hover {
+                    background-color: $primary-blue-clear;
+
+                    &:active {
+                        background-color: $primary-blue-dark;
+                    }
+                }
+            }
+
+            .icon-eye {
+                background: url($eye-open-white) no-repeat center / 16px;
+                background-color: $primary-blue-mid;
+            }
+
+            .icon-trash {
+                background: url($trash-white) no-repeat center / 16px;
+                background-color: $primary-blue-mid;
+            }
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0px;
+            width: 100%;
+        }
+
+        tr:first-of-type {
+            background-color: #fff;
+            position: sticky;
+            // position: unset;
+            top: 0;
+        }
+
+        tr {
+            color: #000;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            height: 72px;
+            padding: 11px 30px;
+            text-transform: capitalize;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background-color: #e7e7e7;
+        }
+
+        th,
+        td {
+            padding: 5px 5px 5px 17px;
+        }
+
+        td {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            text-align: left;
+            width: auto;
+        }
+
+        .green-text {
+            color: $primary-green-mid;
+            font-weight: bold;
+        }
+
+        .red-text {
+            color: $primary-red-mid;
+            font-weight: bold;
+        }
+
+        .yellow-text {
+            color: #E89C08;
+            font-weight: bold;
+        }
+
+
+    }
+}

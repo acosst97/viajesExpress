@@ -18,7 +18,7 @@ export class FormvalidationService {
           Validators.minLength(8),
           Validators.maxLength(14),
           this.validarMayuscula(),
-          this.validarCaracterEspecial()
+          // this.validarCaracterEspecial()
         ]],
       recoveryconfirm: ['', Validators.required]
     },
@@ -65,9 +65,7 @@ export class FormvalidationService {
         if (errors['mayusculaError']) {
           validationErrors.push({ valid: false, message: 'Se requiere una letra Mayuscula' });
         }
-        if (errors['caracter']) {
-          validationErrors.push({ valid: false, message: 'Se requiere al menos un caracter especial' });
-        }
+      
       }
       return validationErrors;
     }

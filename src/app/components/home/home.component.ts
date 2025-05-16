@@ -125,7 +125,7 @@ export class HomeComponent {
         (error) => {
           console.error('Error al registrar la reservación:', error);
           this.customSrv.showToast({ text: "no hay documento asociado", type: 'error-white', duration: 2000 });
-          this.reservacionForm.reset();
+          // this.reservacionForm.reset();
         }
       );
     } else {

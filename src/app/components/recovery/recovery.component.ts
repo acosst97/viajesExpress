@@ -64,16 +64,15 @@ export class RecoveryComponent {
   //-------------------------------------------------------------------------------------- //
   async recoveryPasswordConfirm() {
     const password = this.validRecoveryForm.get('recoveryKey').value;
-
+  
     try {
-      const response = await this.authSrv.restablecerContrasena(this.token, password);
-      this.customSrv.showToast({ text: 'Contraseña restablecida con éxito', type: 'success-white', duration: 2000 });
+      const response: string = await this.authSrv.restablecerContrasena(this.token, password).toPromise();
+      this.customSrv.showToast({ text: response, type: 'success-white', duration: 2000 });
       console.log('Contraseña restablecida con éxito', response);
-      alert('Contraseña restablecida con éxito');
+      alert(response);
       this.router.navigate(['/login']);
-
+  
     } catch (error) {
-      // Si ocurre un error, manejarlo aquí
       console.error('Error al restablecer la contraseña', error);
       alert('Ocurrió un error. Intenta de nuevo más tarde');
     }

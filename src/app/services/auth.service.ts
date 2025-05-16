@@ -33,7 +33,7 @@ export class AuthService {
     const body: Object = { token, nuevaContrasena };
     console.log("body recovery", body);
     console.log('URL de la petición:', `${this.urlAuth}/reset-password`);
-    return this.http.post(`${this.urlAuth}/reset-password`, body);
+    return this.http.post(`${this.urlAuth}/reset-password`, body, { responseType: 'text' });
   }
   private tokenKey = 'authToken';
   private expirationTime: number = 3 * 60 * 1000;

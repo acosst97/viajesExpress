@@ -68,6 +68,9 @@
         <form [formGroup]="registroForm" (ngSubmit)="registre()">
           <input type="text" formControlName="primerNombre" placeholder="Nombres" required />
           <div *ngIf="registroForm.get('primerNombre')?.invalid && registroForm.get('primerNombre')?.touched"
+            class="error-message">Documento</div>
+          <input type="text" formControlName="primerNombre" placeholder="Nombres" required />
+          <div *ngIf="registroForm.get('primerNombre')?.invalid && registroForm.get('primerNombre')?.touched"
             class="error-message">Nombre es requerido.</div>
 
           <input type="text" formControlName="segundoNombre" placeholder="Segundo Nombre" />
