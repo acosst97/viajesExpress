@@ -1,3 +1,6 @@
+
+
+
 @if(this.usuario){
 <app-table [tableProps]="tableProps">
     <ng-template style="background-color: #E7E7E7;" #lastTH>
@@ -5,11 +8,66 @@
     </ng-template>
     <ng-template #actions let-data>
         <div class="btns">
+            <button class="edit" (click)="editarUser()">Edit</button>
+            <button class="asing">asignar</button>
+            <button class="delete">Eliminar</button>
         </div>
     </ng-template>
-
 </app-table>
 
 }@else{
 <div class="div">no hay data</div>
 }
+
+<app-modal #OpenEdit>
+    <div id="edit-modal">
+        <div class="modal">
+            <div class="main-cont">
+                <h1>Registro</h1>
+                <form [formGroup]="editForm" (ngSubmit)="save()" class="form">
+                  <input class="input-label" type="text" formControlName="primerNombre" placeholder="Nombres" required />
+                  <div *ngIf="editForm.get('primerNombre')?.invalid && editForm.get('primerNombre')?.touched"
+                    class="error-message">Documento</div>
+                  <input type="text" formControlName="primerNombre" placeholder="Nombres" required />
+                  <div *ngIf="editForm.get('primerNombre')?.invalid && editForm.get('primerNombre')?.touched"
+                    class="error-message">Nombre es requerido.</div>
+        
+                  <input class="input-label" type="text" formControlName="segundoNombre" placeholder="Segundo Nombre" />
+        
+                  <input class="input-label" type="text" formControlName="primerApellido" placeholder="Apellidos" required />
+                  <div *ngIf="editForm.get('primerApellido')?.invalid && editForm.get('primerApellido')?.touched"
+                    class="error-message">Apellido es requerido.</div>
+        
+                  <input class="input-label" type="text" formControlName="segApellido" placeholder="Segundo Apellido" />
+        
+                  <input  class="input-label" type="number" formControlName="experiencia" placeholder="Experiencia (años)" required />
+                  <div *ngIf="editForm.get('experiencia')?.invalid && editForm.get('experiencia')?.touched">
+                    <div *ngIf="editForm.get('experiencia')?.errors?.['required']" class="error-message">Experiencia es
+                      requerida.</div>
+                    <div *ngIf="editForm.get('experiencia')?.errors?.['min']" class="error-message">La experiencia no puede
+                      ser negativa.</div>
+                  </div>
+        
+                  <input class="input-label" type="text" formControlName="telefono" placeholder="Teléfono" required />
+                  <div *ngIf="editForm.get('telefono')?.invalid && editForm.get('telefono')?.touched"
+                    class="error-message">Teléfono es requerido.</div>
+        
+                  <input class="input-label" type="email" formControlName="correo" placeholder="Correo" required />
+                  <div *ngIf="editForm.get('correo')?.invalid && editForm.get('correo')?.touched">
+                    <div *ngIf="editForm.get('correo')?.errors?.['required']">Correo electrónico es requerido.</div>
+                    <div *ngIf="editForm.get('correo')?.errors?.['email']">Correo electrónico no válido.</div>
+                  </div>
+        
+        
+                  <div *ngIf="EditError" class="error-message">{{ EditError }}</div>
+        
+                  <button class="btn btn-primary btn-block btn-large" type="submit"
+                    [disabled]="editForm.invalid">Guardar</button>
+                </form>
+            </div>
+        
+        </div>
+       
+    </div>
+
+  </app-modal>

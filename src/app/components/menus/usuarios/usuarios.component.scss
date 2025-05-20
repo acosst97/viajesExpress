@@ -1,1 +1,99 @@
+#edit-modal {
 
+.modal{
+    align-items: center;
+    background-color: gainsboro;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    left: 0;
+    bottom: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 2;
+    .main-cont {
+        width: 80%; /* Ajustamos el ancho para que no ocupe todo el viewport */
+        max-width: 600px; /* Añadimos un ancho máximo para pantallas grandes */
+        background-color: #f4f6f8; /* Un color de fondo más claro */
+        padding: 30px; /* Añademos un poco de espacio interno */
+        border-radius: 10px; /* Redondeamos un poco más los bordes */
+        margin: 20px auto; /* Centramos el modal vertical y horizontalmente */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Añadimos una sombra suave */
+    
+        h1 {
+          color: #333; /* Color de texto más legible */
+          text-align: center;
+          margin-bottom: 20px;
+        }
+    
+        .form {
+          display: grid;
+          grid-template-columns: 1fr; /* Una sola columna para que los labels estén encima de los inputs en pantallas pequeñas */
+          gap: 15px;
+    
+          @media (min-width: 576px) { /* Media query para pantallas más grandes */
+            grid-template-columns: 1fr 1fr; /* Volvemos a dos columnas en pantallas medianas y grandes */
+          }
+    
+          .input-label {
+            display: flex; /* Usamos flexbox para alinear label e input verticalmente */
+            flex-direction: column; /* Apilamos el label encima del input */
+    
+            label { /* Estilamos el label */
+              color: #555;
+              font-size: 0.9em;
+              margin-bottom: 5px;
+              text-align: left; /* Aseguramos que el texto esté alineado a la izquierda */
+            }
+    
+            input[type="text"],
+            input[type="number"],
+            input[type="email"] {
+              padding: 10px;
+              border: 1px solid #ccc; /* Borde sutil */
+              border-radius: 5px; /* Bordes redondeados */
+              font-size: 1em;
+              box-sizing: border-box; /* Para que el padding no afecte el ancho total */
+              width: 100%; /* Los inputs ocupan todo el ancho de su celda */
+              transition: border-color 0.3s ease; /* Transición suave para el focus */
+    
+              &:focus {
+                outline: none; /* Removemos el outline por defecto */
+                border-color: #007bff; /* Cambiamos el color del borde al enfocar */
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Añadimos una sombra suave al enfocar */
+              }
+            }
+          }
+    
+          .error-message {
+            color: #dc3545; /* Color rojo para los mensajes de error */
+            font-size: 0.8em;
+            margin-top: 5px;
+            text-align: left; /* Alineamos el texto de error a la izquierda */
+            grid-column: 1 / -1; /* Ocupa ambas columnas en caso de estar en layout de dos columnas */
+          }
+    
+          .btn-large {
+            grid-column: 1 / -1; /* El botón ocupa ambas columnas */
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+    
+            &:hover {
+              opacity: 0.9;
+            }
+    
+            &:disabled {
+              background-color: #6c757d;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+}
+ 
+}
