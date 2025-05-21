@@ -9,7 +9,7 @@
     <ng-template #actions let-data>
         <div class="btns">
             <button class="edit" (click)="editarUser(data)">Edit</button>
-            <button class="asing">asignar</button>
+            <button class="asing" (click)="asignarRoles()">asignar</button>
             <button class="delete"  (click)="eliminarUser(data)">Eliminar</button>
         </div>
     </ng-template>
@@ -71,4 +71,12 @@
         </div>
     </div>
 
+  </app-modal>
+
+  <app-modal #AsingRol >
+   <div id="modal-rol">
+    <div class="modal">
+        <app-select [options]="rolesOption"></app-select>
+    </div>
+   </div>
   </app-modal>

@@ -21,17 +21,18 @@ import {
 } from '@angular/forms';
 import { ModalComponent } from '../../modal/modal.component';
 import { log } from 'console';
+import { SelectComponent } from "../../select/select.component";
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [TableComponent, CommonModule, ReactiveFormsModule, ModalComponent],
+  imports: [TableComponent, CommonModule, ReactiveFormsModule, ModalComponent, SelectComponent],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss',
 })
 export class UsuariosComponent implements OnInit {
   @ViewChild('OpenEdit') openEdit: any;
-  @ViewChild('AsingRol') asingRol: any;
+  @ViewChild('AsingRol') asingRolModal: any;
   srv = inject(SrvGenericosService);
   tableProps: Table;
   editForm: FormGroup;
@@ -179,6 +180,8 @@ export class UsuariosComponent implements OnInit {
       this.editForm.markAllAsTouched(); // Marca todos los campos como "tocados" para mostrar los errores de validación
     }
   }
-
+  asignarRoles(){
+    this.asingRolModal.showModal = true;
+  }
   constructor(private router: Router, private fb: FormBuilder) {}
 }
