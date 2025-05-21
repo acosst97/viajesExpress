@@ -6,17 +6,17 @@ export interface LoginRequest {
 export interface Usuario {
   idUsuario: number;
   primerNombre: string;
-  segundoNombre: string | null; // Puede ser nulo si no tiene segundo nombre
+  segundoNombre: string | null; 
   primerApellido: string;
-  segApellido: string | null;   // Puede ser nulo si no tiene segundo apellido
-  fecha_nacimiento: string;     // Formato YYYY-MM-DD
+  segApellido: string | null;   
+  fecha_nacimiento: string;     
   experiencia: number;
   telefono: string;
   correo: string;
-  password?: string;           // La contraseña usualmente no se devuelve después del login
-  rol: any[];                   // Ajusta el tipo si conoces la estructura del rol
-  cargos: any[];                // Ajusta el tipo si conoces la estructura de los cargos
-  vehiculos: any[];             // Ajusta el tipo si conoces la estructura de los vehículos
+  password?: string;           
+  rol: any[];                   
+  cargos: any[];                
+  vehiculos: any[];             
   reservaciones: any[];
 }
 

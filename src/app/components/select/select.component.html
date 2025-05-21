@@ -1,0 +1,31 @@
+
+@if (rutaActual == '/dashboard/account' || rutaActual == '/dashboard/transfers'){
+    <div [className]="this.shortStyle ? 'short-select' : 'full-select'" (click)="!isDisabled && openSelectList()">
+        {{ selectedOption ? selectedOption.text : placeholder}}
+        <div class="arrow-down" [ngClass]="showList ? 'selected' : ''">
+            <div class="divisor"></div>
+        </div>
+    </div>
+    }@else {
+    <div [className]="this.shortStyle ? 'short-select' : 'full-select'" (click)=" openSelectList()">
+        {{ selectedOption ? selectedOption.text : placeholder}}
+        <div class="arrow-down" [ngClass]="showList ? 'selected' : 'TI'">
+            <div class="divisor"></div>
+        </div>
+    </div>
+    }
+    
+    <!-- Listado de opciones -->
+    <div (change)="selectOption($event.target)" [className]="this.shortStyle ? 'short-options' : 'full-options'"
+        [@inOutAnimation] *ngIf="showList && !isDisabled">
+        <input class="search" type="text" [formControl]="searchControl" placeholder="Buscar..." />
+        <div class="option" *ngFor="let item of filteredOptions() ?? []" (click)="chooseOption(item)">
+            {{item.text}} </div>
+    </div>
+    <!-- <div (change)="selectOption($event.target)" [className]="this.shortStyle ? 'short-options' : 'full-options'"
+        [@inOutAnimation] *ngIf="showList && !isDisabled">
+        <div class="option" *ngFor="let item of filteredOptions" (click)="chooseOption(item)">
+            {{ item.text }}
+        </div>
+    </div> -->
+    CSS 

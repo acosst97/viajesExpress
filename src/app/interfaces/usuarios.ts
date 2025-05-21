@@ -6,5 +6,56 @@ export interface ListarUsuarioDto {
     primerApellido: string;
     segApellido: string;
     correo: string;
+    telefono: string;
     nombresRoles: string[];
+}
+
+
+export interface UpdateUsuarioDTO {
+    idUsuario: number;
+    primerNombre: string;
+    segundoNombre?: string;
+    primerApellido: string;
+    segApellido?: string;
+    experiencia: number;
+    telefono: string;
+    correo?: string;
+  }
+  
+  export interface UpdateUsuarioRolDTO {
+    idUsuario: number;
+    idRol: number; // Asumo que el ID del rol es un número
+  }
+  
+  export interface MensajeDTO {
+    mensaje: string;
+  }
+  
+  // Si necesitas un DTO para el rol
+  export interface RolDto {
+    idRol: number;
+    nombreRol: string;
+  }
+
+  export interface selectOptions {
+    id?: any,
+    codigoBanco?: any;
+    text?: any,
+    value?: any,
+    idPersona?: any;
+    typeDocument?: any;
+    nombreTipoDocumeto?: any;
+    nombreCompletoLista?: any;
+    codigoDane?: any;
+    fkDepartamentoId?: any;
+    pkRelacionid?: any;
+}  
+export interface Roles {
+  roles:   Role[];
+  mensaje: string;
+}
+
+export interface Role {
+  idRol:     number;
+  nombreRol: string;
 }

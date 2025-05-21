@@ -8,9 +8,9 @@
     </ng-template>
     <ng-template #actions let-data>
         <div class="btns">
-            <button class="edit" (click)="editarUser()">Edit</button>
+            <button class="edit" (click)="editarUser(data)">Edit</button>
             <button class="asing">asignar</button>
-            <button class="delete">Eliminar</button>
+            <button class="delete"  (click)="eliminarUser(data)">Eliminar</button>
         </div>
     </ng-template>
 </app-table>
@@ -23,11 +23,11 @@
     <div id="edit-modal">
         <div class="modal">
             <div class="main-cont">
-                <h1>Registro</h1>
+                <h1>Actualiza tus datos</h1>
                 <form [formGroup]="editForm" (ngSubmit)="save()" class="form">
-                  <input class="input-label" type="text" formControlName="primerNombre" placeholder="Nombres" required />
-                  <div *ngIf="editForm.get('primerNombre')?.invalid && editForm.get('primerNombre')?.touched"
-                    class="error-message">Documento</div>
+                    <input type="text" formControlName="documento" placeholder="123445" required />
+                    <div *ngIf="editForm.get('documento')?.invalid && editForm.get('documento')?.touched"
+                      class="error-message">Documento es requerido</div>
                   <input type="text" formControlName="primerNombre" placeholder="Nombres" required />
                   <div *ngIf="editForm.get('primerNombre')?.invalid && editForm.get('primerNombre')?.touched"
                     class="error-message">Nombre es requerido.</div>
@@ -63,11 +63,12 @@
         
                   <button class="btn btn-primary btn-block btn-large" type="submit"
                     [disabled]="editForm.invalid">Guardar</button>
+                    <button class="btn btn-primary btn-block btn-large" type="submit"
+                     (click)="goToHome()">Volver</button>
                 </form>
             </div>
         
         </div>
-       
     </div>
 
   </app-modal>

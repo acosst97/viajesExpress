@@ -27,6 +27,7 @@ export class LoginComponent {
     private router: Router) { }
   ngOnInit(): void {
     this.registroForm = new FormGroup({
+      documento:new FormControl('', Validators.required),
       primerNombre: new FormControl('', Validators.required),
       segundoNombre: new FormControl(''),
       primerApellido: new FormControl('', Validators.required),
@@ -49,7 +50,7 @@ export class LoginComponent {
     for (let i = 0; i < length; i++) {
       token += characters.charAt(Math.floor(Math.random() * characters.length));
     }
-    console.log('token', token);
+    console.log('token', token); 
     return token;
   }
   login() {
