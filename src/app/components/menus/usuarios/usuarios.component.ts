@@ -22,11 +22,12 @@ import {
 import { ModalComponent } from '../../modal/modal.component';
 import { log } from 'console';
 import { SelectComponent } from "../../select/select.component";
+import { CardComponent } from "../../card/card.component";
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [TableComponent, CommonModule, ReactiveFormsModule, ModalComponent, SelectComponent],
+  imports: [TableComponent, CommonModule, ReactiveFormsModule, ModalComponent, SelectComponent, CardComponent],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss',
 })

@@ -1,0 +1,28 @@
+.card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 0 20px -5px rgba($color: #000, $alpha: 0.2);
+    padding: 18px;
+  
+    .card__options {
+      cursor: pointer;
+      display: grid;
+      justify-content: end;
+      margin-bottom: -25px;
+      width: auto;
+  
+    }
+  
+    .card__header {
+      font-weight: 500;
+      margin: 0;
+      //padding: 14px 14px 5px 14px;
+      font-size: 1.4rem;
+    }
+  
+    .card__body {
+      max-height: 100%;
+      // overflow: hidden;
+      //padding: 0px 10px 10px 10px;
+    }
+ }

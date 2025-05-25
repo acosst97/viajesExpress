@@ -1,1 +1,15 @@
-<p>card works!</p>
+<div class="card" style="padding-bottom: 15px;">
+    <div class="card__options">
+      <ng-container *ngIf="optionsTemplateRef" [ngTemplateOutlet]="optionsTemplateRef">
+  
+      </ng-container>
+    </div>
+    <h1 class="card__header">{{ header }}</h1>
+    <div class="card__body">
+      <ng-container *ngIf="bodyTemplateRef" [ngTemplateOutlet]="bodyTemplateRef">
+  
+      </ng-container>
+    </div> 
+  </div>
+  
+  

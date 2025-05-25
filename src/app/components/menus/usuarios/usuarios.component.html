@@ -1,24 +1,24 @@
-
-
-
-@if(this.usuario){
-<app-table [tableProps]="tableProps">
-    <ng-template style="background-color: #E7E7E7;" #lastTH>
-        <th style="background-color: #E7E7E7;">Acciones</th>
-    </ng-template>
-    <ng-template #actions let-data>
-        <div class="btns">
+<app-card>
+  <ng-template #body>
+    @if(this.usuario){
+      <app-table [tableProps]="tableProps">
+        <ng-template style="background-color: #E7E7E7;" #lastTH>
+          <th style="background-color: #E7E7E7;">Acciones</th>
+        </ng-template>
+        <ng-template #actions let-data>
+          <div class="btns">
             <button class="edit" (click)="editarUser(data)">Edit</button>
             <button class="asing" (click)="asignarRoles()">asignar</button>
-            <button class="delete"  (click)="eliminarUser(data)">Eliminar</button>
-        </div>
-    </ng-template>
-</app-table>
+            <button class="delete" (click)="eliminarUser(data)">Eliminar</button>
+          </div>
+        </ng-template>
+      </app-table>
+    } @else {
+      <div class="div">no hay data</div>
+    }
+  </ng-template>
 
-}@else{
-<div class="div">no hay data</div>
-}
-
+  </app-card>
 <app-modal #OpenEdit>
     <div id="edit-modal">
         <div class="modal">
