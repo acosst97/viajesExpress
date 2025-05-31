@@ -17,7 +17,7 @@
     
     <!-- Listado de opciones -->
     <div (change)="selectOption($event.target)" [className]="this.shortStyle ? 'short-options' : 'full-options'"
-        [@inOutAnimation] *ngIf="showList && !isDisabled">
+        *ngIf="showList && !isDisabled">
         <input class="search" type="text" [formControl]="searchControl" placeholder="Buscar..." />
         <div class="option" *ngFor="let item of filteredOptions() ?? []" (click)="chooseOption(item)">
             {{item.text}} </div>

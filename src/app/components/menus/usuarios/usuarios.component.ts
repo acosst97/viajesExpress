@@ -81,7 +81,6 @@ export class UsuariosComponent implements OnInit {
       const data: any = await firstValueFrom(this.srv.listarUsuarios());
       console.log('data usuarios', data);
       this.usuario = data.usuarios;
-
       this.tableProps.data = this.usuario;
     } catch (error) {
       console.log('error user', error);

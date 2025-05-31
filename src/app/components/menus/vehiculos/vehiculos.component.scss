@@ -1,0 +1,250 @@
+#vehiculos {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  .info-top {
+    display: flex;
+    width: 50vw;
+    gap: 15px;
+    .box{
+      padding: 25px; 
+    }
+  }
+  .table {
+    .items{
+      display: flex;
+      gap: 10px;
+      .btn.btn-info {
+        .icon {
+          width: 24px;
+          height: 24px;
+          background-image: url('/assets/icons/vehiculoedit.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+      }
+      .btn.btn-success {
+       .icon-success {
+         width: 24px;
+         height: 24px;
+         background-image: url('/assets/icons/vehiculoeview.svg');
+         background-size: contain;
+         background-repeat: no-repeat;
+       }
+     }
+    }
+   
+  
+ }
+  .registre-buttom {
+    width: 15vw;
+    margin: 0 0 22px 0;
+    border-radius: 18px;
+    background-color: #2b8da9d4;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap:10px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      background-color: #084e61d4;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+    :active {
+      background-color: #d0d0d0;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      transform: translateY(0);
+    }
+    .icon{
+      background-image: url('/assets/icons/registrecar.svg');
+      width: 24px;
+      height: 25px;
+    
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+#create-vehiculo {
+   .modal-cont {
+    height: 95vh;
+    width: 450px;
+    padding: 35px;
+    box-sizing: border-box;
+    overflow: overlay;
+ 
+     .form-title {
+       text-align: center;
+       margin-bottom: 25px;
+       color: #333;
+     }
+ 
+     label {
+       display: block;
+       margin-bottom: 8px;
+       font-weight: 600;
+       color: #555;
+     }
+ .file-name-display {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #e9ecef;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.85em;
+        color: #495057;
+        margin-top: 5px; 
+        max-width: 100%; 
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        white-space: nowrap; 
+        margin-bottom: 15px;
+      }
+
+      .btn-clear-file {
+        background: none;
+        border: none;
+        color: #dc3545;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1.1em;
+        padding: 0;
+        line-height: 1; /* Asegura que la 'X' se alinee bien */
+        &:hover {
+          color: #c82333;
+        }
+    }
+     .form-input {
+       width: 100%;
+       padding: 10px 12px;
+       border: 1px solid #ccc;
+       border-radius: 6px;
+       font-size: 1em;
+       box-sizing: border-box;
+       transition: border-color 0.3s ease, box-shadow 0.3s ease;
+       margin-bottom: 15px; /* Espacio entre campos */
+     }
+ 
+     .form-input:focus {
+       outline: none;
+       border-color: #007bff;
+       box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+     }
+ 
+     .form-group {
+       position: relative; 
+       margin-bottom: 15px;
+     }
+ 
+     .date-input {
+       padding-right: 15px;
+       padding-top: 17px; 
+     }
+ 
+     .calendar-icon {
+       position: absolute;
+       right: 12px;
+       top: 50%; /* Centrado verticalmente */
+       transform: translateY(-50%);
+       color: #888;
+       pointer-events: none; /* Permite clics a través del icono */
+       font-size: 1.2em;
+     }
+ 
+     .document-upload-group {
+       display: flex;
+       align-items: center; 
+       gap: 10px; 
+       margin-bottom: 15px;
+ 
+       .form-input {
+         flex-grow: 1; 
+         margin-bottom: 0; 
+       }
+ 
+       .file-input {
+         display: none; 
+       }
+ 
+       .btn-upload {
+         background-color: #28a745; 
+         color: white;
+         padding: 10px 15px;
+         border-radius: 6px;
+         cursor: pointer;
+         transition: background-color 0.3s ease;
+         white-space: nowrap;
+         font-size: 0.9em; 
+ 
+         &:hover {
+           background-color: #218838;
+         }
+       }
+     }
+ 
+     .warning {
+       color: #dc3545; 
+       font-size: 0.85em;
+       margin-top: -10px; 
+       margin-bottom: 10px;
+     }
+ 
+     .warning.green {
+       color: #28a745; 
+     }
+ 
+     .form-actions {
+       display: flex;
+       justify-content: flex-end; /* Alinea los botones a la derecha */
+       gap: 15px;
+       margin-top: 30px;
+       .btn {
+         padding: 10px 20px;
+         border: none;
+         border-radius: 6px;
+         cursor: pointer;
+         font-size: 1em;
+         transition: background-color 0.3s ease;
+       }
+ 
+       .btn-secondary {
+         background-color: #007bff; /* Azul para el botón principal */
+         color: white;
+         &:hover {
+           background-color: #0056b3;
+         }
+       }
+     }
+   }
+ }
+#edit-registro{
+  @extend #create-vehiculo;
+}
+
+#view{
+  @extend #create-vehiculo;
+  .info-section{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  b{
+    text-align: left;
+  }
+  p{
+    text-align: right;
+    
+  }
+  .btn.btn-info{
+    .icon{
+      background-image: url('/src/assets/icons/vehiculoeview.svg');
+      }
+  }
+  }
+}

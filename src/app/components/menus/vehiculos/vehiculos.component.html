@@ -1,1 +1,257 @@
-<p>vehiculos works!</p>
+<div id="vehiculos">
+    <div class="info-top">
+        <app-card>
+            <ng-template #body>
+                <div class="box">
+                    aqui encontraras toda la información de tus registros sobre los vehiculos y 
+                    usuarios asociados a estos.
+                   <h2> Vehiculos Registrados</h2>
+                   @if (this.vehifilter) {
+                     <p>{{this.vehifilter.length}}</p>   
+                   }@else {
+                     <p>0</p>
+                   }
+                </div>
+            </ng-template>
+
+        </app-card>
+
+        <app-card>
+            <ng-template #body>
+                <div class="box">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod hic tempore at architecto ducimus
+                    quam, perferendis sunt ratione ab earum nam nostrum doloremque. Sed, culpa autem ipsam incidunt
+                    facilis corrupti.
+                </div>
+            </ng-template>
+
+        </app-card>
+    </div>
+
+    <div>
+        <button class="registre-buttom" (click)="openRegistre()"> Registrar Vehiculo <div class="icon"></div></button>
+        <app-card>
+            <ng-template #body>
+                <div class="table">
+                    @if(this.vehifilter){
+                    <app-table [tableProps]="tableProps">
+                        <ng-template style="background-color: #E7E7E7;" #lastTH>
+                            <th style="background-color: #E7E7E7;">Acciones</th>
+                        </ng-template>
+                        <ng-template #actions let-data>
+                            <div class="items">
+                                <button class="btn btn-info" (click)="editarVehiculo(data)">
+                                    <div class="icon">
+                                    </div>
+                                </button>
+                                <button class="btn btn-success" (click)="viewData(data)">
+                                    <div class="icon-success">
+                                    </div>
+                                </button>
+                            </div>
+
+                            <!-- <div class="btns">
+                       
+                          <button class="asing" (click)="asignarRoles()">asignar</button>
+                          <button class="delete" (click)="eliminarUser(data)">Eliminar</button>
+                        </div> -->
+
+                        </ng-template>
+                    </app-table>
+                    } @else {
+                    <div class="div">no hay data</div>
+                    }
+
+                </div>
+
+            </ng-template>
+
+        </app-card>
+
+    </div>
+</div>
+<app-modal #OpenEditModal id="edit-registro">
+    <div class="modal-cont">
+        <form class="" [formGroup]="formEdit" (ngSubmit)="onSubmitEdit()">
+            <label for="capacidad">Capacidad*</label>
+            <input formControlName="capacidad" type="text" id="capacidad" name="capacidad" class="form-input"
+                placeholder="Ej: 5 personas" required>
+            @for (validation of getValidatorErroVehiculoEdit('capacidad'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                {{ validation.message }}
+            </div>
+            }
+            <label for="placaVehiculo">Placa Vehículo*</label>
+            <input formControlName="placaVehiculo" type="text" id="placaVehiculo" name="placaVehiculo"
+                class="form-input" placeholder="Ej: ABC-123" required>
+            @for (validation of getValidatorErroVehiculoEdit('placaVehiculo'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                {{ validation.message }}
+            </div>
+            }
+
+            <label for="modelo">Modelo*</label>
+            <input formControlName="modelo" type="text" id="modelo" name="modelo" class="form-input"
+                placeholder="Ej: Toyota Hilux" required>
+            @for (validation of getValidatorErroVehiculoEdit('modelo'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                {{ validation.message }}
+            </div>
+            }
+            <label for="seguroVig">Vigencia del Seguro*</label>
+            <div class="form-group">
+                <input formControlName="seguroVig" type="date" id="seguroVig" name="seguroVig"
+                    class="form-input date-input" placeholder="dd/mm/aaaa" required>
+                <span class="calendar-icon">📅</span>
+            </div>
+            @for (validation of getValidatorErroVehiculoEdit('seguroVig'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                {{ validation.message }}
+            </div>
+            }
+            <label for="documentacion">Nombre de archivo*</label>
+            <div class="form-group document-upload-group">
+                <input formControlName="documentacion" type="text" id="documentacion" name="documentacion"
+                    class="form-input" placeholder="123456789" required>
+            </div>
+            @for (validation of getValidatorErroVehiculoEdit('documentacion'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                {{ validation.message }}
+            </div>
+            }
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-secondary">Actualizar Vehículo</button>
+            </div>
+            <!-- <pre>{{formRegistro.value | json}}</pre> -->
+        </form>
+    </div>
+</app-modal>
+
+<app-modal #RegistroModal id="create-vehiculo" [idDefault]="1">
+    <div class="modal-cont">
+        <div class="form-container">
+            <h3 class="form-title">Ingresa tu información de vehículo</h3>
+            <form class="" [formGroup]="formRegistro" (ngSubmit)="onSubmit()">
+                <label for="capacidad">Capacidad*</label>
+                <input formControlName="capacidad" type="text" id="capacidad" name="capacidad" class="form-input"
+                    placeholder="Ej: 5 personas" required>
+                @for (validation of getValidatorErroVehiculo('capacidad'); track $index) {
+                <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                    {{ validation.message }}
+                </div>
+                }
+
+                <label for="placaVehiculo">Placa Vehículo*</label>
+                <input formControlName="placaVehiculo" type="text" id="placaVehiculo" name="placaVehiculo"
+                    class="form-input" placeholder="Ej: ABC-123" required>
+                @for (validation of getValidatorErroVehiculo('placaVehiculo'); track $index) {
+                <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                    {{ validation.message }}
+                </div>
+                }
+                <label for="modelo">Modelo*</label>
+                <input formControlName="modelo" type="text" id="modelo" name="modelo" class="form-input"
+                    placeholder="Ej: Toyota Hilux" required>
+                @for (validation of getValidatorErroVehiculo('modelo'); track $index) {
+                <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                    {{ validation.message }}
+                </div>
+                }
+
+                <label for="seguroVig">Vigencia del Seguro*</label>
+                <div class="form-group">
+                    <input formControlName="seguroVig" type="date" id="seguroVig" name="seguroVig"
+                        class="form-input date-input" placeholder="dd/mm/aaaa" required>
+                    <span class="calendar-icon">📅</span>
+                </div>
+                @for (validation of getValidatorErroVehiculo('seguroVig'); track $index) {
+                <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                    {{ validation.message }}
+                </div>
+                }
+                <label for="documentacion">Usuario*</label>
+                <div class="form-group document-upload-group">
+                    <app-select (optionSelected)="onUsuarioSelected($event)" [options]="userOption"
+                        [placeholder]="'selecciona usuario'" #DocSelected></app-select>
+                </div>
+                <!-- @if (this.formRegistro?.touched && this.docSelected.selectOption == null) {
+                <div class="warning">selecciona un usuario</div>
+               } -->
+                <label for="documentacion">Nombre de tu archivo*</label>
+                <div class="form-group document-upload-group">
+                    <input formControlName="documentacion" type="text" id="documentacion" name="documentacion"
+                        class="form-input" placeholder="123456789" required>
+                    <input type="file" id="docBase64" name="docBase64" class="file-input"
+                        (change)="onFileSelected($event)" accept="application/pdf">
+                    <label for="docBase64" class="btn btn-upload">Cargar Pdf</label>
+                    @for (validation of getValidatorErroVehiculo('docBase64'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+                </div>
+                <span *ngIf="fileName" class="file-name-display">
+                    {{ fileName }}
+                    <button type="button" class="btn-clear-file" (click)="clearFile()">❌</button>
+                </span>
+                @for (validation of getValidatorErroVehiculo('documentacion'); track $index) {
+                <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                    {{ validation.message }}
+                </div>
+                }
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-secondary">Registrar Vehículo</button>
+                </div>
+                <!-- <pre>{{formRegistro.value | json}}</pre>
+              <pre>{{formRegistro.valid}}</pre> -->
+            </form>
+        </div>
+    </div>
+</app-modal>
+<app-modal #ViewInfoModal id="view" [idDefault]="1">
+    <div class="modal-cont">
+        @if (vehiSelected) {
+        <div class="form-container">
+            <h3 class="form-title">información de vehículo</h3>
+         
+            <div class="info-section">
+                <b>Capacidad</b>
+                <p>{{vehiSelected.capacidad}} personas</p>
+                <b>Placa del Vehículo</b>
+                <p>{{vehiSelected.placaVehiculo}}</p>
+                <b>Modelo</b>
+                <p>{{vehiSelected.modelo}}</p>
+                <b>Nombre archivo pdf</b>
+                <p>
+                    {{vehiSelected.documentacion}}
+                  </p>
+                <b>Vigencia del Seguro</b>
+                <p>{{vehiSelected.seguroVig}}</p>
+                <b>Documento</b>
+                <p>{{vehiSelected.documentoUsuario}}</p>
+                <b>Nombre Conductor</b>
+                <p>{{vehiSelected.nombreUsuario}}</p>
+            </div>
+            <hr> 
+            <form class="" [formGroup]="formRegistro" (ngSubmit)="onSubmit()">
+                <label for="capacidad">Asigna un nuevo usuario a tu vehiculo</label>
+                <app-select [options]="userOption" (optionSelected)="onUsuarioSelected($event)">
+                </app-select>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-secondary" (click)="asigneConfirm(vehiSelected)">Asignar</button>
+                    @if (vehiSelected.base64) {
+                            <button class="btn btn-info" (click)="downloadVehicleDocument()"> <div class="icon"></div> Descargar Pdf</button>
+                        } @else {
+                        <span class="no-doc-message"> (No hay archivo)</span>
+                      }
+                </div>
+
+            </form>
+      
+        </div>
+    }
+    </div>
+
+</app-modal>

@@ -1,0 +1,87 @@
+
+.full-select {
+    align-items: center;
+    border: 1px solid #2E4C99;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex; 
+    height: 35px;
+    justify-content: space-between;
+    padding-left: 14px;
+    width: 100%;
+
+    .arrow-down {
+        background: url("/src/assets/icons/down-arrow.svg") no-repeat;
+        background-position: 60% 50%;
+        border-radius: 0 3px 3px 0;
+        height: 33px;
+        margin-left: 14px;
+        width: 35px;
+
+        .divisor {
+            background-color:  #0dcaf0;
+            height: 24px;
+            margin-top: 4px;
+            width: 1px;
+        }
+    }
+
+    .arrow-down:hover {
+        background-color:  #0dcaf0;
+        background-image: url("/src/assets/icons/down-arrow.svg");
+    }
+
+    .arrow-down.selected {
+        background-color:  #0dcaf0;
+        background-image: url("/src/assets/icons/down-arrow.svg");
+    }
+}
+
+.full-options {
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: overlay;
+    position: absolute;
+    text-align: left;
+    user-select: none;
+    z-index: 10;
+
+    .option {
+        background-color: #0dcaf0;
+        border-bottom: 1px dashed white;
+        color: white;
+        cursor: pointer;
+        font-size: 0.875em;
+        padding: 10px 12px;
+        transition: 0.3s;
+        width: 265px;
+    }
+
+    .option:hover {
+        background-color: white;
+        color: #0dcaf0;
+    }
+
+    .option:first-child {
+        border-radius: 5px 5px 0 0;
+    }
+
+    .option:last-child {
+        border-bottom: none;
+        border-radius: 0 0 5px 5px;
+    }
+}
+
+.short-select {
+    @extend .full-select;
+    width: auto;
+}
+
+.short-options {
+    @extend .full-options;
+
+    .option {
+        width: 53px;
+
+    }
+}

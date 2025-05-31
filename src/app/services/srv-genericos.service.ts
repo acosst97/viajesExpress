@@ -1,9 +1,11 @@
+import { AsignarVehiculo, RegistroVehiculoDTO } from './../interfaces/vehiculo';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CrearServicioVehiculoDto, ListarServicioVehiculoDto, MensajeDto } from '../interfaces/serviciosVehiculos';
 import { CrearReservacion, ListarReservaciones } from '../interfaces/reservaciones';
 import { ListarUsuarioDto, MensajeDTO, Roles, UpdateUsuarioDTO, UpdateUsuarioRolDTO } from '../interfaces/usuarios';
+import { Vehiculo } from '../interfaces/vehiculo';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class SrvGenericosService {
 
   private apiUrl = 'http://localhost:8080/services';
   private apiUrlReserva = 'http://localhost:8080/reservaciones';
-  private apiUrlVehiculos = '';
+  private apiUrlVehiculos = 'http://localhost:8080/vehiculos';
   constructor(private http: HttpClient) { }
 
 
@@ -48,16 +50,33 @@ export class SrvGenericosService {
   editarUsuario(usuario: UpdateUsuarioDTO): Observable<MensajeDTO> { 
     return this.http.put<MensajeDTO>(`${this.apiUsuarios}/actualizar`,usuario);
   }
-
+  
   // Servicio para asignar/actualizar rol de usuario
   actualizarRolUsuario(data: UpdateUsuarioRolDTO): Observable<MensajeDTO> {
     // La URL de tu endpoint de asignación de rol
     return this.http.put<MensajeDTO>(`${this.apiUsuarios}/actualizar-rol`, data);
   }
-  //lkstar roles
+  //listar roles
   listarRoles(): Observable<Roles> {
     return this.http.get<Roles>(`${this.apiUsuarios}/listarRoles`);
-    
+  }
+  
+  //VEHICULOS
+  listarVehiculos():Observable<Vehiculo>{
+    return this.http.get<Vehiculo>(`${this.apiUrlVehiculos}/listarVehiculos`);
+  }
+
+  registrarVehiculos(objectVe:RegistroVehiculoDTO):Observable<MensajeDTO>{
+    return this.http.post<MensajeDTO>(`${this.apiUrlVehiculos}/registrarVehiculo`,objectVe);
+  }
+
+  //editar
+  actualizarVehiculo(vehiculo: Vehiculo): Observable<any> {
+    return this.http.put(`${this.apiUrlVehiculos}/actualizar`, vehiculo);
+  }
+  //Asignar
+  asignVehicle(vehiculo: AsignarVehiculo): Observable<any> {
+    return this.http.put(`${this.apiUrlVehiculos}/asignar`, vehiculo);
   }
 
 }

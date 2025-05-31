@@ -21,5 +21,7 @@ export class CustomSrvService {
       this.active = false;
     }, data.duration);
   }
+
+
   constructor() { }
 }

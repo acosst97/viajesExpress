@@ -81,6 +81,7 @@ export class LoginComponent {
   registre() {
     if (this.registroForm.valid) {
       const registroData = {
+        documento: this.registroForm.get('documento')?.value,
         primerNombre: this.registroForm.get('primerNombre')?.value,
         segundoNombre: this.registroForm.get('segundoNombre')?.value,
         primerApellido: this.registroForm.get('primerApellido')?.value,
