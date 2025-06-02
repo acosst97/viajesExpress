@@ -56,16 +56,16 @@
             @for (item of servicios; track $index)
             {
             <div class="col-lg-4 col-sm-6 mb-4">
-                <!-- Portfolio item 1-->
+                <!-- Portfolio item 1--> 
                 <div class="portfolio-item">
                     <a class="portfolio-link" data-bs-toggle="modal">
                         <div class="portfolio-hover">
-                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div> 
                         </div>
                         <img class="img-fluid" [src]="item.images" alt="..." />
                     </a>
                     <div class="portfolio-caption">
-                        <div class="portfolio-caption-heading">{{item.valorServicio}}</div>
+                        <div class="portfolio-caption-heading">${{converterToNumber(item.valorServicio) | number:'1.0-2'}}</div>
                         <div class="portfolio-caption-subheading text-muted">{{item.descripcion}}</div>
                     </div>
                     <div class="">
@@ -79,7 +79,6 @@
             <app-modal #OpenReservationModal>
                 <div id="request-apertura">
                     <div class="modal">
-
                         <div class="modal-cont">
                             <div class="cont-title">
                                 <h1 style="font-weight: bold;"> Solicitar Viaje <b></b></h1>
@@ -144,7 +143,6 @@
                         </div>
                     </div>
                 </div>
-
                 @if (showResponseModal) {
                 <div class="popup-alert">
                     <app-alert></app-alert>
@@ -155,58 +153,6 @@
         </div>
     </div>
 </section>
-<div style="position: absolute; top: 24%; left: 38%;">
-    <app-modal #AbriModalRegister id="register-service">
-        <div class="modal-cont">
-            <h2>Registrar Nuevo Servicio Vehicular</h2>
-
-            <form [formGroup]="servicioForm" (ngSubmit)="registrarServicio()">
-                <div>
-                    <label for="nombreServicio">Nombre del Servicio:</label>
-                    <input type="text" id="nombreServicio" formControlName="nombreServicio">
-                    <div *ngIf="servicioForm.invalid && (servicioForm.dirty || servicioForm.touched)">
-                        <div *ngIf="servicioForm.errors?.['required']" class="error-message">
-                            El nombre del servicio es requerido.
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="valorServicio">Valor del Servicio:</label>
-                    <input type="number" id="valorServicio" formControlName="valorServicio">
-                    <div *ngIf="servicioForm.invalid && (servicioForm.dirty || servicioForm.touched)">
-                        <div *ngIf="servicioForm.errors?.['required']" class="error-message">
-                            El valor del servicio es requerido.
-                        </div>
-                        <div *ngIf="servicioForm.errors?.['min']" class="error-message">
-                            El valor del servicio debe ser mayor o igual a 0.
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="descripcion">Descripción:</label>
-                    <textarea id="descripcion" formControlName="descripcion"></textarea>
-                    <div *ngIf="servicioForm.invalid && (servicioForm.dirty || servicioForm.touched)">
-                        <div *ngIf="servicioForm.errors?.['required']" class="error-message">
-                            La descripción es requerida.
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="images">URL de la Imagen (Opcional):</label>
-                    <input type="file" id="images" formControlName="images">
-                </div>
-
-                <button type="submit" [disabled]="servicioForm.invalid">Registrar Servicio</button>
-
-                <div *ngIf="mensajeRespuesta" class="success-message">{{ mensajeRespuesta }}</div>
-                <div *ngIf="errorRespuesta" class="error-message">{{ errorRespuesta }}</div>
-            </form>
-        </div>
-    </app-modal>
-</div>
 
 
 <!-- About-->

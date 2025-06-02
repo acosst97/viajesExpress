@@ -1,1 +1,234 @@
-<p>services-vehiculos works!</p>
+@if (showResponseModal) {
+    <div class="popup-alert">
+        <app-alert></app-alert>
+    </div>
+    }
+<div id="services">
+    <div class="info-top">
+    
+        <app-card>
+            <ng-template #body>
+                <div class="box">
+                    Aqui encontraras toda la información de tus registros sobre los servicios <br>
+                    y rutas disponibles para tu empresa
+                   <h4> Registra un nuevo Servicio</h4>
+                   <button class="btn btn-primary" (click)="openRegister()">Formulario</button>
+                   @if (this.loadingData()) {
+                    <div class="global-loader-backdrop">
+                        <img src="/assets/icons/loading.svg" class="rotate-icon" alt="loading icon" />
+                      </div>
+                    }
+                </div>
+            </ng-template>
+        </app-card>
+        <app-card>
+            <div class="box">
+                <ng-template #body>
+                    <app-rutas > </app-rutas>
+             </ng-template>
+            </div>
+           
+          
+        </app-card>
+        <app-card>
+            <div class="box">
+            <ng-template #body>
+              <app-estado-ruta> </app-estado-ruta>
+            </ng-template>
+        </div>
+        </app-card>
+    </div>
+
+    <div>
+        <button class="view-buttom" (click)="changueView()">Cambiar vista <div class="icon"></div></button>
+        <app-card>
+            <ng-template #body>
+                @if (viewTable) {
+                    <div class="table">
+                        @if(this.listSrvFilter){
+                        <app-table [tableProps]="tableProps">
+                            <ng-template style="background-color: #E7E7E7;" #lastTH>
+                                <th style="background-color: #E7E7E7;">Acciones</th>
+                            </ng-template>
+                            <ng-template #actions let-data>
+                                <div class="items">
+                                    <button class="btn btn-info" (click)="tableFlujo('edit-service',data)">
+                                        <div class="icon">
+                                        </div>
+                                    </button>
+                                    <button class="btn btn-danger" (click)="tableFlujo('question-delete',data)">
+                                        <div class="icon-danger">
+                                        </div>
+                                    </button>
+                                </div>
+                         </ng-template>
+                        </app-table>
+                        } @else {
+                        <div class="div">no hay data</div>
+                        }
+    
+                    </div>
+                }@else {
+                    <section class="view-images">
+                            <div class="text-center">
+                                <h2 class="section-heading text-uppercase">Portfolio</h2>
+                                <h3 class="section-subheading text-muted">Lista de Servicios Activos.</h3>
+                            </div>
+                            <div class="row">
+                                @for (item of listServices; track $index)
+                                {
+                                <div class="col-lg-4 col-sm-6 mb-4">
+                                    <!-- Portfolio item 1--> 
+                                    <div class="portfolio-item">
+                                        <a class="portfolio-link" data-bs-toggle="modal">
+                                            <div class="portfolio-hover">
+                                                <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div> 
+                                            </div>
+                                            <img class="img-fluid" [src]="item.images" alt="..." />
+                                        </a>
+                                        <div class="portfolio-caption">
+                                            <div class="portfolio-caption-heading">${{converteNumber(item.valorServicio) | number:'1.0-2'}}</div>
+                                            <div class="portfolio-caption-subheading text-muted">{{item.descripcion}}</div>
+                                        </div>
+                                        <div class="">
+                                           
+                                        </div>
+                                    </div>
+                    
+                                </div>
+                                }
+                            </div>
+                    </section>
+                }
+               
+            </ng-template>
+        </app-card>
+
+    </div>
+</div>
+
+    <app-modal #AbriModalRegister id="register-service" [idDefault]="1">
+        <div class="modal-cont">
+            <div class="form-container">
+                <h2 class="form-title" st>Registrar Nuevo Servicio Vehicular</h2>
+                <form [formGroup]="formValidation" (ngSubmit)="onSubmitService()">
+                    <div>
+                        <label for="nombreServicio">Nombre del Servicio:</label>
+                        <input class="form-input" type="text" id="nombreServicio" formControlName="nombreServicio">
+                        @for (validation of getValidatorErroVehiculo('nombreServicio'); track $index) {
+                            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                                {{ validation.message }}
+                            </div>
+                        }  
+                    </div>
+                    <div>
+                        <label for="valorServicio">Valor del Servicio:</label>
+                        <input class="form-input" type="text" id="valorServicio" formControlName="valorServicio">
+                        @for (validation of getValidatorErroVehiculo('valorServicio'); track $index) {
+                            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                                {{ validation.message }}
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="descripcion">Descripción:</label>
+                        <textarea class="form-input" id="descripcion" formControlName="descripcion"></textarea>
+                        @for (validation of getValidatorErroVehiculo('descripcion'); track $index) {
+                            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                                {{ validation.message }}
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="images">URL de la Imagen</label>
+                        <input  class="form-input" type="file" id="images" name="images"  (change)="onFileSelected($event)"  accept="image/png, image/jpeg">
+                        @if (selectedImageBase64) {
+                            <img [src]="selectedImageBase64" alt="Previsualización" style="max-width: 100px; max-height: 100px; margin-top: 10px;">
+                        }
+                        @for (validation of getValidatorErroVehiculo('images'); track $index) {
+                            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                                {{ validation.message }}
+                            </div>
+                        }
+                    </div>
+                    <button type="submit" class="btn btn-success" [disabled]="formValidation.invalid">Registrar Servicio</button>
+                    @if (this.loadingData()) {
+                        <div class="global-loader-backdrop">
+                            <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                          </div>
+                    }
+                    @if (this.loadingData()===false) {}
+                </form>
+            </div>
+        </div>
+    </app-modal>
+
+    <app-modal #EditServiceModal id="register-service" [idDefault]="1">
+        <div class="modal-cont">
+            <div class="form-container">
+                <h2 class="form-title" >Actualiza la información de tus servicios</h2>
+                <form [formGroup]="formValidation" (ngSubmit)="onSubmitEdit()">
+                    <div>
+                        <label for="nombreServicio">Nombre del Servicio:</label>
+                        <input class="form-input" type="text" id="nombreServicio" formControlName="nombreServicio">
+                        @for (validation of getValidatorErroVehiculo('nombreServicio'); track $index) {
+                            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                                {{ validation.message }}
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="valorServicio">Valor del Servicio:</label>
+                        <input class="form-input" type="text" id="valorServicio" formControlName="valorServicio">
+                        @for (validation of getValidatorErroVehiculo('valorServicio'); track $index) {
+                            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                                {{ validation.message }}
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="descripcion">Descripción:</label>
+                        <textarea class="form-input" id="descripcion" formControlName="descripcion"></textarea>
+                        @for (validation of getValidatorErroVehiculo('descripcion'); track $index) {
+                            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                                {{ validation.message }}
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="images">Elegir Images </label>
+                        <input  class="form-input" type="file" id="images" name="images"  (change)="onFileSelected($event)"  accept="image/png, image/jpeg">
+                        @if (selectedImageBase64) {
+                            <img [src]="selectedImageBase64" alt="Previsualización" style="max-width: 100px; max-height: 100px; margin-top: 10px;">
+                        }
+                        @for (validation of getValidatorErroVehiculo('images'); track $index) {
+                            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                                {{ validation.message }}
+                            </div>
+                        }
+                    </div>
+                    <button type="submit" class="btn btn-success">Actualizar Servicio</button>
+                    @if (this.loadingData()) {
+                        <div class="global-loader-backdrop">
+                            <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                          </div>
+                    }
+                    @if (this.loadingData()===false) {}
+                </form>
+            </div>
+        </div>
+    </app-modal>
+
+    <app-modal #QuestionModal [idDefault]="1" id="delete">
+        <div class="modal-cont">
+            <h4> Estas seguro de eliminar este registro ?</h4>
+            <button class="btn btn-primary" (click)="tableFlujo('confirm-delete', this.serviceSelected)" >Eliminar</button>
+            @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                  </div>
+            }
+            @if (this.loadingData()===false) {}
+        </div>
+    </app-modal>
+

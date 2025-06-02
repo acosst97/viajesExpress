@@ -47,7 +47,6 @@ export class ReservacionComponent {
  try {
      const data: any = await firstValueFrom(this.service.ListarReservaciones());
      console.log('data reservas', data);
- 
        this.listReservas = data.reservaciones
        if (this.listReservas.length>0) {
         this.reservaFilter = this.listReservas.map((d:any)=>{

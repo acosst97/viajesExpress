@@ -89,7 +89,7 @@ export class FormvalidationService {
       docBase64: ['', [Validators.required]], 
       placaVehiculo: ['', [
         Validators.required,
-        Validators.pattern(/^[A-Za-z]{3}[0-9]{3,4}$/), // Ejemplo: ABC123 o ABC1234
+        Validators.pattern(/^[A-Za-z]{3}[0-9]{3,4}$/), 
         Validators.minLength(6),
         Validators.maxLength(7)
       ]],
@@ -206,6 +206,9 @@ export class FormvalidationService {
         if (fieldName === 'docBase64' && errors['required'] && !control.value) {
           validationErrors.push({ message: 'Debe cargar un documento.', valid: false });
         }
+        if (fieldName === 'images' && errors['required'] && !control.value) {
+          validationErrors.push({ message: 'Debe cargar un imagen.', valid: false });
+        }
       }
     }
     if (validationErrors.length > 0) {
@@ -221,5 +224,116 @@ export class FormvalidationService {
     }
   }
 
+  //SERVICIO VEHICULO 
+  initFormServices():FormGroup{
+    return this.fb.group({
+      nombreServicio: ['', [
+        Validators.required,
+        Validators.min(5),
+        Validators.max(45) 
+      ]],
+      valorServicio: ['', [
+        Validators.required,
+        Validators.pattern(/^[.0-9]*$/), 
+        // Validators.minLength(5),
+        // Validators.maxLength(20),
+      ]],
+      descripcion: ['', [Validators.required]], 
+      images: ['', [
+        ,
+      ]],
+    });
+  }
+  
+
+    //SERVICIO   RUTAS
+    initFormRutas():FormGroup{
+      return this.fb.group({
+        codRuta: ['', [
+          Validators.required,
+          Validators.min(5),
+          // Validators.max(45) 
+        ]],
+        nombreRuta: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z 0-9]*$/), 
+          Validators.minLength(2),
+          Validators.maxLength(20),
+        ]],
+        origenRuta: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z 0-9]*$/), 
+          Validators.minLength(2),
+          Validators.maxLength(20),
+        ]],
+        destinoRuta: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z 0-9]*$/),  
+          Validators.minLength(2),
+          Validators.maxLength(20),
+        ]],
+        // reservacionesIdReservaciones: ['', [
+        //   Validators.required,
+        //   Validators.pattern(/^[0-9]*$/),  
+        //   Validators.minLength(2),
+        //   Validators.maxLength(20),
+        // ]],
+      });
+    }
+    getValidationRutasEstados(formGroup: FormGroup, fieldName: string, formSubmitted: boolean) {
+      const control = formGroup.get(fieldName);
+      const errors = control?.errors;
+      const validationErrors = [];
+      if (errors) {
+        if (formSubmitted || control?.touched || control?.dirty) {
+          if (errors['required']) {
+            validationErrors.push({ valid: false, message: 'Este campo es requerido' });
+          }
+          if (errors['minlength']) {
+            validationErrors.push({ message: `Mínimo ${control.errors['minlength'].requiredLength} caracteres.`, valid: false });
+          }
+          if (errors['maxlength']) {
+            validationErrors.push({ message: `Máximo ${control.errors['maxlength'].requiredLength} caracteres.`, valid: false });
+          }
+          if (errors['pattern']) {
+            validationErrors.push({ message: 'Formato inválido.', valid: false });
+          }
+          if (errors['min']) {
+            validationErrors.push({ message: `El valor mínimo es ${control.errors['min'].min}.`, valid: false });
+          }
+          if (errors['max']) {
+            validationErrors.push({ message: `El valor máximo es ${control.errors['max'].max}.`, valid: false });
+          } 
+        }
+      }
+      if (validationErrors.length > 0) {
+        return validationErrors;
+      } 
+   
+      else if (control?.valid && (formSubmitted || control?.touched || control?.dirty)) {
+        return [{ message: 'Campo válido', valid: true }];
+      } 
+      else {
+        return []; 
+      }
+    }
+
+    //*Estados form
+    initFormEstado():FormGroup{
+      return this.fb.group({
+        nombreEstado: ['', [
+          Validators.required,
+          Validators.min(5),
+          // Validators.max(45) 
+        ]],
+        descripcionEstado: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z 0-9]*$/), 
+          Validators.minLength(2),
+          Validators.maxLength(20),
+        ]],
+   
+      });
+    }
   constructor(private fb: FormBuilder) { }
 }

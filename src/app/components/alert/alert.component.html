@@ -1,3 +1,8 @@
-<div [ngClass]="{'contenedor-alerta':true, 'verde': verde, 'rojo': rojo}" [className]="getType(alerData?.type)">
+<!-- <div [ngClass]="{'contenedor-alerta':true, 'verde': verde, 'rojo': rojo}" [className]="getType(alerData?.type)">
     <img class="svg" src="/../../../assets/icons/{{alerData?.type}}.svg"><label>{{alerData?.text}}</label>
-</div>
+</div> -->
+
+<div [ngClass]="{'contenedor-alerta': true, 'verde': verde, 'rojo': rojo, 'mostrar': alerData, 'ocultar': !alerData}" [className]="getType(alerData?.type)">
+    <img class="svg" src="/../../../assets/icons/{{alerData?.type}}.svg">
+    <label>{{alerData?.text}}</label>
+  </div>

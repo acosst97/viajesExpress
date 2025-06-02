@@ -1,0 +1,175 @@
+<div id="rutas">
+    <div class="box">
+        <div class="icon"> </div>
+        <p>Gestiona la información de tus rutas como las <br> asignaciones de las reservas realizadas
+            por los clientes</p>
+        <button class="btn btn-success" (click)="openModales('open-list-rutas')">
+            Ver registro de rutas
+        </button>
+
+    </div>
+</div>
+
+<app-modal #ListRutasModal>
+    <div class="modal-cont">
+        <div class="top-buttom">
+            <button class="btn btn-success" (click)="openModales('registre-ruta')">
+                registrar
+            </button>
+        </div>
+        <div class="table">
+            @if (listaRutasFilter) {
+            <app-table [tableProps]="tableProps">
+                <ng-template style="background-color: #E7E7E7;" #lastTH>
+                    <th style="background-color: #E7E7E7;">Acciones</th>
+                </ng-template>
+                <ng-template #actions let-data>
+                    <div class="items">
+                        <button class="btn btn-info" (click)="openModales('question')">
+                            <div class="icon">
+                            </div>
+                        </button>
+                        <button class="btn btn-success" (click)="openModales('question')">
+                            <div class="icon-success">
+                            </div>
+                        </button>
+                        <button class="btn btn-danger" (click)="openModales('question')">
+                            <div class="icon-danger">
+                            </div>
+                        </button>
+                    </div>
+                </ng-template>
+            </app-table>
+            }@else {
+            <div style="text-align: center; font-size: 35px;font-weight: bold;">no hay datos</div>
+            }
+
+        </div>
+    </div>
+</app-modal>
+<app-modal #RegistroModal id="register-ruta" [idDefault]="1">
+    <div class="modal-cont">
+        <div class="form-container">
+            <h2 class="form-title">Registrar Ruta</h2>
+            <form [formGroup]="formValidation" (ngSubmit)="onSubmitRegistre()">
+                <div class="form-row">
+                    <div>
+                        <label for="codRuta">codigo de ruta</label>
+                        <input class="form-input" type="text" formControlName="codRuta" id="codRuta">
+                        @for (validation of getValidatorErrors('codRuta'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="nombreRuta">Nombre de tu ruta</label>
+                        <input class="form-input" type="text" id="nombreRuta" formControlName="nombreRuta">
+                        @for (validation of getValidatorErrors('nombreRuta'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="origenRuta">Origen ruta:</label>
+                        <input class="form-input" type="text" id="origenRuta" formControlName="origenRuta">
+                        @for (validation of getValidatorErrors('origenRuta'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="destinoRuta">destino de Ruta:</label>
+                        <input class="form-input" type="text" id="destinoRuta" formControlName="destinoRuta">
+                        @for (validation of getValidatorErrors('destinoRuta'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="estado">ingresa el estado asignar* <span class="" (click)="helpEstado()">?* </span> </label>
+                        <app-select [options]="estadoOption" (optionSelected)="onSelect($event)" ></app-select>
+                    </div>
+                    <div>
+                        <label for="descripcion">Asociar una reservación ?   <span class="" (click)="prueba()" >?* </span></label>
+                      
+                        <app-select [options]="optioReservas" (optionSelected)="onSelectRe($event)"></app-select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Registrar Servicio</button>
+                @if (this.loadingData()) {
+                    <div class="global-loader-backdrop">
+                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                    </div>
+                    }
+                    @if (this.loadingData()===false) {}
+            </form>
+        </div>
+    </div>
+</app-modal>
+
+<app-modal #UpdateModal id="register-ruta" [idDefault]="1">
+    <div class="modal-cont">
+        <div class="form-container">
+            <h2 class="form-title">Actualiza información de tus rutas</h2>
+            <form [formGroup]="formValidation">
+                <div class="form-row">
+                    <div>
+                        <label for="nombreServicio">codigo de ruta</label>
+                        <input class="form-input" type="text" formControlName="codRuta">
+                    </div>
+                    <div>
+                        <label for="valorServicio">Nombre de tu ruta</label>
+                        <input class="form-input" type="text" formControlName="nombreRuta">
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="descripcion">Origen ruta:</label>
+                        <input class="form-input" type="text" formControlName="origenRuta">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="descripcion">Destino de Ruta:</label>
+                        <input class="form-input" type="text" formControlName="destinoRuta">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Confirmar</button>
+                @if (this.loadingData()) {
+                    <div class="global-loader-backdrop">
+                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                    </div>
+                    }
+                    @if (this.loadingData()===false) {}
+            </form>
+        </div>
+    </div>
+</app-modal>
+
+<app-modal #DeleteModal>
+
+</app-modal>
+
+<app-modal #HelpModal id="help">
+    <div class="modal-cont">
+        <p>ingresa el codigo o nombre de reservación para <br>asociarla a esta ruta </p>
+    </div>
+</app-modal>
+<app-modal #HelpModalEstado id="help">
+    <div class="modal-cont">
+        <p>Asocia un estado a una ruta, esto te ayudara para tener control sobre el estado de tus vehiculos,puedes hacer registro de tus propios estados</p>
+        <p>Deseas registrar un estado ?</p>
+        <button class="btn btn-info" >abrir Form </button>
+    </div>
+</app-modal>

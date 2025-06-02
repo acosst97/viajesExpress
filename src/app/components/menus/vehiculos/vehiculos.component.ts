@@ -1,7 +1,7 @@
 import { Usuario } from './../../../interfaces/loginRequest';
 
 
-import { Component, computed, effect, inject, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, signal, ViewChild } from '@angular/core';
 import { AlertComponent } from "../../alert/alert.component";
 import { CardComponent } from "../../card/card.component";
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,8 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DataService } from '../../../services/data.service';
 import { SelectComponent } from "../../select/select.component";
 import { ListarUsuarioDto, selectOptions } from '../../../interfaces/usuarios';
+import { resolve } from 'node:path';
+import { CustomSrvService } from '../../../services/custom-srv.service';
 
 @Component({
   selector: 'app-vehiculos',
@@ -30,9 +32,12 @@ export class VehiculosComponent {
  @ViewChild('RegistroModal') registroModal: any;
  @ViewChild('ViewInfoModal') viewInfoModal: any;
  @ViewChild('DocSelected') docSelected: any;
+ @ViewChild('QuestionModal') questionModal: any;
  dataSrv      =    inject(DataService);
  veSrv        =    inject(SrvGenericosService);
  formSrv      =    inject(FormvalidationService);
+ 
+ loadingData   =    signal(false);
  tableProps    :   Table;
  listVehiculos :   Vehiculo[];
  vehifilter    :   Vehiculo[];
@@ -44,6 +49,9 @@ export class VehiculosComponent {
  userOption    :   selectOptions[] = [];
  usuarioSelected:  selectOptions;
  fileName      :   string | null = null;
+ showResponseModal:boolean = false;
+ seguroAVencer: any = null;
+ 
 
  public docUsuarios = computed(() => this.dataSrv.getUsuarios());
  
@@ -62,8 +70,11 @@ export class VehiculosComponent {
   };
  this.listarVehiculoSrv();
  this.listarUsuarios();
+ this.customSrv.toast$.subscribe((message) => {
+  this.showResponseModal = !!message;
+});
  }
- constructor(){
+ constructor(private customSrv: CustomSrvService){
   effect(() => {
     const detailsUser = this.docUsuarios();
     console.log('data detailsUser  changed:', detailsUser);
@@ -110,11 +121,56 @@ async listarUsuarios() {
       return data;
     });
       this.tableProps.data = this.vehifilter;
+      this.encontrarSeguroProximoAVencer();
   } catch (error) {
     console.log(error);
   }  
  }
+ encontrarSeguroProximoAVencer() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); 
+  let closestVehicle: any = null;
+  let smallestDifference = Infinity;
 
+  this.listVehiculos.forEach((vehiculo: any) => {
+    const seguroVigDate = new Date(vehiculo.seguroVig);
+    seguroVigDate.setHours(0, 0, 0, 0); 
+
+ 
+    const diffTime = seguroVigDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    const warningThresholdDays = 30;
+    if (diffDays <= warningThresholdDays) {
+      if (Math.abs(diffDays) < smallestDifference) {
+        smallestDifference = Math.abs(diffDays);
+        closestVehicle = vehiculo;
+      }
+    }
+  });
+
+  this.seguroAVencer = closestVehicle;
+  console.log("Vehículo con seguro más próximo a vencer:", this.seguroAVencer);
+}
+esSeguroVencidoOProximo(seguroVigencia: string): boolean {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const seguroDate = new Date(seguroVigencia);
+  seguroDate.setHours(0, 0, 0, 0);
+
+  const diffTime = seguroDate.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays <= 30; 
+}
+
+esSeguroVencido(seguroVigencia: string): boolean {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const seguroDate = new Date(seguroVigencia);
+  seguroDate.setHours(0, 0, 0, 0);
+
+  return seguroDate.getTime() < today.getTime(); 
+}
  //lectura archivo a base64
  onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
@@ -178,6 +234,7 @@ onSubmit(): void {
         console.log("Registro exitoso", data);
         this.formSubmitted =false; 
         this.listarVehiculoSrv();
+        this.fileName = null;
       },
       error: (err) => {
         console.error("Error al registrar el vehículo", err); // aquí 
@@ -234,6 +291,7 @@ onSubmit(): void {
   }
   asigneConfirm(data:Vehiculo){
    try {
+    this.loadingData.update(()=>true);
     const id = data.idVehiculo;
     const usuario = this.usuarioSelected.id;
     const Dto = {
@@ -243,14 +301,19 @@ onSubmit(): void {
      this.veSrv.asignVehicle(Dto).subscribe({
       next: (data) => {
         console.log("Asignación completa exitoso", data);
-        this.listarVehiculoSrv();
       },
       error: (err) => {
-        console.error("Error al registrar el vehículo", err); 
-      }
+        console.error("Error al registrar el vehículo", err);
+        this.loadingData.update(()=>false); 
+      },
+      complete:()=>{ this.loadingData.update(()=>false);
+        this.viewInfoModal.showModal = false;
+        this.listarVehiculoSrv();
+       }
      });
    } catch (error) {
     console.log("error de servicio",error);
+    this.loadingData.update(()=>false); 
     
    }
   }
@@ -279,4 +342,38 @@ onSubmit(): void {
     link.click();
     document.body.removeChild(link);
   }
+  //*ELIMINAR VEHICULO
+  eliminarVehiculoSrv(){
+    this.loadingData.update(()=>true);
+   this.veSrv.deleteVehiculo(this.vehiSelected.idVehiculo).subscribe({
+    next:(res)=>{
+      console.log("respuesta",res);  
+    },
+    error:(error) =>{
+      console.error('error de servicio',error);
+    },
+    complete:async()=>{
+        console.log(   console.log("comppleado"));
+        await new Promise(resolve=> setTimeout(resolve,2000));
+        this.loadingData.update(()=>false);
+        this.questionModal.showModal = false;
+        this.listarVehiculoSrv();
+    }
+  },
+);
+  }
+  deleteVehi(type:string,data:any){
+    this.vehiSelected = data;
+    switch (type) {
+      case 'question':
+        this.questionModal.showModal = true;
+        console.log('onfo vehi', this.vehiSelected);
+        break;
+    case 'confirm-delete':
+      this.eliminarVehiculoSrv();
+    break;
+    }
+  }
+  
+ 
 }

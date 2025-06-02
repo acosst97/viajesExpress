@@ -7,7 +7,8 @@ export interface Vehiculo {
     modelo: string;
     base64:string;
     documentoUsuario: string; 
-    nombreUsuario: string;   
+    nombreUsuario: string;
+    estadoSeguro?: 'Vencido' | 'Proximo a Vencer' | 'Vigente'; // Nuevo campo   
   }
 
   export interface RegistroVehiculoDTO {

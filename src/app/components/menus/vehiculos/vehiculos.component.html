@@ -1,15 +1,20 @@
+
 <div id="vehiculos">
     <div class="info-top">
         <app-card>
             <ng-template #body>
                 <div class="box">
-                    aqui encontraras toda la información de tus registros sobre los vehiculos y 
-                    usuarios asociados a estos.
+                    <b style="padding-top: 5px;"> 
+                        Aqui encontraras toda la información de tus registros sobre <br> los vehiculos y 
+                        usuarios asociados a estos.
+                    </b>
+                    <hr>
+                    <hr>
                    <h2> Vehiculos Registrados</h2>
                    @if (this.vehifilter) {
-                     <p>{{this.vehifilter.length}}</p>   
+                     <p style="text-align: center; font-size: 32px; color:rgb(25, 25, 133)">{{this.vehifilter.length}}</p>   
                    }@else {
-                     <p>0</p>
+                     <p style="text-align: center;">0</p>
                    }
                 </div>
             </ng-template>
@@ -19,12 +24,25 @@
         <app-card>
             <ng-template #body>
                 <div class="box">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod hic tempore at architecto ducimus
-                    quam, perferendis sunt ratione ab earum nam nostrum doloremque. Sed, culpa autem ipsam incidunt
-                    facilis corrupti.
+                    <h4>Validación de Seguro Vigente</h4>
+                    <div *ngIf="seguroAVencer; else noVehiculo">
+                        <p><strong>Placa:</strong> {{ seguroAVencer.placaVehiculo }}</p>
+                        <p><strong>Modelo:</strong> {{ seguroAVencer.modelo }}</p>
+                        <p>
+                            <strong>Vigencia del Seguro:</strong>
+                            <span [ngStyle]="{'color': esSeguroVencidoOProximo(seguroAVencer.seguroVig) ? 'red' : 'orange'}">
+                                {{ seguroAVencer.seguroVig | date:'dd/MM/yyyy' }}
+                            </span>
+                        </p>
+                        <p *ngIf="esSeguroVencidoOProximo(seguroAVencer.seguroVig)">
+                            Este seguro está {{ esSeguroVencido(seguroAVencer.seguroVig) ? 'VENCIDO' : 'PRÓXIMO A VENCER' }}.
+                        </p>
+                    </div>
+                    <ng-template #noVehiculo>
+                        <p>No hay vehículos con seguro próximo a vencer o vencido.</p>
+                    </ng-template>
                 </div>
             </ng-template>
-
         </app-card>
     </div>
 
@@ -48,15 +66,12 @@
                                     <div class="icon-success">
                                     </div>
                                 </button>
+                                <button class="btn btn-danger" (click)="deleteVehi('question',data)">
+                                    <div class="icon-danger">
+                                    </div>
+                                </button>
                             </div>
-
-                            <!-- <div class="btns">
-                       
-                          <button class="asing" (click)="asignarRoles()">asignar</button>
-                          <button class="delete" (click)="eliminarUser(data)">Eliminar</button>
-                        </div> -->
-
-                        </ng-template>
+                     </ng-template>
                     </app-table>
                     } @else {
                     <div class="div">no hay data</div>
@@ -119,11 +134,15 @@
                 {{ validation.message }}
             </div>
             }
-
             <div class="form-actions">
                 <button type="submit" class="btn btn-secondary">Actualizar Vehículo</button>
             </div>
-            <!-- <pre>{{formRegistro.value | json}}</pre> -->
+            @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/src/assets/icons/loading.svg" class="rotate-icon" />
+                  </div>
+            }
+            @if (this.loadingData()===false) {}
         </form>
     </div>
 </app-modal>
@@ -175,9 +194,7 @@
                     <app-select (optionSelected)="onUsuarioSelected($event)" [options]="userOption"
                         [placeholder]="'selecciona usuario'" #DocSelected></app-select>
                 </div>
-                <!-- @if (this.formRegistro?.touched && this.docSelected.selectOption == null) {
-                <div class="warning">selecciona un usuario</div>
-               } -->
+    
                 <label for="documentacion">Nombre de tu archivo*</label>
                 <div class="form-group document-upload-group">
                     <input formControlName="documentacion" type="text" id="documentacion" name="documentacion"
@@ -204,8 +221,12 @@
                 <div class="form-actions">
                     <button type="submit" class="btn btn-secondary">Registrar Vehículo</button>
                 </div>
-                <!-- <pre>{{formRegistro.value | json}}</pre>
-              <pre>{{formRegistro.valid}}</pre> -->
+                @if (this.loadingData()) {
+                    <div class="global-loader-backdrop">
+                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                      </div>
+                }
+                @if (this.loadingData()===false) {}
             </form>
         </div>
     </div>
@@ -246,6 +267,12 @@
                         } @else {
                         <span class="no-doc-message"> (No hay archivo)</span>
                       }
+                      @if (this.loadingData()) {
+                        <div class="global-loader-backdrop">
+                            <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                          </div>
+                    }
+                    @if (this.loadingData()===false) {}
                 </div>
 
             </form>
@@ -253,5 +280,18 @@
         </div>
     }
     </div>
+</app-modal>
 
+<app-modal #QuestionModal [idDefault]="1" id="delete">
+    <div class="modal-cont">
+        <h2> Estas seguro de eliminar este registro ?</h2>
+        <button class="btn btn-primary" (click)="deleteVehi('confirm-delete', vehiSelected)" >Eliminar</button>
+        @if (this.loadingData()) {
+            <div class="global-loader-backdrop">
+                <img src="/assets/icons/loading.svg" class="rotate-icon" />
+              </div>
+        }
+        @if (this.loadingData()===false) {}
+    </div>
+    
 </app-modal>

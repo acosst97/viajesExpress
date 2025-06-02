@@ -25,7 +25,7 @@ export class HomeComponent {
   servicios: ListarServicioVehiculoDto[] = [];
   lstReservaciones: ListarReservaciones[] = [];
   errorMessage: string = '';
-  servicioForm: FormGroup;
+ 
   mensajeRespuesta: string = '';
   errorRespuesta: string = '';
   reservacionForm: FormGroup;
@@ -39,12 +39,6 @@ export class HomeComponent {
 
   ngOnInit(): void {
 
-    this.servicioForm = this.fb.group({
-      nombreServicio: ['', Validators.required],
-      valorServicio: [null, [Validators.required, Validators.min(0)]],
-      descripcion: ['', Validators.required],
-      images: [''],
-    });
     this.reservacionForm = this.fb.group({
       detallePago: ['', Validators.required],
       valorPago: ['', Validators.required],
@@ -55,43 +49,16 @@ export class HomeComponent {
       correo: ['', [Validators.required, Validators.email]],
     });
     this.cargarServicios();
-    this.loadReservation();
+    // this.loadReservation();
     this.registrer = new FormGroup([]);
     this.customSrv.toast$.subscribe((message) => {
       this.showResponseModal = !!message;
     });
   }
 
-  registrarServicio(): void {
-    if (this.servicioForm.valid) {
-      const nuevoServicio: CrearServicioVehiculoDto = this.servicioForm.value;
-      this.srv.registrarServicioVehiculo(nuevoServicio).subscribe(
-        (response: MensajeDto) => {
-          this.mensajeRespuesta = response.mensaje;
-          this.errorRespuesta = '';
-          this.servicioForm.reset();
-        },
-        (error) => {
-          this.errorRespuesta = 'Error al registrar el servicio.';
-          this.mensajeRespuesta = '';
-          console.error('Error al registrar servicio:', error);
-
-        }
-      );
-    } else {
-      this.errorRespuesta = 'Por favor, complete el formulario correctamente.';
-      this.mensajeRespuesta = '';
-    }
-  }
-
-  get f() {
-    return this.servicioForm.controls;
-  }
-
   cargarServicios(): void {
     this.srv.listarServiciosVehiculos().subscribe(
       (data: any) => {
-
         this.servicios = data?.servicios;
         console.log("Lista de servicios  vehiculos", this.servicios);
         this.errorMessage = '';
@@ -102,9 +69,7 @@ export class HomeComponent {
       }
     );
   }
-  openRegister() {
-    this.abriModalRegister.showModal = true
-  }
+  
   onSubmit() {
     if (this.reservacionForm.valid) {
       const formValues = this.reservacionForm.value;
@@ -146,7 +111,10 @@ export class HomeComponent {
       }
     )
   }
-
+ converterToNumber(n:any){
+  const number = n
+  return Number(number);
+ }
   openFormReservation() {
     this.openReservationModal.showModal = true;
   }

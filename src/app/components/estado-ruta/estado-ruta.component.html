@@ -1,0 +1,104 @@
+<div id="estado">
+    <div class="box">
+        <div class="icon"> </div>
+        <p>Gestiona la información de los estados y tener un mejor Control sobre tus rutas <br> activas e inactivas.</p>
+        <div class="btn">
+            <button class="btn btn-info" (click)="stateFlujo('open-registre')">
+                abrir form
+            </button>
+            <button class="btn btn-primary" (click)="stateFlujo('open-list')">
+                Ver rutas
+            </button>
+        </div>
+    </div>
+</div>
+<app-modal #OpenRegistreModal id="register-service" [idDefault]="1">
+    <div class="modal-cont">
+        <div class="form-container">
+            <h2 class="form-title" st>Registrar Nuevo Estado</h2>
+            <form [formGroup]="formValidation" (ngSubmit)="onSubmit()">
+                <div>
+                    <label for="nombreEstado">Nombre del estado</label>
+                    <input class="form-input" type="text" id="nombreEstado" formControlName="nombreEstado">
+                    @for (validation of getValidatorErrors('nombreEstado'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+                </div>
+                <div>
+                    <label for="descripcionEstado">Descripción:</label>
+                    <textarea class="form-input" id="descripcionEstado" formControlName="descripcionEstado"></textarea>
+                    @for (validation of getValidatorErrors('descripcionEstado'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+                </div>
+
+                <button type="submit" class="btn btn-success" [disabled]="formValidation.invalid">Confirmar</button>
+                @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                </div>
+                }
+                @if (this.loadingData()===false) {}
+            </form>
+        </div>
+    </div>
+</app-modal>
+
+<app-modal #OpenUpdateModal id="register-service" [idDefault]="1">
+    <div class="modal-cont">
+        <div class="form-container">
+            <h2 class="form-title" st>Registrar Nuevo Estado</h2>
+            <form [formGroup]="formValidation" (ngSubmit)="onSubmitEdit()">
+                <div>
+                    <label for="nombreEstado">Nombre del estado</label>
+                    <input class="form-input" type="text" id="nombreEstado" formControlName="nombreEstado">
+                    @for (validation of getValidatorErrors('nombreEstado'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+                </div>
+                <div>
+                    <label for="descripcionEstado">Descripción:</label>
+                    <textarea class="form-input" id="descripcionEstado" formControlName="descripcionEstado"></textarea>
+                    @for (validation of getValidatorErrors('descripcionEstado'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+                </div>
+
+                <button type="submit" class="btn btn-success" [disabled]="formValidation.invalid">Confirmar</button>
+                @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                </div>
+                }
+                @if (this.loadingData()===false) {}
+            </form>
+        </div>
+    </div>
+</app-modal>
+
+<app-modal #OpenListModal id="listar">
+    <div class="modal-cont">
+      <ul class="list-group">
+        @for (item of listEstado; track $index) {
+          <div class="content">
+            <li class="list-group-item active item-row">
+              <span>{{ item.nombreEstado }}</span>
+              <button class="btn-edit" (click)="stateFlujo('open-edit',item)">✏️</button>
+            </li>
+            <li class="list-group-item  item-row">
+              <span>{{ item.descripcionEstado }}</span>
+              <button class="btn-delete" (click)="stateFlujo('confirm-delete',item)">❌</button>
+            </li>
+          </div>
+        }
+      </ul>
+    </div>
+  </app-modal>

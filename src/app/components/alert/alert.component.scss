@@ -8,17 +8,50 @@
     box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.25);
     font-size: 1.25em;
     z-index: 999;
-    position: absolute;
-    bottom: 34vh;
+    position: fixed;
+    top: -100px; 
+    left: 50%; 
+    opacity: 0; 
 
-}
-
+  }
+  
+  .contenedor-alerta.mostrar {
+    animation: slide-in-top 0.5s ease-out forwards; /* Aplica la animación de entrada */
+  }
+  
+  /* Animación de salida: se desliza hacia arriba y se vuelve invisible */
+  .contenedor-alerta.ocultar {
+    animation: slide-out-top 0.5s ease-in forwards; /* Aplica la animación de salida */
+  }
+ 
+  @keyframes slide-in-top {
+    from {
+      top: -100px; 
+      opacity: 0;
+    }
+    to {
+      top: 20px; 
+      opacity: 1; 
+    }
+  }
+  
+  
+  @keyframes slide-out-top {
+    from {
+      top: 20px; 
+      opacity: 1; 
+    }
+    to {
+      top: -100px;
+      opacity: 0;
+    }
+  }
 .verde {
     background: var(--exito-500, #33BB71);
 }
 
 .rojo {
-    background: var(--error-500, #DD5B72);
+    background: var(--error-500, #f3a458);
 }
 
 .svg {
@@ -35,4 +68,7 @@ label {
     font-weight: 700;
     line-height: 28px;
     z-index: 999;
+}
+@keyframes identifier {
+    
 }

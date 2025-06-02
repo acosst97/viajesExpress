@@ -19,7 +19,7 @@
         width: 35px;
 
         .divisor {
-            background-color:  #0dcaf0;
+            background-color:  #198754;
             height: 24px;
             margin-top: 4px;
             width: 1px;
@@ -27,13 +27,13 @@
     }
 
     .arrow-down:hover {
-        background-color:  #0dcaf0;
-        background-image: url("/src/assets/icons/down-arrow.svg");
+        background-color:  #198754;
+        background-image: url("/assets/icons/down-arrow.svg");
     }
 
     .arrow-down.selected {
-        background-color:  #0dcaf0;
-        background-image: url("/src/assets/icons/down-arrow.svg");
+        background-color:  #198754;
+        background-image: url("/assets/icons/down-arrow.svg");
     }
 }
 
@@ -47,7 +47,7 @@
     z-index: 10;
 
     .option {
-        background-color: #0dcaf0;
+        background-color: #198754;
         border-bottom: 1px dashed white;
         color: white;
         cursor: pointer;
