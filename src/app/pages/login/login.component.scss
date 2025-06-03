@@ -13,13 +13,13 @@
 	text-align: center;
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 	vertical-align: middle;
-	background-color: #f5f5f5;
-	background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
-	background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: linear-gradient(top, #ffffff, #e6e6e6);
+	// background-color: #f5f5f5;
+	// background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+	// background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+	// background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+	// background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+	// background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+	// background-image: linear-gradient(top, #ffffff, #e6e6e6);
 	background-repeat: repeat-x;
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr=#ffffff, endColorstr=#e6e6e6, GradientType=0);
 	border-color: #e6e6e6 #e6e6e6 #e6e6e6;
@@ -149,12 +149,12 @@ body {
 input {
 	width: 100%;
 	margin-bottom: 10px;
-	background: rgba(0, 0, 0, 0.3);
+	// background: rgba(0, 0, 0, 0.3);
 	border: none;
 	outline: none;
 	padding: 10px;
 	font-size: 13px;
-	color: #fff;
+	color: #000000;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	border-radius: 4px;
@@ -186,14 +186,91 @@ input:focus {
 	background: none;
 }
 
-#registro-modal {
-	.main-cont {
+#registre {
+	.modal-cont {
+	  height: 65vh;
+	  width: 620px;
+	  padding: 35px;
+	  box-sizing: border-box;
+	  overflow: overlay;
+  
+	  .form-title {
+		text-align: center;
+		margin-bottom: 25px;
+		color: #333;
+	  }
+  
+	  .form-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px;
+		margin-bottom: 15px;
+  
+		> div {
+		  width: 100%;
+		}
+	  }
+  
+	  label {
+		display: block;
+		margin-bottom: 8px;
+		font-weight: 600;
+		color: #555;
+	  }
+  
+	  .form-input {
 		width: 100%;
-		background-color: #172a40;
-		height: 70vh;
-		border-radius: 20px;
-		margin: -11% 0% -1% 0%;
-		
+		padding: 10px 12px;
+		border: 1px solid #ccc;
+		border-radius: 6px;
+		font-size: 1em;
+		box-sizing: border-box;
+		transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	  }
+  
+	  .form-input:focus {
+		outline: none;
+		border-color: #007bff;
+		box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+	  }
+  
+	  .warning {
+		color: #dc3545;
+		font-size: 0.85em;
+		margin-top: 5px;
+		margin-bottom: 10px;
+	  }
+  
+	  .warning.green {
+		color: #28a745;
+	  }
+  
+	  .btn-success {
+		width: 100%;
+		padding: 10px 20px;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		font-size: 1em;
+		background-color: #28a745;
+		color: white;
+		transition: background-color 0.3s ease;
+		margin-top: 20px;
+  
+		&:hover {
+		  background-color: #218838;
+		}
+  
+		&:disabled {
+		  background-color: #94d3a2;
+		  cursor: not-allowed;
+		}
+	  }
+  
+	  /* Estilos del cargador */
+	  .global-loader-backdrop {
+		/* ... tus estilos de cargador ... */
+	  }
 	}
 }
 
@@ -235,6 +312,20 @@ input:focus {
 			font-size: 1.25em;
 		}
 
+		.icon-eye-opened {
+			cursor: pointer;
+			height: 16px;
+			margin: 9px 8px 8px;
+			transition: 0.3s;
+			width: 22px;
+			.icon{
+				width: 24px;
+				height: 24px;
+				background-image: url("/assets/icons/eye.svg");
+				background-size: contain;
+				background-repeat: no-repeat;	
+			}
+		}
 		.input-label {
 
 			.blue-label {

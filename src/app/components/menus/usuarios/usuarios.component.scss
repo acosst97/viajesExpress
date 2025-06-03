@@ -1,102 +1,210 @@
-#edit-modal {
-.modal{
-    align-items: center;
-    background-color: gainsboro;
-    display: flex;
-    font-family: Arial, Helvetica, sans-serif;
-    justify-content: center;
-    left: 0;
-    bottom: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 2;
-    .main-cont {
-        width: 80%; 
-        max-width: 600px; 
-        background-color: #f4f6f8; 
-        padding: 30px; 
-        border-radius: 10px;
-        margin: 20px auto; 
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Añadimos una sombra suave */
-    
-        h1 {
-          color: #333; /* Color de texto más legible */
-          text-align: center;
-          margin-bottom: 20px;
-        }
-    
-        .form {
-          display: grid;
-          grid-template-columns: 1fr; /* Una sola columna para que los labels estén encima de los inputs en pantallas pequeñas */
-          gap: 15px;
-    
-          @media (min-width: 576px) { /* Media query para pantallas más grandes */
-            grid-template-columns: 1fr 1fr; /* Volvemos a dos columnas en pantallas medianas y grandes */
-          }
-    
-          .input-label {
-            display: flex; /* Usamos flexbox para alinear label e input verticalmente */
-            flex-direction: column; /* Apilamos el label encima del input */
-    
-            label { /* Estilamos el label */
-              color: #555;
-              font-size: 0.9em;
-              margin-bottom: 5px;
-              text-align: left; /* Aseguramos que el texto esté alineado a la izquierda */
-            }
-    
-            input[type="text"],
-            input[type="number"],
-            input[type="email"] {
-              padding: 10px;
-              border: 1px solid #ccc; /* Borde sutil */
-              border-radius: 5px; /* Bordes redondeados */
-              font-size: 1em;
-              box-sizing: border-box; /* Para que el padding no afecte el ancho total */
-              width: 100%; /* Los inputs ocupan todo el ancho de su celda */
-              transition: border-color 0.3s ease; /* Transición suave para el focus */
-    
-              &:focus {
-                outline: none; /* Removemos el outline por defecto */
-                border-color: #007bff; /* Cambiamos el color del borde al enfocar */
-                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Añadimos una sombra suave al enfocar */
-              }
-            }
-          }
-    
-          .error-message {
-            color: #dc3545; /* Color rojo para los mensajes de error */
-            font-size: 0.8em;
-            margin-top: 5px;
-            text-align: left; /* Alineamos el texto de error a la izquierda */
-            grid-column: 1 / -1; /* Ocupa ambas columnas en caso de estar en layout de dos columnas */
-          }
-    
-          .btn-large {
-            grid-column: 1 / -1; /* El botón ocupa ambas columnas */
-            padding: 12px 20px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-    
-            &:hover {
-              opacity: 0.9;
-            }
-    
-            &:disabled {
-              background-color: #6c757d;
-              cursor: not-allowed;
-            }
-          }
+#usuarios {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  .info-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: end;
+    .box {
+      padding: 30px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      .icon{
+        width: 34px;
+        height: 24px;
+        background-image: url("/assets/icons/roles-user.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+    }
+    .cont-table-rol{
+      padding: 30px;
+    }
+  }
+  .table {
+    .items {
+      display: flex;
+      gap: 10px;
+      .btn.btn-info {
+        .icon {
+          width: 24px;
+          height: 24px;
+          background-image: url("/assets/icons/vehiculoedit.svg");
+          background-size: contain;
+          background-repeat: no-repeat;
         }
       }
-}
- 
+      .btn.btn-success {
+        .icon-success {
+          width: 24px;
+          height: 24px;
+          background-image: url("/assets/icons/vehiculoeview.svg");
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+      }
+    }
+  }
+  .registre-buttom {
+    width: 15vw;
+    margin: 0 0 22px 0;
+    border-radius: 18px;
+    background-color: #2b8da9d4;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 10px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      background-color: #084e61d4;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+    :active {
+      background-color: #d0d0d0;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      transform: translateY(0);
+    }
+    .icon {
+      background-image: url("/assets/icons/registrecar.svg");
+      width: 24px;
+      height: 25px;
+      background-repeat: no-repeat;
+    }
+  }
 }
 
-#modal-rol{
-    @extend #edit-modal;
+#edit {
+  .modal-cont {
+    height: 65vh;
+    width: 620px;
+    padding: 35px;
+    box-sizing: border-box;
+    overflow: overlay;
+
+    .form-title {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 15px;
+
+      > div {
+        width: 100%;
+      }
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    }
+
+    .warning {
+      color: #dc3545;
+      font-size: 0.85em;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+
+    .warning.green {
+      color: #28a745;
+    }
+
+    .btn-success {
+      width: 100%;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      background-color: #28a745;
+      color: white;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+
+      &:hover {
+        background-color: #218838;
+      }
+
+      &:disabled {
+        background-color: #94d3a2;
+        cursor: not-allowed;
+      }
+    }
+
+    /* Estilos del cargador */
+    .global-loader-backdrop {
+      /* ... tus estilos de cargador ... */
+    }
+  }
+}
+
+#view-rol {
+  .modal-cont {
+    padding: 25px;
+    width: 310px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    .icon {
+      width: 34px;
+      height: 24px;
+      background-image: url("/assets/icons/assign.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+#registre-rol {
+  @extend #edit;
+  .modal-cont {
+    height: 47vh;
+    width: 333px;
+    padding: 35px;
+    box-sizing: border-box;
+    overflow: overlay;
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+  }
 }

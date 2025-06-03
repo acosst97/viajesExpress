@@ -1,11 +1,134 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormvalidationService {
 
+
+  initFormUsuario(){
+    return this.fb.group({
+      idUsuario: ['', [
+      ]],
+      documento: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]+$/),
+        Validators.min(1),
+        Validators.max(100) 
+      ]],
+      primerNombre: ['', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9]*$/), 
+        Validators.minLength(5),
+        Validators.maxLength(20),
+      ]],
+      primerApellido: ['', [
+        Validators.required,
+        // Validators.pattern(/^[A-Za-z]{3}[0-9]{3,4}$/), 
+      ]],
+      segundoNombre: ['', [
+       
+  
+      ]],
+      segApellido: ['', [
+    
+      ]],
+  
+      experiencia: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]*$/), 
+        Validators.minLength(0),
+        // Validators.maxLength(20),
+      ]],
+      telefono: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]*$/), 
+   
+      ]],
+      correo: ['', [
+        Validators.required,
+
+      ]],
+   
+    });
+  }
+  formRegistreUser(){
+    return this.fb.group({
+      documento: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]+$/),
+     
+      ]],
+      primerNombre: ['', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9]*$/), 
+        Validators.minLength(5),
+        Validators.maxLength(20),
+      ]],
+      primerApellido: ['', [
+        Validators.required,
+      ]],
+      segundoNombre: ['', [
+      
+      ]],
+      segApellido: ['', [
+    
+      ]],
+      fechaNacimiento: ['', [
+        Validators.required,
+      ]],
+      experiencia: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]*$/), 
+        // Validators.minLength(0),
+       
+      ]],
+      telefono: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]*$/), 
+   
+      ]],
+      correo: ['', [
+        Validators.required,
+        Validators.email
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/),
+        Validators.minLength(8),
+        Validators.maxLength(14),
+        this.validarMayuscula(),
+      ]],
+   
+    });
+  }
+
+//RESERVACIONES
+initFormReservas(){
+ return  this.fb.group({
+    detallePago: ['', Validators.required],
+    valorPago: ['', Validators.required],
+    fechaReserva: ['', [Validators.required,this.fechaNoPasadaValidator]],
+    fechaViaje: ['', [Validators.required, this.fechaNoPasadaValidator]],
+    documentoUsuario: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+    telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+    correo: ['', [Validators.required, Validators.email]],
+  });
+} 
+fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
+  const fechaValor = control.value;
+  if (!fechaValor) return null;
+
+  const fechaViaje = new Date(fechaValor);
+  const hoy = new Date();
+
+  // Quitar horas/minutos/segundos para comparación solo de fechas
+  hoy.setHours(0, 0, 0, 0);
+  fechaViaje.setHours(0, 0, 0, 0);
+
+  return fechaViaje < hoy ? { fechaPasada: true } : null;
+}
   //--------------------------------------------------------------------------------------//
   //   //*******************  Validacion De formulario RECOVERY Password *** //
   //------------------------------------------------------------------------------------//
@@ -46,7 +169,6 @@ export class FormvalidationService {
     const control = form.get(fieldName);
     const errors = control?.errors;
     const validationErrors = [];
-    const value = control?.value || '';
     if (errors) {
       if (formSubmitted || control?.touched || control?.dirty) {
 
@@ -65,11 +187,18 @@ export class FormvalidationService {
         if (errors['mayusculaError']) {
           validationErrors.push({ valid: false, message: 'Se requiere una letra Mayuscula' });
         }
-      
       }
-      return validationErrors;
     }
-    return []; // retorno vacio si ya no hay Errores
+    if (validationErrors.length > 0) {
+      return validationErrors;
+    } 
+ 
+    else if (control?.valid && (formSubmitted || control?.touched || control?.dirty)) {
+      return [{ message: 'Campo válido', valid: true }];
+    } 
+    else {
+      return []; 
+    }
   }
 
   initFormVehiculo(): FormGroup {
@@ -304,6 +433,9 @@ export class FormvalidationService {
           if (errors['max']) {
             validationErrors.push({ message: `El valor máximo es ${control.errors['max'].max}.`, valid: false });
           } 
+          if (errors['fechaPasada']) {
+            validationErrors.push({ valid: false, message: 'no se permite fechas pasadas,' });
+          }
         }
       }
       if (validationErrors.length > 0) {

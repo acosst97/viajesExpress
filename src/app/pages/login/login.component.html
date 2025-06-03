@@ -1,7 +1,8 @@
 <app-nav></app-nav>
+
+
 <section class="page-section bg-light" id="portfolio">
   <div class="container">
-
     <div class="row">
       <div class="col-lg-4 col-sm-6 mb-4">
         <div class="portfolio-item">
@@ -24,8 +25,7 @@
                 class="error-message">
                 Contraseña es requerida.
               </div>
-              <div *ngIf="loginError" class="error-message">{{ loginError }}</div>
-
+          
               <button type="submit" class="btn btn-primary btn-block btn-large"
                 [disabled]="loginForm.invalid">Ingresar</button>
               <div class="btn btn-primary btn-block btn-large" (click)="openModal()">Registro</div>
@@ -33,9 +33,12 @@
 
             <button type="submit" class="btn btn-primary btn-block btn-large" (click)="openRecovery()">Recuperar
               contraseña</button>
+              @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" alt="loading icon" />
+                  </div>
+                }
           </div>
-
-
         </div>
       </div>
 
@@ -60,63 +63,121 @@
       </div>
     </app-modal>
   </div>
-
-  <app-modal #AbriModal id="registro-modal">
-    <div class="main-cont">
-      <div class="login">
-        <h1>Registro</h1>
-        <form [formGroup]="registroForm" (ngSubmit)="registre()">
-          <input type="text" formControlName="documento" placeholder="123445" required />
-          <div *ngIf="registroForm.get('documento')?.invalid && registroForm.get('documento')?.touched"
-            class="error-message">Documento</div>
-          <input type="text" formControlName="primerNombre" placeholder="Nombres" required />
-          <div *ngIf="registroForm.get('primerNombre')?.invalid && registroForm.get('primerNombre')?.touched"
-            class="error-message">Nombre es requerido.</div>
-
-          <input type="text" formControlName="segundoNombre" placeholder="Segundo Nombre" />
-
-          <input type="text" formControlName="primerApellido" placeholder="Apellidos" required />
-          <div *ngIf="registroForm.get('primerApellido')?.invalid && registroForm.get('primerApellido')?.touched"
-            class="error-message">Apellido es requerido.</div>
-
-          <input type="text" formControlName="segApellido" placeholder="Segundo Apellido" />
-
-          <input type="date" formControlName="fechaNacimiento" placeholder="Fecha de Nacimiento" required />
-          <div *ngIf="registroForm.get('fechaNacimiento')?.invalid && registroForm.get('fechaNacimiento')?.touched"
-            class="error-message">Fecha de Nacimiento es requerida.</div>
-
-          <input type="number" formControlName="experiencia" placeholder="Experiencia (años)" required />
-          <div *ngIf="registroForm.get('experiencia')?.invalid && registroForm.get('experiencia')?.touched">
-            <div *ngIf="registroForm.get('experiencia')?.errors?.['required']" class="error-message">Experiencia es
-              requerida.</div>
-            <div *ngIf="registroForm.get('experiencia')?.errors?.['min']" class="error-message">La experiencia no puede
-              ser negativa.</div>
-          </div>
-
-          <input type="tel" formControlName="telefono" placeholder="Teléfono" required />
-          <div *ngIf="registroForm.get('telefono')?.invalid && registroForm.get('telefono')?.touched"
-            class="error-message">Teléfono es requerido.</div>
-
-          <input type="email" formControlName="correo" placeholder="Correo" required />
-          <div *ngIf="registroForm.get('correo')?.invalid && registroForm.get('correo')?.touched">
-            <div *ngIf="registroForm.get('correo')?.errors?.['required']">Correo electrónico es requerido.</div>
-            <div *ngIf="registroForm.get('correo')?.errors?.['email']">Correo electrónico no válido.</div>
-          </div>
-
-          <input type="password" formControlName="password" placeholder="Contraseña" required />
-          <div *ngIf="registroForm.get('password')?.invalid && registroForm.get('password')?.touched"
-            class="error-message">Contraseña es requerida.</div>
-
-          <div *ngIf="registroError" class="error-message">{{ registroError }}</div>
-
-          <button class="btn btn-primary btn-block btn-large" type="submit"
-            [disabled]="registroForm.invalid">Guardar</button>
-        </form>
-
-      </div>
+</section>
+  <app-modal #AbriModal id="registre" [idDefault]="1">
+    <div class="modal-cont">
+        <div class="form-container">
+            <h2 class="form-title">Actualiza tus datos</h2>
+            <form [formGroup]="registroForm" (ngSubmit)="save()">
+                <div class="form-row">
+                    <div>
+                        <label for="documento">documento</label>
+                        <input class="form-input" type="text" formControlName="documento" id="documento">
+                        @for (validation of getValidatorError('documento'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="primerNombre">primer Nombre</label>
+                        <input class="form-input" type="text" id="primerNombre" formControlName="primerNombre">
+                        @for (validation of getValidatorError('primerNombre'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="segundoNombre">Segundo nombre</label>
+                        <input class="form-input" type="text" id="segundoNombre" formControlName="segundoNombre">
+                    </div>
+                    <div>
+                        <label for="primerApellido">primer Apellido:</label>
+                        <input class="form-input" type="text" id="primerApellido" formControlName="primerApellido">
+                        @for (validation of getValidatorError('primerApellido'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-row">
+                  <div>
+                      <label for="segApellido">Segundo Apellido</label>
+                      <input class="form-input" type="text" id="segApellido" formControlName="segApellido">
+                  </div>
+                  <div>
+                      <label for="experiencia">experiencia:</label>
+                      <input class="form-input" type="text" id="experiencia" formControlName="experiencia">
+                      @for (validation of getValidatorError('experiencia'); track $index) {
+                      <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                          {{ validation.message }}
+                      </div>
+                      }
+                  </div>
+              </div>
+              <div class="form-row">
+                <div>
+                    <label for="fechaNacimiento">Fecha Nacimiento</label>
+                    <input type="date" formControlName="fechaNacimiento" placeholder="Fecha de Nacimiento">
+                    @for (validation of getValidatorError('fechaNacimiento'); track $index) {
+                      <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                          {{ validation.message }}
+                      </div>
+                      }
+                </div>
+                <div>
+                  <label for="telefono">telefono</label>
+                  <input class="form-input" type="text" id="telefono" formControlName="telefono">
+                  @for (validation of getValidatorError('telefono'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+              </div>
+            </div>
+              <div class="form-row">
+                <div>
+                    <label for="correo">correo:</label>
+                    <input class="form-input" type="text" id="correo" formControlName="correo">
+                    @for (validation of getValidatorError('correo'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+                </div>
+                <div>
+                  <label for="password">Ingresa tu contraseña</label>
+                  <input formControlName="password" type="{{newPasswordView ?'text':'password'}}"
+                            placeholder="***********">
+                        <div class="{{newPasswordView ?'icon-eye-opened':'icon-eye-closed'}}"
+                            (click)="showHideNewPassword()"><div class="icon"></div></div>
+                  @for (validation of getValidatorError('password'); track $index) {
+                  <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                      {{ validation.message }}
+                  </div>
+                  }
+              </div>
+            </div>
+                <button type="submit" class="btn btn-success">Confirmar</button>
+                @if (this.loadingData()) {
+                    <div class="global-loader-backdrop">
+                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                    </div>
+                    }
+                    @if (this.loadingData()===false) {}
+            </form>
+            <!-- <pre>{{registroForm.value  | json}}</pre>
+            <pre>{{registroForm.status}}</pre> -->
+        </div>
     </div>
   </app-modal>
 
-
-
-</section>
+@if (showResponseModal) {
+  <div class="popup-alert">
+      <app-alert></app-alert>
+  </div>
+  }

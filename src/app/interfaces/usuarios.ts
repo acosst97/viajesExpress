@@ -1,13 +1,20 @@
 export interface ListarUsuarioDto {
-    idUsuario: number;
-    documento: string;
-    primerNombre: string;
-    segundoNombre: string;
-    primerApellido: string;
-    segApellido: string;
-    correo: string;
-    telefono: string;
-    nombresRoles: string[];
+  idUsuario:      number;
+  documento:      string;
+  primerNombre:   string;
+  segundoNombre:  null;
+  primerApellido: string;
+  segApellido:    null;
+  telefono:       string;
+  correo:         string;
+  experiencia:    number;
+  rolId:          null;
+  rolNombre:      null;
+}
+export enum RolEnum {
+  ADMINISTRADOR = "ADMINISTRADOR",
+  EMPLEADO = "EMPLEADO",
+  CLIENTE = "CLIENTE"
 }
 
 
@@ -15,16 +22,16 @@ export interface UpdateUsuarioDTO {
     idUsuario: number;
     primerNombre: string;
     segundoNombre?: string;
-    primerApellido: string;
+    primerApellido?: string;
     segApellido?: string;
-    experiencia: number;
+    experiencia?: number;
     telefono: string;
     correo?: string;
   }
   
   export interface UpdateUsuarioRolDTO {
     idUsuario: number;
-    idRol: number; // Asumo que el ID del rol es un número
+    idRol: number; 
   }
   
   export interface MensajeDTO {

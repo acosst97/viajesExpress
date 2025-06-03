@@ -4,12 +4,17 @@
 <!-- Masthead-->
 <header class="masthead">
     <div class="container">
-        <div class="masthead-subheading">Welcome To Our Studio!</div>
-        <div class="masthead-heading text-uppercase">It's Nice To Meet You</div>
-        <a class="btn btn-primary btn-xl text-uppercase" href="#services">Viajes Express</a>
-    </div>
-</header>
+        <div class="masthead-subheading"></div>
+        <!-- <div class="masthead-heading text-uppercase">Descubre un mundo expectacular</div> -->
 
+    </div>
+
+</header>
+<a class="btn btn-primary btn-xl text-uppercase" style="width: 45%;
+align-items: center;
+flex-direction: column;
+background-color: #507878;
+margin-left: 29%;" (click)="prueba()">Bienvenido a Viajes Express!</a>
 <!-- Services-->
 <section class="page-section" id="services">
     <div class="container">
@@ -46,115 +51,174 @@
 </section>
 
 <!-- Portfolio Grid-->
-<section class="page-section bg-light" id="portfolio">
-    <div class="container">
-        <div class="text-center">
-            <h2 class="section-heading text-uppercase">Portfolio</h2>
-            <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
-        </div>
-        <div class="row">
-            @for (item of servicios; track $index)
-            {
-            <div class="col-lg-4 col-sm-6 mb-4">
-                <!-- Portfolio item 1--> 
-                <div class="portfolio-item">
-                    <a class="portfolio-link" data-bs-toggle="modal">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div> 
-                        </div>
-                        <img class="img-fluid" [src]="item.images" alt="..." />
-                    </a>
-                    <div class="portfolio-caption">
-                        <div class="portfolio-caption-heading">${{converterToNumber(item.valorServicio) | number:'1.0-2'}}</div>
-                        <div class="portfolio-caption-subheading text-muted">{{item.descripcion}}</div>
+<app-card>
+    <div class="box">
+        <ng-template #body>
+            <section class="page-section bg-light" id="portfolio">
+                <div class="container">
+                    <div class="text-center">
+                        <h2 class="section-heading text-uppercase">Portfolio</h2>
+                        <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
                     </div>
-                    <div class="">
-                        <button (click)="openFormReservation()"> Reservar</button>
-                    </div>
-                </div>
-
-            </div>
-            }
-
-            <app-modal #OpenReservationModal>
-                <div id="request-apertura">
-                    <div class="modal">
-                        <div class="modal-cont">
-                            <div class="cont-title">
-                                <h1 style="font-weight: bold;"> Solicitar Viaje <b></b></h1>
-                                <div class="text">
-                                    <p>Para poder realizar el proceso de Viajes , deben tener <br> una
-                                        Cuenta activa con <b>Viajes Express</b></p>
-                                    <p>Puedes solicitar la apertura de una cuenta haciendo el registro</p>
+                    <div class="row">
+                        @for (item of servicios; track $index) {
+                        <div class="col-lg-4 col-sm-6 mb-4">
+                            <!-- Portfolio item 1-->
+                            <div class="portfolio-item">
+                                <a class="portfolio-link" data-bs-toggle="modal">
+                                    <div class="portfolio-hover">
+                                        <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                    </div>
+                                    <img class="img-fluid" [src]="item.images" alt="..." />
+                                </a>
+                                <div class="portfolio-caption">
+                                    <div class="portfolio-caption-heading">${{converterToNumber(item.valorServicio) |
+                                        number:'1.0-2'}}</div>
+                                    <div class="portfolio-caption-subheading text-muted">{{item.descripcion}}</div>
+                                    <div style="display: flex; justify-content: center;">
+                                        <button class="btn btn-info" (click)="openFormReservation(item)">
+                                            Reservar</button>
+                                    </div>
                                 </div>
-                                <form [formGroup]="reservacionForm" class="inputs-table" (ngSubmit)="onSubmit()">
-                                    <div>
-                                        <p>Detalles del Pago <span class="warning">*</span></p>
-                                        <input class="ohinput" type="text" formControlName="detallePago"
-                                            placeholder="detalles" required>
-                                    </div>
 
-                                    <div>
-                                        <p>Valor Pago</p>
-                                        <input class="ohinput" type="text" formControlName="valorPago"
-                                            placeholder="valor">
-                                    </div>
-
-                                    <div>
-                                        <p>Fecha Reserva<span class="warning">*</span></p>
-                                        <input class="ohinput" type="date" formControlName="fechaReserva"
-                                            placeholder="fecha reserva">
-                                    </div>
-
-                                    <div>
-                                        <p>Fecha Viaje</p>
-                                        <input class="ohinput" type="date" formControlName="fechaViaje"
-                                            placeholder="fecha viaje">
-                                    </div>
-
-                                    <div>
-                                        <p>Documento<span class="warning">*</span></p>
-                                        <div class="adjust">
-                                            <input class="ohinput" type="text" formControlName="documentoUsuario"
-                                                placeholder="123456789">
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <p>Teléfono <span class="warning">*</span></p>
-                                        <input class="ohinput" type="number" formControlName="telefono"
-                                            placeholder="000 000 0000">
-                                    </div>
-
-                                    <div>
-                                        <p>Correo Electrónico <span class="warning">*</span></p>
-                                        <input class="ohinput" type="email" formControlName="correo"
-                                            placeholder="colaborador3@empresa.com.co">
-                                    </div>
-
-                                    <div class="align-btns">
-                                        <button class="btn-general" type="submit" [disabled]="reservacionForm.invalid">
-                                            Solicitar Reservación </button>
-                                        <button class="btn-general" (click)="home()"> Volver </button>
-                                    </div>
-                                    <pre>{{reservacionForm.value | json}}</pre>
-                                </form>
                             </div>
+
                         </div>
+                        }
+
                     </div>
                 </div>
-                @if (showResponseModal) {
-                <div class="popup-alert">
-                    <app-alert></app-alert>
+            </section>
+        </ng-template>
+    </div>
+
+</app-card>
+
+<app-modal #OpenReservationModal id="registre" [idDefault]="1">
+    <div class="modal-cont">
+        <div class="cont-title">
+            <h1 class="form-title">Solicitar Viaje <b></b></h1>
+            <div class="text">
+                <p>Para poder realizar el proceso de Viajes, deben tener <br> una
+                    Cuenta activa con <b>Viajes Express</b></p>
+                <p>Puedes solicitar la apertura de una cuenta haciendo el registro</p>
+            </div>
+
+            <form [formGroup]="reservacionForm" (ngSubmit)="onSubmit()">
+                <div class="form-row">
+                    <div>
+                        <label for="detallePago">Detalles del Pago <span class="warning">*</span></label>
+                        <input id="detallePago" class="form-input" type="text" formControlName="detallePago"
+                            placeholder="detalles" required>
+                        @for (validation of getValidatorError('detallePago'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+
+                    <div>
+                        <label for="valorPago">Valor Pago</label>
+                        <input id="valorPago" class="form-input" type="text" formControlName="valorPago"
+                            placeholder="valor">
+                        @for (validation of getValidatorError('valorPago'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="fechaReserva">Fecha Reserva <span class="warning">*</span></label>
+                        <input id="fechaReserva" class="form-input" type="date" formControlName="fechaReserva"
+                            placeholder="fecha reserva">
+                        @for (validation of getValidatorError('fechaReserva'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+
+                    <div>
+                        <label for="fechaViaje">Fecha Viaje</label>
+                        <input id="fechaViaje" class="form-input" type="date" formControlName="fechaViaje"
+                            placeholder="fecha viaje">
+                        @for (validation of getValidatorError('fechaViaje'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="documentoUsuario">Documento <span class="warning">*</span></label>
+                        <input id="documentoUsuario" class="form-input" type="text" formControlName="documentoUsuario"
+                            placeholder="123456789">
+                        @for (validation of getValidatorError('documentoUsuario'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                    <div>
+                        <label for="telefono">Teléfono <span class="warning">*</span></label>
+                        <input id="telefono" class="form-input" type="text" formControlName="telefono"
+                            placeholder="000 000 0000">
+                        @for (validation of getValidatorError('telefono'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="correo">Correo Electrónico <span class="warning">*</span></label>
+                        <input id="correo" class="form-input" type="email" formControlName="correo"
+                            placeholder="colaborador3@empresa.com.co">
+                        @for (validation of getValidatorError('correo'); track $index) {
+                        <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                            {{ validation.message }}
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <button class="btn-success" type="submit" [disabled]="reservacionForm.invalid">Solicitar
+                            Reservación</button>
+                    </div>
+                    <div>
+                        <button class="btn-success" type="button" (click)="home()">Volver</button>
+                    </div>
+                </div>
+                @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" />
                 </div>
                 }
-            </app-modal>
-
+                @if (this.loadingData()===false) {}
+                <!-- <pre>{{reservacionForm.value | json}}</pre> -->
+            </form>
         </div>
     </div>
-</section>
 
+</app-modal>
 
+@if (showResponseModal) {
+<div class="popup-alert" style="margin-top: 45%;">
+    <app-alert></app-alert>
+</div>
+}
 <!-- About-->
 <section class="page-section" id="about">
     <div class="container">

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import * as CryptoJS from 'crypto-js';
 import { interval, Observable, Subscription } from 'rxjs';
 import { LoginRequest, RegistroRequest, Usuario } from '../interfaces/loginRequest';
-import { FormControl } from '@angular/forms';
-
+const SECRET_KEY = 'tu_clave_secreta';
 @Injectable({
   providedIn: 'root'
 })
@@ -87,5 +87,18 @@ export class AuthService {
 
   redirectToLogin(): void {
     this.router.navigate(['/login']);
+  }
+
+  obtenerUsuario(): any {
+    const encrypted = sessionStorage.getItem('usuario');
+    if (!encrypted) return null;
+
+    const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    return JSON.parse(decrypted);
+  }
+
+  cerrarSesion() {
+    sessionStorage.removeItem('usuario');
   }
 }

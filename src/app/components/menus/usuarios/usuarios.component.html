@@ -1,15 +1,56 @@
+@if (showResponseModal) {
+  <div class="popup-alert">
+      <app-alert></app-alert>
+  </div>
+  }
+
+ <div id="usuarios">
+  <div class="info-top">
+    <app-card>
+        <ng-template #body>
+            <div class="box">
+              <div class="icon"></div>
+                Aqui puedes registrar tus roles por si <br> no tienes aun roles para asignación
+               <h4> Registra un nuevo Rol de usuario</h4>
+               <button class="btn btn-info" (click)="openModalRoles('registre-rol')">Formulario</button>
+              
+            </div>
+        </ng-template>
+    </app-card>
+    <app-card>
+      <ng-template #body>
+              <div class="cont-table-rol">
+                <h3>Lista de roles regustrados actualmente</h3>
+                @if(this.roles){
+                  <app-table [tableProps]="tablePropsRoles">
+                    <ng-template style="background-color: #E7E7E7;" #lastTH>
+                      <th style="background-color: #E7E7E7;">Acciones</th>
+                    </ng-template>
+                    <!-- <ng-template #actions let-data>
+                      <div class="btns" style="display: inline-flex; gap: 10px;">
+                        <button class="btn btn-success" (click)="editarUser(data)">Edit</button>
+                        <button class="btn btn-info" (click)="openModalRoles('abrir-modal',data)">asignar</button>
+                      </div>
+                    </ng-template> -->
+                  </app-table>
+                } @else {
+                  <div class="div">no hay data</div>
+                }
+              </div> 
+         </ng-template>
+    </app-card>
+</div>
 <app-card>
   <ng-template #body>
-    @if(this.usuario){
+    @if(this.usuarioFilter){
       <app-table [tableProps]="tableProps">
         <ng-template style="background-color: #E7E7E7;" #lastTH>
           <th style="background-color: #E7E7E7;">Acciones</th>
         </ng-template>
         <ng-template #actions let-data>
-          <div class="btns">
-            <button class="edit" (click)="editarUser(data)">Edit</button>
-            <button class="asing" (click)="asignarRoles()">asignar</button>
-            <button class="delete" (click)="eliminarUser(data)">Eliminar</button>
+          <div class="btns" style="display: inline-flex; gap: 10px;">
+            <button class="btn btn-success" (click)="editarUser(data)">Edit</button>
+            <button class="btn btn-info" (click)="openModalRoles('abrir-modal',data)">asignar</button>
           </div>
         </ng-template>
       </app-table>
@@ -17,66 +58,135 @@
       <div class="div">no hay data</div>
     }
   </ng-template>
-
   </app-card>
-<app-modal #OpenEdit>
-    <div id="edit-modal">
-        <div class="modal">
-            <div class="main-cont">
-                <h1>Actualiza tus datos</h1>
-                <form [formGroup]="editForm" (ngSubmit)="save()" class="form">
-                    <input type="text" formControlName="documento" placeholder="123445" required />
-                    <div *ngIf="editForm.get('documento')?.invalid && editForm.get('documento')?.touched"
-                      class="error-message">Documento es requerido</div>
-                  <input type="text" formControlName="primerNombre" placeholder="Nombres" required />
-                  <div *ngIf="editForm.get('primerNombre')?.invalid && editForm.get('primerNombre')?.touched"
-                    class="error-message">Nombre es requerido.</div>
-        
-                  <input class="input-label" type="text" formControlName="segundoNombre" placeholder="Segundo Nombre" />
-        
-                  <input class="input-label" type="text" formControlName="primerApellido" placeholder="Apellidos" required />
-                  <div *ngIf="editForm.get('primerApellido')?.invalid && editForm.get('primerApellido')?.touched"
-                    class="error-message">Apellido es requerido.</div>
-        
-                  <input class="input-label" type="text" formControlName="segApellido" placeholder="Segundo Apellido" />
-        
-                  <input  class="input-label" type="number" formControlName="experiencia" placeholder="Experiencia (años)" required />
-                  <div *ngIf="editForm.get('experiencia')?.invalid && editForm.get('experiencia')?.touched">
-                    <div *ngIf="editForm.get('experiencia')?.errors?.['required']" class="error-message">Experiencia es
-                      requerida.</div>
-                    <div *ngIf="editForm.get('experiencia')?.errors?.['min']" class="error-message">La experiencia no puede
-                      ser negativa.</div>
-                  </div>
-        
-                  <input class="input-label" type="text" formControlName="telefono" placeholder="Teléfono" required />
-                  <div *ngIf="editForm.get('telefono')?.invalid && editForm.get('telefono')?.touched"
-                    class="error-message">Teléfono es requerido.</div>
-        
-                  <input class="input-label" type="email" formControlName="correo" placeholder="Correo" required />
-                  <div *ngIf="editForm.get('correo')?.invalid && editForm.get('correo')?.touched">
-                    <div *ngIf="editForm.get('correo')?.errors?.['required']">Correo electrónico es requerido.</div>
-                    <div *ngIf="editForm.get('correo')?.errors?.['email']">Correo electrónico no válido.</div>
-                  </div>
-        
-        
-                  <div *ngIf="EditError" class="error-message">{{ EditError }}</div>
-        
-                  <button class="btn btn-primary btn-block btn-large" type="submit"
-                    [disabled]="editForm.invalid">Guardar</button>
-                    <button class="btn btn-primary btn-block btn-large" type="submit"
-                     (click)="goToHome()">Volver</button>
-                </form>
-            </div>
-        
-        </div>
-    </div>
 
+ </div>  
+
+
+ <app-modal #OpenEdit id="edit" [idDefault]="1">
+  <div class="modal-cont">
+      <div class="form-container">
+          <h2 class="form-title">Actualiza tus datos</h2>
+          <form [formGroup]="editForm" (ngSubmit)="save()">
+              <div class="form-row">
+                  <div>
+                      <label for="codRuta">documento</label>
+                      <input class="form-input" type="text" formControlName="documento" id="documento">
+                      @for (validation of getValidatorError('documento'); track $index) {
+                      <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                          {{ validation.message }}
+                      </div>
+                      }
+                  </div>
+                  <div>
+                      <label for="primerNombre">primer Nombre</label>
+                      <input class="form-input" type="text" id="primerNombre" formControlName="primerNombre">
+                      @for (validation of getValidatorError('primerNombre'); track $index) {
+                      <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                          {{ validation.message }}
+                      </div>
+                      }
+                  </div>
+              </div>
+              <div class="form-row">
+                  <div>
+                      <label for="segundoNombre">Segundo nombre</label>
+                      <input class="form-input" type="text" id="segundoNombre" formControlName="segundoNombre">
+                  </div>
+                  <div>
+                      <label for="primerApellido">primer Apellido:</label>
+                      <input class="form-input" type="text" id="primerApellido" formControlName="primerApellido">
+                      @for (validation of getValidatorError('primerApellido'); track $index) {
+                      <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                          {{ validation.message }}
+                      </div>
+                      }
+                  </div>
+              </div>
+              <div class="form-row">
+                <div>
+                    <label for="segApellido">Segundo Apellido</label>
+                    <input class="form-input" type="text" id="segApellido" formControlName="segApellido">
+                </div>
+                <div>
+                    <label for="experiencia">experiencia:</label>
+                    <input class="form-input" type="text" id="experiencia" formControlName="experiencia">
+                    @for (validation of getValidatorError('experiencia'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="form-row">
+              <div>
+                  <label for="telefono">telefono</label>
+                  <input class="form-input" type="text" id="telefono" formControlName="telefono">
+                  @for (validation of getValidatorError('telefono'); track $index) {
+                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                        {{ validation.message }}
+                    </div>
+                    }
+              </div>
+              <div>
+                  <label for="correo">primer Apellido:</label>
+                  <input class="form-input" type="text" id="correo" formControlName="correo">
+                  @for (validation of getValidatorError('correo'); track $index) {
+                  <div class="warning" [ngClass]="{ 'green': validation.valid }">
+                      {{ validation.message }}
+                  </div>
+                  }
+              </div>
+          </div>
+              <button type="submit" class="btn btn-success">Confirmar</button>
+              @if (this.loadingData()) {
+                  <div class="global-loader-backdrop">
+                      <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                  </div>
+                  }
+                  @if (this.loadingData()===false) {}
+          </form>
+      </div>
+  </div>
+</app-modal>
+
+  <app-modal #AsingRol id="view-rol">
+    <div class="modal-cont">
+      <div class="icon"></div>
+       <p> Asigna el rol que desees para tus usuarios</p>
+        <app-select [options]="rolesOption" (optionSelected)="onRolSelect($event)"></app-select>
+        <div>
+          <button class="btn btn-success" (click)="openModalRoles('confirm',userSelected)">Confirmar</button>
+        </div>
+      
+        @if (this.loadingData()) {
+          <div class="global-loader-backdrop">
+              <img src="/assets/icons/loading.svg" class="rotate-icon" />
+            </div>
+      }
+      @if (this.loadingData()===false) {}
+    </div>
   </app-modal>
 
-  <app-modal #AsingRol >
-   <div id="modal-rol">
-    <div class="modal">
-        <app-select [options]="rolesOption"></app-select>
+  <app-modal #OpenRegistreRol id="registre-rol" [idDefault]="1">
+    <div class="modal-cont">
+        <div class="form-container">
+            <h2 class="form-title">Registra un nuevo Rol</h2>
+            <form  (ngSubmit)="save()">
+                <div class="form-row">
+                    <div>
+                        <label for="codRuta">documento</label>
+                      <app-select [options]="listaRolesAssing"></app-select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Confirmar</button>
+                @if (this.loadingData()) {
+                    <div class="global-loader-backdrop">
+                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                    </div>
+                    }
+                    @if (this.loadingData()===false) {}
+            </form>
+        </div>
     </div>
-   </div>
   </app-modal>

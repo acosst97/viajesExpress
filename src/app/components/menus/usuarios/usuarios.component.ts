@@ -1,8 +1,9 @@
 import { Router } from '@angular/router';
-import { Component, inject, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import {
   ListarUsuarioDto,
   RolDto,
+  RolEnum,
   Roles,
   selectOptions,
   UpdateUsuarioDTO,
@@ -23,27 +24,44 @@ import { ModalComponent } from '../../modal/modal.component';
 import { log } from 'console';
 import { SelectComponent } from "../../select/select.component";
 import { CardComponent } from "../../card/card.component";
+import { CustomSrvService } from '../../../services/custom-srv.service';
+import { AlertComponent } from '../../alert/alert.component';
+import { FormvalidationService } from '../../../services/formvalidation.service';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [TableComponent, CommonModule, ReactiveFormsModule, ModalComponent, SelectComponent, CardComponent],
+  imports: [AlertComponent,TableComponent, CommonModule, ReactiveFormsModule, ModalComponent, SelectComponent, CardComponent],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss',
 })
 export class UsuariosComponent implements OnInit {
   @ViewChild('OpenEdit') openEdit: any;
   @ViewChild('AsingRol') asingRolModal: any;
-  srv = inject(SrvGenericosService);
-  tableProps: Table;
-  editForm: FormGroup;
-  usuario: ListarUsuarioDto[];
-  roles: RolDto[];
-  rolesOption: selectOptions[] = [];
-  EditError: string = '';
+  @ViewChild('OpenRegistreRol') openRegistreRol: any;
+  srv               = inject(SrvGenericosService);
+  customSrv         = inject(CustomSrvService);
+  formSrv           = inject(FormvalidationService);
+  loadingData       = signal(false);
+  tableProps        : Table;
+  tablePropsRoles   : Table;
+  editForm          : FormGroup;
+  usuario           : ListarUsuarioDto[] ;
+  usuarioFilter     : any[];
+  roles             : RolDto[] ;
+  rolesOption       : selectOptions[] = [];
+  rolSelected       : selectOptions;
+  userSelected      : ListarUsuarioDto;
+  EditError         : string = '';
+  formSubmitted     :        boolean = false;
+  showResponseModal :        boolean = false;
+  listaRolesAssing  :selectOptions[] = [
+    { text: "ADMINISTRADOR" },
+    { text: "EMPLEADO" },
+    { text: "CLIENTE" }
+  ];
   ngOnInit(): void {
-    this.initEditForm();
-
+    this.editForm = this.formSrv.initFormUsuario();
     this.tableProps = {
       filter: 1,
       actions: 1,
@@ -54,36 +72,60 @@ export class UsuariosComponent implements OnInit {
       showFilter: true,
       class: 'non-striped',
     };
+    this.tablePropsRoles = {
+      filter: 0,
+      actions: 1,
+      exportar: {
+        objeto: '',
+      },
+      data: '',
+      showFilter: false,
+      class: 'non-striped',
+    };
     this.listarUsuarios();
     this.listarRoles();
-  }
-  initEditForm(): void {
-    this.editForm = this.fb.group({
-      idUsuario: [''], // Campo oculto para almacenar el ID del usuario a editar
-      documento: [{ value: '', disabled: true }, Validators.required], // Deshabilitado
-      primerNombre: ['', Validators.required],
-      segundoNombre: [''],
-      primerApellido: ['', Validators.required],
-      segApellido: [''],
-      experiencia: ['', [Validators.required, Validators.min(0)]],
-      telefono: ['', Validators.required],
-      correo: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.email],
-      ], // Deshabilitado
-      // Puedes añadir un campo para el rol si lo manejarás en el mismo formulario
-      // idRol: ['']
+    this.customSrv.toast$.subscribe((message) => {
+      this.showResponseModal = !!message;
     });
   }
 
+  /**Validacion form */
+  getValidatorError(fieldName: string) {
+    return this.formSrv.getValidationRutasEstados(
+      this.editForm, fieldName, this.formSubmitted);
+  }
+  
   async listarUsuarios() {
     try {
       const data: any = await firstValueFrom(this.srv.listarUsuarios());
       console.log('data usuarios', data);
       this.usuario = data.usuarios;
-      this.tableProps.data = this.usuario;
+      if (this.usuario.length>0) {
+        // const usuariosConRol = this.usuario.filter((data: ListarUsuarioDto) => {
+        //   return data.rolId !== null && data.rolId !== undefined; // Filtra si rolId no es nulo
+        //   // Si quieres filtrar por un rol específico:
+        //   // return data.rolNombre === 'ADMINISTRADOR';
+        // });
+      this.usuarioFilter = this.usuario.map((data:any)=>{
+      const {idUsuario, documento,primerNombre,segundoNombre,
+        primerApellido,segApellido,telefono,correo,experiencia,rolId,rolNombre,...d
+       } = data
+       const nombreCompleto = `${primerNombre} ${primerApellido}`;
+      return {
+        idUsuario,
+        documento,
+        nombre:nombreCompleto,
+        telefono,
+        correo,
+        experiencia,
+        rol:rolNombre
+      }
+      })  
+      this.tableProps.data = this.usuarioFilter;
+      }
     } catch (error) {
       console.log('error user', error);
+      this.tableProps.data = [];
     }
   }
   //listarRoles
@@ -92,9 +134,13 @@ export class UsuariosComponent implements OnInit {
       const data: Roles = await firstValueFrom(this.srv.listarRoles());
       console.log('data Roles', data);
       if (data.roles.length > 0) {
-        for (const key in data.roles) {
-          if (Object.prototype.hasOwnProperty.call(data.roles, key)) {
-            const element = data.roles[key];
+        this.roles = data.roles;
+        console.log('table Roles', this.roles);
+        this.tablePropsRoles.data = this.roles;
+        const rolesFiltrados = data.roles.filter(role => role.nombreRol.toUpperCase() !== 'ADMINISTRADOR');
+        for (const key in rolesFiltrados) {
+          if (Object.prototype.hasOwnProperty.call(rolesFiltrados, key)) {
+            const element = rolesFiltrados[key];
             this.rolesOption.push({
               id: element.idRol,
               text: element.nombreRol,
@@ -102,37 +148,40 @@ export class UsuariosComponent implements OnInit {
             console.log('lista option roles', this.rolesOption);
           }
         }
+      }else{
+        this.customSrv.showToast({ text: 'Sin roles para asignar', type: 'success-white', duration: 2000 });
+        this.loadingData.update(()=>false);
+        this.tablePropsRoles.data =  [];
       }
     } catch (error) {
       console.log('Error ROLES', error);
+      this.customSrv.showToast({ text: 'Falló la solicitud', type: 'error-white', duration: 2000 })
     }
   }
-
-  editarUser(data: ListarUsuarioDto) {
-    console.log('data que llega para editar', data);
-    // Asigna los datos del usuario al formulario
-    this.editForm.patchValue({
-      idUsuario: data.idUsuario,
-      documento: data.documento,
-      primerNombre: data.primerNombre,
-      segundoNombre: data.segundoNombre,
-      primerApellido: data.primerApellido,
-      segApellido: data.segApellido,
-      telefono: data.telefono,
-      correo: data.correo,
-    });
-
-    this.editForm.get('documento')?.disable();
-    this.editForm.get('correo')?.disable();
-
-    this.openEdit.showModal = true;
-    console.log('Formulario precargado con data:', this.editForm.value);
-  }
-  editarUser1(data: ListarUsuarioDto) {
-    console.log('data que llega', data);
-    const dataUser = this.usuario.find((d) => data.idUsuario === d.idUsuario);
-    this.openEdit.showModal = true;
-    console.log('data econtrada', dataUser);
+  editarUser(userDataParaEditar: ListarUsuarioDto) {
+    console.log('data que llega para editar', userDataParaEditar);   
+    const data = this.usuario.find(
+      (u: ListarUsuarioDto) => u.idUsuario === userDataParaEditar.idUsuario
+    );
+    const idUsuario = data.idUsuario;
+    console.log('data convert', data);
+    if (data) {
+      this.editForm.patchValue({
+        idUsuario: idUsuario,
+        documento: data.documento,
+        primerNombre: data.primerNombre,
+        segundoNombre: data.segundoNombre,
+        primerApellido: data.primerApellido,
+        experiencia:data.experiencia,
+        segApellido: data.segApellido,
+        telefono: data.telefono,
+        correo: data.correo,
+      });
+      this.editForm.get('documento')?.disable();
+      this.editForm.get('correo')?.disable();
+      this.openEdit.showModal = true;
+      console.log('Formulario precargado con data:', this.editForm.value);
+    }
   }
   eliminarUser(data: ListarUsuarioDto) {
     const dataUser = this.usuario.find((d) => data.idUsuario === d.idUsuario);
@@ -143,11 +192,10 @@ export class UsuariosComponent implements OnInit {
     // this.router.navigate(['/usuarios']);
     this.openEdit.showModal = false;
   }
-  save(): void {
+  save() {
+    this.loadingData.update(()=>true);
     if (this.editForm.valid) {
-      // Clona el valor del formulario para evitar mutar el original, y habilita temporalmente los campos deshabilitados para obtener sus valores
-      const formData = { ...this.editForm.getRawValue() };
-
+      const formData = this.editForm.getRawValue();
       const updateUsuarioDTO: UpdateUsuarioDTO = {
         idUsuario: formData.idUsuario,
         primerNombre: formData.primerNombre,
@@ -156,32 +204,85 @@ export class UsuariosComponent implements OnInit {
         segApellido: formData.segApellido,
         experiencia: formData.experiencia,
         telefono: formData.telefono,
-        correo: formData.correo, // El correo se incluirá porque usamos getRawValue()
+        correo: formData.correo, 
       };
-
-      this.srv.editarUsuario(updateUsuarioDTO).subscribe({
-        next: (response) => {
-          console.log('Usuario actualizado exitosamente:', response);
-          this.EditError = null;
-          this.openEdit.showModal = false; // Cierra el modal
-          this.listarUsuarios(); // Recarga la lista de usuarios para ver los cambios
-          this.editForm.reset(); // Reinicia el formulario
-          this.editForm.get('documento')?.enable(); // Habilita nuevamente los campos para el próximo uso
-          this.editForm.get('correo')?.enable();
-        },
-        error: (err) => {
-          console.error('Error al actualizar usuario:', err);
-          this.EditError =
-            err.error?.mensaje || 'Error al actualizar el usuario.';
-          // Si el error tiene un mensaje específico del backend, lo mostramos
-        },
-      });
+      try {
+        this.srv.editarUsuario(updateUsuarioDTO).subscribe({
+          next: (response) => {
+            this.customSrv.showToast({ text: 'Usuario actualizado exitosamente', type: 'success-white', duration: 2000 });
+            this.EditError = null;
+            this.openEdit.showModal = false; 
+            this.listarUsuarios(); 
+            this.editForm.reset(); 
+            this.editForm.get('documento')?.enable();
+            this.editForm.get('correo')?.enable();
+            this.loadingData.update(()=>false);
+          },
+          error: (err) => {
+            console.error('Error al actualizar usuario:', err);
+              this.customSrv.showToast({ text: 'Falló la solicitud', type: 'error-white', duration: 2000 });
+              this.loadingData.update(()=>false);
+          },complete:async()=>{
+            this.customSrv.showToast({ text: 'Falló la solicitud', type: 'error-white', duration: 2000 });
+            await new Promise(resolve=>setTimeout(resolve,2000));
+            this.openEdit.showModal = false; 
+            this.loadingData.update(()=>false);
+          }
+        });
+      } catch (error) {
+        this.loadingData.update(()=>false);
+        console.error('Error al actualizar usuario:', error);
+        this.customSrv.showToast({ text: 'Falló la solicitud', type: 'error-white', duration: 2000 })
+      }finally{
+        this.loadingData.update(()=>false);
+      }
     } else {
-      this.editForm.markAllAsTouched(); // Marca todos los campos como "tocados" para mostrar los errores de validación
+      this.editForm.markAllAsTouched();
+      this.customSrv.showToast({ text: 'Formulario invalido', type: 'error-white', duration: 2000 })
+      this.loadingData.update(()=>false);
     }
   }
-  asignarRoles(){
-    this.asingRolModal.showModal = true;
+  openModalRoles(type:string,data?:any){
+     this.userSelected = data;
+    switch (type) {
+      case 'abrir-modal':
+        this.asingRolModal.showModal = true;
+        break;
+      case 'confirm':
+        this.confirmAsigRol(this.userSelected);
+        break;
+        case 'registre-rol':
+          this.openRegistreRol.showModal = true;
+          break;
+    }
+  }
+  confirmAsigRol(user:ListarUsuarioDto){
+    this.loadingData.update(()=>true);
+  const req = {
+    idUsuario: user.idUsuario,
+    idRol: this.rolSelected.id
+  }
+  this.srv.actualizarRolUsuario(req).subscribe({
+    next: (response) => {
+      console.log('Rol actualizado exitosamente:', response);
+      this.listarUsuarios(); 
+      this.customSrv.showToast({ text: response.mensaje, type: 'success-white', duration: 2000 });
+      this.loadingData.update(()=>false);
+    },
+    error: (err) => {
+      console.error('Error al actualizar usuario:', err);
+        this.customSrv.showToast({ text: 'Falló la solicitud', type: 'error-white', duration: 2000 });
+        this.loadingData.update(()=>false);
+    },
+    complete:async ()=>{
+      await new Promise(resolve=>setTimeout(resolve,2000));
+      this.loadingData.update(()=>false);
+      this.asingRolModal.showModal = false;
+    }
+  });
+  }
+  onRolSelect(data:any){
+    this.rolSelected = data;
   }
   constructor(private router: Router, private fb: FormBuilder) {}
 }
