@@ -18,7 +18,38 @@
     }
   }
 }
-
+#list-rutas {
+  .modal-cont {
+    display: flex;
+    flex-direction: column;
+    padding: 70px;
+    width: 70vw;
+    height: 80vh;
+    .items{
+      display:inline-flex;
+      gap:12px;
+    }
+    .btn.btn-info {
+      .icon {
+        width: 24px;
+        height: 24px;
+        background-image: url("/assets/icons/detalle-ruta.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+    }
+      .btn.btn-danger {
+        .icon-danger {
+          width: 24px;
+          height: 24px;
+          background-image: url("/assets/icons/delete-ruta.svg");
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+      }
+   
+  }
+}
 #register-ruta {
   .modal-cont {
     height: 65vh;
@@ -106,7 +137,82 @@
     }
   }
 }
+#delete {
+  .modal-cont {
+    height: auto;
+    width: 410px;
+    padding: 35px;
+    box-sizing: border-box;
+    overflow: overlay;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    .btn.btn-danger {
+      .icon {
+        background-image: url("/assets/icons/vehiculodelete.svg");
+      }
+    }
+  }
+}
+#view {
+  .modal-cont {
+    height: 95vh;
+    width: 520px;
+    padding: 35px;
+    box-sizing: border-box;
+    overflow: overlay;
 
+    .info-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 20px; 
+      b {
+        text-align: left;
+      }
+      p {
+        text-align: right;
+      }
+      .btn.btn-info {
+        .icon {
+          background-image: url("/src/assets/icons/vehiculoeview.svg");
+        }
+      }
+    }
+
+    .reservations-section {
+      h3 {
+        text-align: center;
+        margin-bottom: 15px;
+        color: #333; 
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+
+        th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          font-size: 0.9em;
+        }
+
+        th {
+          background-color: #f2f2f2;
+          font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+          background-color: #f9f9f9;
+        }
+
+        tr:hover {
+          background-color: #f1f1f1;
+        }
+      }
+    }
+  }
+}
 #help {
   .modal-cont {
     display: flex;

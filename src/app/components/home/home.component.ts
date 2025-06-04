@@ -1,3 +1,4 @@
+import { Element } from './../../../../node_modules/parse5/dist/tree-adapters/default.d';
 import { Component, signal, ViewChild } from '@angular/core';
 import { NavComponent } from '../nav/nav.component';
 import { Router, RouterLink } from '@angular/router';
@@ -20,6 +21,8 @@ import { CustomSrvService } from '../../services/custom-srv.service';
 import { AlertComponent } from '../alert/alert.component';
 import { CardComponent } from '../card/card.component';
 import { FormvalidationService } from '../../services/formvalidation.service';
+import { selectOptions } from '../../interfaces/usuarios';
+import { SelectComponent } from "../select/select.component";
 
 @Component({
   selector: 'app-home',
@@ -32,7 +35,8 @@ import { FormvalidationService } from '../../services/formvalidation.service';
     ReactiveFormsModule,
     AlertComponent,
     CardComponent,
-  ],
+    SelectComponent
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -47,6 +51,9 @@ export class HomeComponent {
   mensajeRespuesta                    : string = '';
   errorRespuesta                      : string = '';
   reservacionForm                     : FormGroup;
+  listaRutas                          : any[]
+  optioRutas                          :    selectOptions[] =[]; 
+  rutaSelected                        : selectOptions;
   constructor(
     private formSrv: FormvalidationService,
     private srv: SrvGenericosService,
@@ -55,10 +62,10 @@ export class HomeComponent {
   ) {}
 
   ngOnInit(): void {
+    this.optioRutas = [];
     this.reservacionForm = this.formSrv.initFormReservas();
     this.cargarServicios();
-   
-    this.registrer = new FormGroup([]);
+    this.getListRutas();
     this.customSrv.toast$.subscribe((message) => {
       this.showResponseModal = !!message;
     });
@@ -81,19 +88,54 @@ export class HomeComponent {
       }
     );
   }
+  //CARGAR RUTAS
+//NOTE **lISTADO RUTAS
+getListRutas(){
+  try {
+    this.srv.getListRutes().subscribe({
+      next:(data: any) => {
+       console.log("Lista de rutas", data);
+        this.listaRutas = data?.rutas;
+        if (this.listaRutas.length>0) {
+         for (const key in this.listaRutas) {
+          if (Object.prototype.hasOwnProperty.call(this.listaRutas, key)) {
+            const element = this.listaRutas[key];
+            this.optioRutas.push({id:element.idRuta,text:element.nombreRuta});
+          }
+         }
+        }else{
+          this.customSrv.showToast({ text: 'No hay Rutas disponibles', type: 'error-white', duration: 2000 })
+        }
+      },
+      error:(error)=>{
+        console.error("error de servicio", error);
+      }
+      }
+      );
+  } catch (error) {
+    console.log("error de servicio", error);
+  }
+ }
+ onRutaSelec(data:any){
+  this.rutaSelected = data;
+  return this.rutaSelected;
+ }
 
+//*
   onSubmit() {
     try {
       this.loadingData.update(() => true);
       if (this.reservacionForm.valid) {
         const formValues = this.reservacionForm.value;
         const valorPago = this.reservacionForm.get('valorPago').value;
+        const idRuta = this.rutaSelected.id;
         const reservacionDto = {
           detallePago: formValues.detallePago,
           valorPago: valorPago,
           fechaReserva: formValues.fechaReserva,
           fechaViaje: formValues.fechaViaje,
           documentoUsuario: formValues.documentoUsuario,
+          idRuta:idRuta
         };
         console.log('form values:', reservacionDto);
         this.srv.registrarReservaciones(reservacionDto).subscribe(
@@ -122,6 +164,7 @@ export class HomeComponent {
               this.loadingData.update(() => false);
               this.abriModalRegister.showModal = false;
               this.formSubmitted = false;
+             
             },
           }
         );
@@ -173,5 +216,5 @@ prueba(){
     this.openReservationModal.showModal = false;
   }
 
-  registrer: any;
+
 }

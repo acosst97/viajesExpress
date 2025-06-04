@@ -38,8 +38,9 @@
                 @for (column of columnsBox; track $index) {
                 <ng-container>
                     @if (columnsBox[$index].active) {
-                    <td [ngClass]="{'hidden': $index === 0 || columnsBox[$index].nombre === 'naturaleza' || columnsBox[$index].nombre === 'id' || columnsBox[$index].nombre === 'personaId', 
-                         }">
+                    <td [ngClass]="{'hidden': $index === 0 || columnsBox[$index].nombre === 'naturaleza' || columnsBox[$index].nombre === 'id' || columnsBox[$index].nombre === 'personaId',
+                           
+                         } ">
                         {{Object.values(data)[$index]}}
                     </td>
                     }

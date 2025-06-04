@@ -1,3 +1,4 @@
+import { red } from './../../../../../node_modules/@colors/colors/index.d';
 import { Router } from '@angular/router';
 import { Component, inject, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import {
@@ -46,7 +47,7 @@ export class UsuariosComponent implements OnInit {
   tableProps        : Table;
   tablePropsRoles   : Table;
   editForm          : FormGroup;
-  usuario           : ListarUsuarioDto[] ;
+  usuario           : ListarUsuarioDto[];
   usuarioFilter     : any[];
   roles             : RolDto[] ;
   rolesOption       : selectOptions[] = [];
@@ -283,6 +284,43 @@ export class UsuariosComponent implements OnInit {
   }
   onRolSelect(data:any){
     this.rolSelected = data;
+    console.log('rol selected',this.rolSelected);
+    return this.rolSelected;
+  }
+
+  registreRol(){
+    try {
+      this.loadingData.update(()=>true);
+      const text  = this.rolSelected.text;
+      console.log('conversion',text);
+      const req ={
+        nombreRol: text
+    }
+     this.srv.registrarRol(req).subscribe({
+       next: (response) => {
+         console.log('Rol Registrado Correctamente',response);
+         this.listarRoles(); 
+         this.customSrv.showToast({ text: response.mensaje, type: 'success-white', duration: 2000 });
+         this.loadingData.update(()=>false);
+       },
+       error: (err) => {
+         console.error('Error al actualizar usuario:', err);
+         const mensaje = err?.error.mensaje;
+         this.customSrv.showToast({ text: mensaje, type: 'error-white', duration: 2000 });
+         this.loadingData.update(()=>false);
+       },
+       complete:async ()=>{
+         await new Promise(resolve=>setTimeout(resolve,2000));
+         this.loadingData.update(()=>false);
+         this.asingRolModal.showModal = false;
+       }
+     });
+    } catch (error) {
+      console.error('Error al actualizar usuario:', error);
+      this.customSrv.showToast({ text: "falló la solicitud", type: 'error-white', duration: 2000 });
+      this.loadingData.update(()=>false);
+    }
+   
   }
   constructor(private router: Router, private fb: FormBuilder) {}
 }

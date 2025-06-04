@@ -381,32 +381,26 @@ fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
         codRuta: ['', [
           Validators.required,
           Validators.min(5),
-          // Validators.max(45) 
         ]],
         nombreRuta: ['', [
           Validators.required,
-          Validators.pattern(/^[a-zA-Z 0-9]*$/), 
+          Validators.pattern(/^[a-zA-Z. -0-9]*$/), 
           Validators.minLength(2),
           Validators.maxLength(20),
         ]],
         origenRuta: ['', [
           Validators.required,
-          Validators.pattern(/^[a-zA-Z 0-9]*$/), 
+          Validators.pattern(/^[a-zA-Z. -0-9]*$/), 
           Validators.minLength(2),
           Validators.maxLength(20),
         ]],
         destinoRuta: ['', [
           Validators.required,
-          Validators.pattern(/^[a-zA-Z 0-9]*$/),  
+          Validators.pattern(/^[a-zA-Z. -0-9]*$/),  
           Validators.minLength(2),
           Validators.maxLength(20),
         ]],
-        // reservacionesIdReservaciones: ['', [
-        //   Validators.required,
-        //   Validators.pattern(/^[0-9]*$/),  
-        //   Validators.minLength(2),
-        //   Validators.maxLength(20),
-        // ]],
+    
       });
     }
     getValidationRutasEstados(formGroup: FormGroup, fieldName: string, formSubmitted: boolean) {
@@ -462,7 +456,7 @@ fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
           Validators.required,
           Validators.pattern(/^[a-zA-Z 0-9]*$/), 
           Validators.minLength(2),
-          Validators.maxLength(20),
+          Validators.maxLength(40),
         ]],
    
       });

@@ -190,6 +190,10 @@ margin-left: 29%;" (click)="prueba()">Bienvenido a Viajes Express!</a>
                         </div>
                         }
                     </div>
+                    <div>
+                        <label for="correo">Selecciona la ruta o destino<span class="warning">*</span></label>
+                        <app-select class="select"  [options]="optioRutas" (optionSelected)="onRutaSelec($event)"></app-select>
+                    </div>
                 </div>
 
                 <div class="form-row">

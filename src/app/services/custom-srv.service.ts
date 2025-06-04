@@ -21,7 +21,13 @@ export class CustomSrvService {
       this.active = false;
     }, data.duration);
   }
-
+  
+  converToNumber(d:any){
+     console.log("numero",d);
+     
+    const number = Number(d);
+    return number;
+  }
 
   constructor() { }
 }

@@ -68,13 +68,12 @@ export class SrvGenericosService {
     return this.http.get<any[]>(`${this.apiUrlReserva}/lstReservaciones`);
   }
 
-  registrarReservaciones(
-    objectReservas: CrearReservacion
-  ): Observable<MensajeDto> {
-    return this.http.post<MensajeDto>(
-      `${this.apiUrlReserva}/registrarReservacion`,
-      objectReservas
-    );
+  registrarReservaciones(objectReservas: CrearReservacion): Observable<MensajeDto> {
+    console.log("llego solicitud", objectReservas);
+    return this.http.post<MensajeDto>(`${this.apiUrlReserva}/registre`,objectReservas);
+  }
+  borrarReserva(id:number):Observable<MensajeDTO>{
+    return this.http.delete<MensajeDTO>(`${this.apiUrlReserva}/eliminar/${id}`);
   }
   //-------------------------------------------------------//
   //------------ servicios USUARIOS -------------- *      //
@@ -100,7 +99,12 @@ export class SrvGenericosService {
   listarRoles(): Observable<Roles> {
     return this.http.get<Roles>(`${this.apiUsuarios}/listarRoles`);
   }
-
+  
+  registrarRol(data:any):Observable<MensajeDTO>{
+    console.log("cuerpo",data);
+    
+    return this.http.post<MensajeDTO>(`${this.apiUsuarios}/registroRol`,data);
+  }
   //-------------------------------------------------------//
   //------------ SERVICIOS VEHICULOS -------------- *      //
   //-------------------------------------------------------//
@@ -143,8 +147,11 @@ export class SrvGenericosService {
    actualizarRutas(rutaObject: any): Observable<any> {
     return this.http.put(`${this.apiRutas}/actualizar`, rutaObject);
   }
+  borrarRuta(id:number):Observable<MensajeDTO>{
+    return this.http.delete<MensajeDTO>(`${this.apiRutas}/eliminar/${id}`);
+  }
     //-------------------------------------------------------//
-  //------------ SERVICIOS RUTAS   ------------------ *    //
+  //------------ SERVICIOS Estados  ------------------ *    //
   //-------------------------------------------------------//
   getListEstados():Observable<any>{
     return this.http.get<any>(`${this.apiEstado}/listar`);

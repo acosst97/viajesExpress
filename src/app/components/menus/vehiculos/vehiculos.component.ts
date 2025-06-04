@@ -56,8 +56,6 @@ export class VehiculosComponent {
  public docUsuarios = computed(() => this.dataSrv.getUsuarios());
  
  ngOnInit() {
-  this.formRegistro = this.formSrv.initFormVehiculo();
-  this.formEdit = this.formSrv.initFormVehiculoEdit();
   this.tableProps = {
     filter: 1,
     actions: 1,
@@ -68,6 +66,8 @@ export class VehiculosComponent {
     showFilter: true,
     class: 'non-striped',
   };
+  this.formRegistro = this.formSrv.initFormVehiculo();
+  this.formEdit = this.formSrv.initFormVehiculoEdit();
  this.listarVehiculoSrv();
  this.listarUsuarios();
  this.customSrv.toast$.subscribe((message) => {
@@ -123,6 +123,7 @@ async listarUsuarios() {
       this.tableProps.data = this.vehifilter;
       this.encontrarSeguroProximoAVencer();
   } catch (error) {
+    this.tableProps.data = []
     console.log(error);
   }  
  }

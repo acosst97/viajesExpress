@@ -1,16 +1,24 @@
 
 export interface ListarReservaciones {
-    idReservaciones:  number;
     detallePago:      string;
     valorPago:        string;
     fechaReserva:     Date;
     fechaViaje:       Date;
-    capacidad:        null;
     vehiculo:         null;
+    idReservaciones:  number;
     idUsuario:        number;
+    ruta:             Ruta;
     documentoUsuario: string;
     primerNombre:     string;
     primerApellido:   string;
+}
+
+export interface Ruta {
+    idRuta:      number;
+    codRuta:     string;
+    nombreRuta:  string;
+    origenRuta:  string;
+    destinoRuta: string;
 }
 
 export interface CrearReservacion {
@@ -19,6 +27,7 @@ export interface CrearReservacion {
     fechaReserva: string
     fechaViaje: string
     documentoUsuario: string
+    idRuta:number;
 }
 
 export interface Dsad {

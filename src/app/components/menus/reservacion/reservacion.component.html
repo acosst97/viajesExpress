@@ -35,11 +35,11 @@
                         </ng-template>
                         <ng-template #actions let-data>
                             <div class="items">
-                                <button class="btn btn-info" (click)="editarReservacion(data)">
+                                <button class="btn btn-info" (click)="viewData(data)">
                                     <div class="icon">
                                     </div>
                                 </button>
-                                <button class="btn btn-danger" (click)="viewData(data)">
+                                <button class="btn btn-danger" (click)="openDelete('eliminar',data)">
                                     <div class="icon-danger">
                                     </div>
                                 </button>
@@ -58,3 +58,75 @@
 
     </div>
 </div>
+
+<app-modal #ViewDataModal id="view" [idDefault]="1">
+    <div class="modal-cont">
+      @if (reservaSelected) {
+        <div class="form-container">
+          <h3 class="form-title">Información de Reservación</h3>
+  
+          <div class="info-section">
+            <b>Detalle del Pago</b>
+            <p>{{reservaSelected.detallePago }}</p>
+  
+            <b>Valor del Pago</b>
+            <p>$ {{reservaSelected.valorPago | number:'1.0-2'}}</p>
+            <b>Fecha de Reserva</b>
+            <p>{{reservaSelected.fechaReserva | date}}</p>
+  
+            <b>Fecha de Viaje</b>
+            <p>{{reservaSelected.fechaViaje | date}}</p>
+  
+            <b>Documento del Usuario</b>
+            <p>{{reservaSelected.documentoUsuario}}</p>
+  
+            <b>Nombre del Usuario</b>
+            <p>{{reservaSelected.primerNombre}} {{reservaSelected.primerApellido}}</p>
+            <hr>
+            <h4>Ruta Asignada</h4>
+             @if (reservaSelected.ruta) {
+                <b>Código de Ruta</b>
+                <p>{{reservaSelected.ruta?.codRuta || 'no disponible'}}</p>
+      
+                <b>Nombre de Ruta</b>
+                <p>{{reservaSelected.ruta.nombreRuta}}</p>
+      
+                <b>Origen</b>
+                <p>{{reservaSelected.ruta.origenRuta}}</p>
+      
+                <b>Destino</b>
+                <p>{{reservaSelected.ruta.destinoRuta}}</p>
+             }
+         
+          </div>
+  
+          <div class="form-actions">
+            @if (this.loadingData()) {
+              <div class="global-loader-backdrop">
+                <img src="/assets/icons/loading.svg" class="rotate-icon" />
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </app-modal>
+
+  <app-modal #QuestionModal [idDefault]="1" id="delete">
+    <div class="modal-cont">
+        <h2> Estas seguro de eliminar este registro ?</h2>
+        <button class="btn btn-primary" (click)="openDelete('confirm-delete', reservaSelected)" >Eliminar</button>
+        @if (this.loadingData()) {
+            <div class="global-loader-backdrop">
+                <img src="/assets/icons/loading.svg" class="rotate-icon" />
+              </div>
+        }
+        @if (this.loadingData()===false) {}
+    </div>
+</app-modal>
+
+@if (showResponseModal) {
+    <div class="popup-alert">
+        <app-alert></app-alert>
+    </div>
+    }

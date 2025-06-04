@@ -172,21 +172,21 @@
     <div class="modal-cont">
         <div class="form-container">
             <h2 class="form-title">Registra un nuevo Rol</h2>
-            <form  (ngSubmit)="save()">
+            <div>
                 <div class="form-row">
                     <div>
-                        <label for="codRuta">documento</label>
-                      <app-select [options]="listaRolesAssing"></app-select>
+                        <label for="documento">ingresa el rol a crear</label>
+                      <app-select [options]="listaRolesAssing" (optionSelected)="onRolSelect($event)"></app-select>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Confirmar</button>
+                <button class="btn btn-success" (click)="registreRol()">Confirmar</button>
                 @if (this.loadingData()) {
                     <div class="global-loader-backdrop">
                         <img src="/assets/icons/loading.svg" class="rotate-icon" />
                     </div>
                     }
                     @if (this.loadingData()===false) {}
-            </form>
+            </div>
         </div>
     </div>
   </app-modal>

@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<app-modal #ListRutasModal>
+<app-modal #ListRutasModal id="list-rutas">
     <div class="modal-cont">
         <div class="top-buttom">
             <button class="btn btn-success" (click)="openModales('registre-ruta')">
@@ -25,15 +25,11 @@
                 </ng-template>
                 <ng-template #actions let-data>
                     <div class="items">
-                        <button class="btn btn-info" (click)="openModales('question')">
+                        <button class="btn btn-info" (click)="openModales('view-details',data)">
                             <div class="icon">
                             </div>
                         </button>
-                        <button class="btn btn-success" (click)="openModales('question')">
-                            <div class="icon-success">
-                            </div>
-                        </button>
-                        <button class="btn btn-danger" (click)="openModales('question')">
+                        <button class="btn btn-danger" (click)="openModales('question-delete',data)">
                             <div class="icon-danger">
                             </div>
                         </button>
@@ -98,11 +94,11 @@
                         <label for="estado">ingresa el estado asignar* <span class="" (click)="helpEstado()">?* </span> </label>
                         <app-select [options]="estadoOption" (optionSelected)="onSelect($event)" ></app-select>
                     </div>
-                    <div>
+                    <!-- <div>
                         <label for="descripcion">Asociar una reservación ?   <span class="" (click)="prueba()" >?* </span></label>
                       
                         <app-select [options]="optioReservas" (optionSelected)="onSelectRe($event)"></app-select>
-                    </div>
+                    </div> -->
                 </div>
 
                 <button type="submit" class="btn btn-success">Registrar Servicio</button>
@@ -171,5 +167,63 @@
         <p>Asocia un estado a una ruta, esto te ayudara para tener control sobre el estado de tus vehiculos,puedes hacer registro de tus propios estados</p>
         <p>Deseas registrar un estado ?</p>
         <button class="btn btn-info" >abrir Form </button>
+    </div>
+</app-modal>
+
+<app-modal #QuestionModal [idDefault]="1" id="delete">
+    <div class="modal-cont">
+        <h2> Estas seguro de eliminar este registro ?</h2>
+        <p> ten en cuenta que estos registros pueden estar <br> asociados a las rutas asignadas</p>
+        <button class="btn btn-primary" (click)="openModales('confirm-delete', rutaSelected)" >Eliminar</button>
+        @if (this.loadingData()) {
+            <div class="global-loader-backdrop">
+                <img src="/assets/icons/loading.svg" class="rotate-icon" />
+              </div>
+        }
+        @if (this.loadingData()===false) {}
+    </div>
+    
+</app-modal>
+
+<app-modal #ViewDetail id="view" [idDefault]="1">
+    <div class="modal-cont">
+        @if (rutaSelected) {
+        <div class="form-container">
+            <h3 class="form-title">información</h3>
+            <p>revisa las reservaciones asociadas a esta ruta</p>
+            <div class="info-section">
+                <b>Código de Ruta</b>
+                <p>{{rutaSelected.codRuta}}</p>
+                <b>Nombre de Ruta</b>
+                <p>{{rutaSelected.nombreRuta}}</p>
+                <b>Activa</b>
+                <p>{{rutaSelected.activa ? 'Sí' : 'No'}}</p>
+            </div>
+            <div class="reservations-section">
+                <h3>Reservaciones</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Reserva</th>
+                            <th>Detalle Pago</th>
+                            <th>Valor Pago</th>
+                            <th>Fecha Reserva</th>
+                            <th>Fecha Viaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let reserva of rutaSelected.reservaciones">
+                            <td>{{reserva.idReservacion}}</td>
+                            <td>{{reserva.detallePago}}</td>
+                            <td>{{reserva.valorPago}}</td>
+                            <td>{{reserva.fechaReserva}}</td>
+                            <td>{{reserva.fechaViaje}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        
+        </div>
+    }
     </div>
 </app-modal>

@@ -63,4 +63,47 @@
       }
     }
   }
+
+  #view {
+    .modal-cont{
+      height: 70vh;
+      width: 450px;
+      padding: 35px;
+      box-sizing: border-box;
+      overflow: overlay;
+      .info-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        b {
+          text-align: left;
+        }
+        p {
+          text-align: right;
+        }
+        .btn.btn-info {
+          .icon {
+            background-image: url("/src/assets/icons/vehiculoeview.svg");
+          }
+        }
+      }
+    }
+ 
+  }
+  #delete {
+    .modal-cont {
+      height: auto;
+      width: 410px;
+      padding: 35px;
+      box-sizing: border-box;
+      overflow: overlay;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      .btn.btn-danger {
+        .icon {
+          background-image: url("/assets/icons/vehiculodelete.svg");
+        }
+      }
+    }
+  }
   

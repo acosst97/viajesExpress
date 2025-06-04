@@ -2,7 +2,6 @@ import {
   Component,
   computed,
   effect,
-  ElementRef,
   EventEmitter,
   inject,
   Output,
@@ -22,7 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DataService } from '../../services/data.service';
 import { selectOptions } from '../../interfaces/usuarios';
 import { ListarReservaciones } from '../../interfaces/reservaciones';
-import { firstValueFrom } from 'rxjs';
+import { ListaRutasDto } from '../../interfaces/rutas';
 
 @Component({
   selector: 'app-rutas',
@@ -37,7 +36,10 @@ export class RutasComponent {
   @ViewChild('UpdateModal')    updateModal: any;
   @ViewChild('DeleteModal')    deleteModal: any;
   @ViewChild('HelpModal')      helpModal: any;
-  @ViewChild('HelpModalEstado')      helpModalEstado: any;
+  @ViewChild('QuestionModal') questionModal: any;
+  @ViewChild('HelpModalEstado')  helpModalEstado: any;
+  @ViewChild('ViewDetail')       viewDetail: any;
+
   @Output() sendTo          = new EventEmitter<string>();
   srv                       = inject(SrvGenericosService);
   formSrv                   = inject(FormvalidationService);
@@ -47,13 +49,17 @@ export class RutasComponent {
   public estados            = computed(() => this.dataSrv.getEstados());
   showResponseModal         : boolean = false;
   tableProps                : Table;
-  listaRutas                : any;
-  listaRutasFilter          : any;
+  listaRutas                : ListaRutasDto[];
+  listaRutasFilter          : any[];
+  rutaSelected              : ListaRutasDto;
   formValidation            : FormGroup;
   formSubmitted             : boolean = false;
   showHelpTooltip           : boolean = false;
-  estadoOption              :selectOptions[]=[];
-  estadoSelected            :selectOptions;
+  estadoOption              : selectOptions[]=[];
+  estadoSelected            : selectOptions;
+  listReservas              : ListarReservaciones[];
+  optioReservas             : selectOptions[] =[];
+  reservaSelec              : selectOptions;
   constructor() {
      effect(() => {
       this.estadoOption = null
@@ -65,7 +71,7 @@ export class RutasComponent {
       });
   }
   ngOnInit() {
-    this.getListReservation();
+    // this.getListReservation();
     this.formValidation = this.formSrv.initFormRutas();
     this.customSrv.toast$.subscribe((message) => {
       this.showResponseModal = !!message;
@@ -98,7 +104,9 @@ export class RutasComponent {
     });
   }
 
-  openModales(type:string){
+  openModales(type:string,data?:ListaRutasDto){
+    console.log("data",data);
+    this.rutaSelected = data;
   switch (type) {
     case 'open-list-rutas':
       this.listRutasModal.showModal = true;
@@ -107,14 +115,26 @@ export class RutasComponent {
       case 'registre-ruta':
       this.registroModal.showModal = true;
       break;
-      case 'value':
-      
+      case 'question-delete':
+        const rutas = this.listaRutas.find(d=> d.idRuta === data.idRuta);
+        if (rutas) {
+          this.rutaSelected = rutas; 
+          console.log('onfo ruta', this.rutaSelected);
+          this.questionModal.showModal = true;
+        }
       break;
-      case 'dff':
-      
+      case 'confirm-delete':
+       this.deleteRuta(this.rutaSelected.idRuta);
       break;
-      case 'terter':
-      
+
+     case 'view-details':
+      const find = this.listaRutas.find(d=> d.idRuta === data.idRuta);
+      if (find) {
+        this.rutaSelected = find; 
+        console.log('onfo ruta', this.rutaSelected);
+        this.viewDetail.showModal= true;
+      }
+    
       break;
   }
   }
@@ -126,10 +146,8 @@ export class RutasComponent {
       this.loadingData.update(()=>true)
       const formValues = this.formValidation.getRawValue();
       const idEstado = this.estadoSelected.id;
-      const reservacionesIdReservaciones = this.reservaSelec.id || null;
       const object = {
-        idEstado,
-        reservacionesIdReservaciones,
+        idEstado, 
         ...formValues
       }
       this.srv.registrarRutasSrv(object).subscribe({
@@ -174,10 +192,14 @@ export class RutasComponent {
        console.log("Lista de rutas", data);
         this.listaRutas = data?.rutas;
         if (this.listaRutas.length>0) {
-          this.listaRutasFilter = this.listaRutas.map((d:any)=>{
-           const {...data} = d;
-          return data;
-          })
+          this.listaRutasFilter = this.listaRutas.map((ruta:any)=>({
+            idRuta : ruta.idRuta,
+            codRuta: ruta.codRuta,
+            estado: ruta.activa ? 'Activo' : 'Inactiva',
+            nombreRuta: ruta.nombreRuta,
+            origenRuta: ruta.origenRuta,
+            destinoRuta: ruta.destinoRuta
+          }));
           this.tableProps.data = this.listaRutasFilter;
         }else{
           this.tableProps.data = [];
@@ -194,26 +216,7 @@ export class RutasComponent {
     console.log("error de servicio", error);
   }
  }
- listReservas    :    ListarReservaciones[];
- optioReservas   :    selectOptions[] =[];
- reservaSelec    :    selectOptions;
- async getListReservation(){
- try {
-     const data: any = await firstValueFrom(this.srv.ListarReservaciones());
-     console.log('data reservas', data);
-       this.listReservas = data.reservaciones
-       if (this.listReservas.length>0) {
-       for (const key in this.listReservas) {
-        if (Object.prototype.hasOwnProperty.call(this.listReservas, key)) {
-          const element:ListarReservaciones = this.listReservas[key];
-          this.optioReservas.push({id:element.idReservaciones,text:element.documentoUsuario});
-        }
-       }
-       }
-   } catch (error) {
-     console.log('error user', error);
-   }
- }
+
  //*Listado estados
  onSelect(event:any){
   this.estadoSelected = event;
@@ -222,5 +225,30 @@ export class RutasComponent {
  onSelectRe(event:any){
   this.reservaSelec = event;
   console.log("seleccion", this.reservaSelec);
+ }
+ //DELETE 
+ deleteRuta(id:number){
+  try {
+    this.loadingData.update(()=>true)
+    this.srv.borrarRuta(id).subscribe({
+      next:(data)=>{
+        console.log("success",data);
+        this.customSrv.showToast({ text: 'Registro Eliminado', type: 'success-white', duration: 2000 });
+      },error:(error)=>{
+        console.error("error",error);
+        const mensaje = error?.error.mensaje || 'Falló la solicitud';
+        this.customSrv.showToast({ text: mensaje, type: 'error-white', duration: 2000 });
+        this.loadingData.update(()=>false);
+      },complete:async()=>{
+        await new Promise(resolve=>setTimeout(resolve,1000));
+        this.loadingData.update(()=>false);
+        this.questionModal.showModal = false;
+      }
+    })
+  } catch (error) {
+    console.error("error",error);
+    this.loadingData.update(()=>false)
+    console.log("error de servicio", error);
+  }
  }
 }
