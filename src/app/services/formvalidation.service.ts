@@ -447,11 +447,11 @@ fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
     //*Estados form
     initFormEstado():FormGroup{
       return this.fb.group({
-        nombreEstado: ['', [
-          Validators.required,
-          Validators.min(5),
-          // Validators.max(45) 
-        ]],
+        // nombreEstado: ['', [
+        //   Validators.required,
+        //   Validators.min(5),
+        //   // Validators.max(45) 
+        // ]],
         descripcionEstado: ['', [
           Validators.required,
           Validators.pattern(/^[a-zA-Z 0-9]*$/), 

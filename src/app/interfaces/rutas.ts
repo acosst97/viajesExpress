@@ -4,7 +4,6 @@ export interface RegistroRuta {
     origenRuta: string;
     destinoRuta: string;
     idEstado?: number;
-    reservacionesIdReservaciones?: number; 
   }
 
   export interface ListaRutasDto {

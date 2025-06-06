@@ -22,6 +22,7 @@ import { DataService } from '../../services/data.service';
 import { selectOptions } from '../../interfaces/usuarios';
 import { ListarReservaciones } from '../../interfaces/reservaciones';
 import { ListaRutasDto } from '../../interfaces/rutas';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-rutas',
@@ -39,7 +40,7 @@ export class RutasComponent {
   @ViewChild('QuestionModal') questionModal: any;
   @ViewChild('HelpModalEstado')  helpModalEstado: any;
   @ViewChild('ViewDetail')       viewDetail: any;
-
+  @ViewChild('DescargarFile') modalDescargarFile!:any;
   @Output() sendTo          = new EventEmitter<string>();
   srv                       = inject(SrvGenericosService);
   formSrv                   = inject(FormvalidationService);
@@ -60,9 +61,11 @@ export class RutasComponent {
   listReservas              : ListarReservaciones[];
   optioReservas             : selectOptions[] =[];
   reservaSelec              : selectOptions;
+  uploadErrorDetails: string[] = [];
+  selectedFile: File | null = null;
   constructor() {
      effect(() => {
-      this.estadoOption = null
+      this.estadoOption = []
         const data = this.estados();
         if (data) {
         this.estadoOption = data();
@@ -95,15 +98,7 @@ export class RutasComponent {
   helpEstado(){
     this.helpModalEstado.showModal=true;
   }
-  async prueba() {
-    this.helpModal.showModal = true;
-    this.customSrv.showToast({
-      text: 'Valida la información',
-      type: 'error-white',
-      duration: 2000,
-    });
-  }
-
+ 
   openModales(type:string,data?:ListaRutasDto){
     console.log("data",data);
     this.rutaSelected = data;
@@ -134,7 +129,7 @@ export class RutasComponent {
         console.log('onfo ruta', this.rutaSelected);
         this.viewDetail.showModal= true;
       }
-    
+     
       break;
   }
   }
@@ -234,6 +229,7 @@ export class RutasComponent {
       next:(data)=>{
         console.log("success",data);
         this.customSrv.showToast({ text: 'Registro Eliminado', type: 'success-white', duration: 2000 });
+        this.getListRutas();
       },error:(error)=>{
         console.error("error",error);
         const mensaje = error?.error.mensaje || 'Falló la solicitud';
@@ -251,4 +247,95 @@ export class RutasComponent {
     console.log("error de servicio", error);
   }
  }
+ openMasiveModales(){
+    this.modalDescargarFile.showModal = true;
+ }
+   descargarPlantilla() {
+    this.loadingData.update(()=>true);
+    this.srv.descargarPlantillaExcel()
+      .pipe(finalize(() => this.loadingData.update(()=>false)))
+      .subscribe({
+        next: (response: Blob) => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'plantilla_rutas.xlsx'; 
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove(); 
+          console.log('Plantilla descargada con éxito.');
+        },
+        error: (error) => {
+          console.error('Error al descargar la plantilla:', error);
+          alert('No se pudo descargar la plantilla. Inténtalo de nuevo más tarde.'); 
+        }
+      });
+  }
+    // ----------------------------------------------------
+  // Lógica para cargar el archivo Excel
+  // ----------------------------------------------------
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    } else {
+      this.selectedFile = null;
+    }
+  }
+
+  uploadFile() {
+      this.loadingData.update(()=>true);
+    if (!this.selectedFile) {
+    this.customSrv.showToast({ text: 'Por favor, selecciona un archivo Excel para cargar.', type: 'error-white', duration: 2000 });
+      return;
+    }
+    const allowedTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+      'application/vnd.ms-excel' 
+    ];
+    if (!allowedTypes.includes(this.selectedFile.type)) {
+      this.customSrv.showToast({ text: 'Tipo de archivo no válido. Por favor, sube un archivo.xls.', type: 'error-white', duration: 2000 });  
+      this.selectedFile = null; // Resetear la selección
+      return;
+    }
+
+    this.srv.uploadExcel(this.selectedFile)
+      .pipe(finalize(() => this.loadingData.update(()=>false))) // Ocultar spinner al finalizar
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+             this.customSrv.showToast({ text: 'Archivo cargado y rutas procesadas con éxito.', type: 'error-white', duration: 2000 });
+            
+            if (response.successfulUploads > 0) {
+                ` ${response.successfulUploads} rutas guardadas.`;
+            }
+            if (response.failedUploads > 0) {
+              ` ${response.failedUploads} rutas con errores.`;
+            }
+            if (response.errors && response.errors.length > 0) {
+             console.log("error",response);
+            }
+          } else {
+            this.customSrv.showToast({ text: 'ocurrio un error al procesar', type: 'error-white', duration: 2000 });
+            if (response.errors && response.errors.length > 0) {
+                this.uploadErrorDetails = response.errors;
+            }
+            console.error('Error del backend al procesar la carga:', response);
+          }
+        },
+        error: (error) => {
+          this.uploadErrorDetails =error?.errors;
+        this.loadingData.update(()=>false)
+        console.error('Error en la carga:', error);
+        this.customSrv.showToast({ text: 'Fallo la solicitud revisa errores', type: 'error-white', duration: 2000 });  
+        },
+        complete:async()=>{
+            await new Promise(resolve=>setTimeout(resolve,1000));
+          this.getListRutas();
+        }
+      });
+  }
+
 }

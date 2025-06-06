@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { NavComponent } from '../../components/nav/nav.component';
 import {
   FormControl,
@@ -16,6 +16,8 @@ import { FormvalidationService } from '../../services/formvalidation.service';
 import { AlertComponent } from '../../components/alert/alert.component';
 import * as CryptoJS from 'crypto-js';
 import { LoginData } from '../../interfaces/loginRequest';
+
+
 const SECRET_KEY = 'tu_clave_secreta';
 @Component({
   selector: 'app-login',
@@ -207,4 +209,6 @@ export class LoginComponent {
       this.registroForm.markAllAsTouched();
     }
   }
+
+  @ViewChild('cuadroRef') cuadroRef!: ElementRef;
 }

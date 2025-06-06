@@ -16,6 +16,10 @@
             <button class="btn btn-success" (click)="openModales('registre-ruta')">
                 registrar
             </button>
+            <button class="btn btn-info" (click)=" openMasiveModales()">
+                carga Masiva
+            </button>
+
         </div>
         <div class="table">
             @if (listaRutasFilter) {
@@ -91,8 +95,9 @@
 
                 <div class="form-row">
                     <div>
-                        <label for="estado">ingresa el estado asignar* <span class="" (click)="helpEstado()">?* </span> </label>
-                        <app-select [options]="estadoOption" (optionSelected)="onSelect($event)" ></app-select>
+                        <label for="estado">ingresa el estado asignar* <span class="" (click)="helpEstado()">?* </span>
+                        </label>
+                        <app-select [options]="estadoOption" (optionSelected)="onSelect($event)"></app-select>
                     </div>
                     <!-- <div>
                         <label for="descripcion">Asociar una reservación ?   <span class="" (click)="prueba()" >?* </span></label>
@@ -103,11 +108,11 @@
 
                 <button type="submit" class="btn btn-success">Registrar Servicio</button>
                 @if (this.loadingData()) {
-                    <div class="global-loader-backdrop">
-                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
-                    </div>
-                    }
-                    @if (this.loadingData()===false) {}
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                </div>
+                }
+                @if (this.loadingData()===false) {}
             </form>
         </div>
     </div>
@@ -143,11 +148,11 @@
                 </div>
                 <button type="submit" class="btn btn-success">Confirmar</button>
                 @if (this.loadingData()) {
-                    <div class="global-loader-backdrop">
-                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
-                    </div>
-                    }
-                    @if (this.loadingData()===false) {}
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                </div>
+                }
+                @if (this.loadingData()===false) {}
             </form>
         </div>
     </div>
@@ -164,9 +169,10 @@
 </app-modal>
 <app-modal #HelpModalEstado id="help">
     <div class="modal-cont">
-        <p>Asocia un estado a una ruta, esto te ayudara para tener control sobre el estado de tus vehiculos,puedes hacer registro de tus propios estados</p>
+        <p>Asocia un estado a una ruta, esto te ayudara para tener control sobre el estado de tus vehiculos,puedes hacer
+            registro de tus propios estados</p>
         <p>Deseas registrar un estado ?</p>
-        <button class="btn btn-info" >abrir Form </button>
+        <button class="btn btn-info">abrir Form </button>
     </div>
 </app-modal>
 
@@ -174,22 +180,22 @@
     <div class="modal-cont">
         <h2> Estas seguro de eliminar este registro ?</h2>
         <p> ten en cuenta que estos registros pueden estar <br> asociados a las rutas asignadas</p>
-        <button class="btn btn-primary" (click)="openModales('confirm-delete', rutaSelected)" >Eliminar</button>
+        <button class="btn btn-primary" (click)="openModales('confirm-delete', rutaSelected)">Eliminar</button>
         @if (this.loadingData()) {
-            <div class="global-loader-backdrop">
-                <img src="/assets/icons/loading.svg" class="rotate-icon" />
-              </div>
+        <div class="global-loader-backdrop">
+            <img src="/assets/icons/loading.svg" class="rotate-icon" />
+        </div>
         }
         @if (this.loadingData()===false) {}
     </div>
-    
+
 </app-modal>
 
 <app-modal #ViewDetail id="view" [idDefault]="1">
     <div class="modal-cont">
         @if (rutaSelected) {
         <div class="form-container">
-            <h3 class="form-title">información</h3>
+            <h2 class="form-title">información</h2>
             <p>revisa las reservaciones asociadas a esta ruta</p>
             <div class="info-section">
                 <b>Código de Ruta</b>
@@ -222,8 +228,56 @@
                     </tbody>
                 </table>
             </div>
-        
+
         </div>
-    }
+        }
+    </div>
+</app-modal>
+
+<app-modal #DescargarFile id="load-archive">
+    <div class="modal-cont">
+        <h3 class="modal-title">Carga Masiva de Rutas</h3>
+
+        <div class="section-download">
+            <h4>1. Descargar Plantilla</h4>
+            <p>Haz clic para obtener la plantilla de Excel y rellenar los datos de las rutas.</p>
+            <button class="btn btn-info" (click)="descargarPlantilla()" [disabled]="this.loadingData()">
+                <ng-container *ngIf="!this.loadingData()">
+                    <i class="fas fa-file-excel"></i> Descargar Plantilla Excel
+                </ng-container>
+                <ng-container *ngIf="this.loadingData()">
+                    <i class="fas fa-spinner fa-spin"></i> Descargando...
+                </ng-container>
+            </button>
+        </div>
+
+        <hr>
+        <div class="section-upload">
+            <h4>2. Cargar Archivo de Rutas</h4>
+            <p>Sube el archivo Excel con los datos de las rutas para procesar.</p>
+
+            <div class="file-input-container">
+                <label for="excelFile" class="custom-file-upload">
+                    <i class="fas fa-upload"></i> Seleccionar Archivo
+                </label>
+                <input type="file" id="excelFile" (change)="onFileSelected($event)" accept=".xlsx, .xls">
+                <span class="file-name">{{ selectedFile ? selectedFile.name : 'Ningún archivo seleccionado' }}</span>
+            </div>
+            <button class="btn btn-success" (click)="uploadFile()" [disabled]="!selectedFile">
+                subir archivo
+            </button>
+            @if (this.loadingData()) {
+            <div class="global-loader-backdrop">
+                <img src="/assets/icons/loading.svg" class="rotate-icon" />
+            </div>
+            }
+            @if (this.loadingData()===false) {}
+            <div *ngIf="uploadErrorDetails && uploadErrorDetails.length > 0" class="error-details">
+                <h5>Detalles de errores:</h5>
+                <ul>
+                    <li *ngFor="let error of uploadErrorDetails">{{ error }}</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </app-modal>

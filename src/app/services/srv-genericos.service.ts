@@ -1,3 +1,4 @@
+import { Ruta } from './../interfaces/reservaciones';
 import { RegistroRuta, Estados } from './../interfaces/rutas';
 import { AsignarVehiculo, RegistroVehiculoDTO } from './../interfaces/vehiculo';
 import { HttpClient } from '@angular/common/http';
@@ -153,6 +154,18 @@ export class SrvGenericosService {
   }
   borrarRuta(id:number):Observable<MensajeDTO>{
     return this.http.delete<MensajeDTO>(`${this.apiRutas}/eliminar/${id}`);
+  }
+
+
+  descargarPlantillaExcel(): Observable<Blob> {
+    return this.http.get(`${this.apiRutas}/descargar-plantilla-excel`, { responseType: 'blob' });
+  }
+
+  // Modificado: Para subir un archivo (MultipartFile)
+  uploadExcel(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http.post(`${this.apiRutas}/upload-excel`, formData);
   }
     //-------------------------------------------------------//
   //------------ SERVICIOS Estados  ------------------ *    //

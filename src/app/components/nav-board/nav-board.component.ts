@@ -24,10 +24,14 @@ export class NavBoardComponent {
     this.usuario = this.authSrv.obtenerUsuario();
     console.log("usuario desencriptado navboard", this.usuario);
     this.roles = this.usuario?.roles || [];
+  this.validatePermiso();
+  }
 
-    this.puedeVerUsuarios = this.tieneAlgunRol(['ADMINISTRADOR', 'EMPLEADO', 'CLIENTE']);
-    this.puedeVerVehiculosServicios = this.tieneAlgunRol(['ADMINISTRADOR', 'EMPLEADO']);
-    this.puedeVerReservaciones = this.tieneAlgunRol(['EMPLEADO', 'CLIENTE']);
+  validatePermiso(){
+const esAdmin = this.tieneRol('ADMINISTRADOR');
+this.puedeVerUsuarios = esAdmin || this.tieneAlgunRol(['EMPLEADO', 'CLIENTE']);
+this.puedeVerVehiculosServicios = esAdmin || this.tieneAlgunRol(['EMPLEADO']);
+this.puedeVerReservaciones = esAdmin || this.tieneAlgunRol(['EMPLEADO', 'CLIENTE']);
   }
 
   tieneRol(rol: string): boolean {

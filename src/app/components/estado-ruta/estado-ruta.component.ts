@@ -16,11 +16,12 @@ import { CommonModule } from '@angular/common';
 import { Estados } from '../../interfaces/rutas';
 import { DataService } from '../../services/data.service';
 import { selectOptions } from '../../interfaces/usuarios';
+import { SelectComponent } from "../select/select.component";
 
 @Component({
   selector: 'app-estado-ruta',
   standalone: true,
-  imports: [ModalComponent, ReactiveFormsModule, CommonModule],
+  imports: [ModalComponent, ReactiveFormsModule, CommonModule, SelectComponent],
   templateUrl: './estado-ruta.component.html',
   styleUrl: './estado-ruta.component.scss',
 })
@@ -43,7 +44,15 @@ export class EstadoRutaComponent {
   viewTable         :       boolean = true;
   estadoSelected    :       Estados;
   listEstado        :       Estados[];
-  estadoOption     :       selectOptions[]=[]
+  estadoOption      :       selectOptions[]=[]
+  estadoOptionRegis: selectOptions[] = [
+  { id: 1, text: 'ACTIVO' },
+  { id: 2, text: 'INACTIVO' },
+  { id: 3, text: "PENDIENTE" },
+  { id: 3, text: "SIN ASIGNAR" },
+  { id: 3, text: "ASIGNADO" }
+];
+  optionSelected    :     selectOptions;     
   constructor() {}
   ngOnInit(): void {
     this.formValidation = this.formSrv.initFormEstado();
@@ -61,6 +70,7 @@ export class EstadoRutaComponent {
               type: 'success-white',
               duration: 2000,
             });
+            this.estadoOption = [];
             for (const key in this.listEstado) {
               if (Object.prototype.hasOwnProperty.call(this.listEstado, key)) {
                 const element:Estados = this.listEstado[key];
@@ -93,6 +103,10 @@ export class EstadoRutaComponent {
       });
     }
   }
+
+  onSelelec(data:any){
+    this.optionSelected = data;
+  }
   onSubmit() {
     this.formSubmitted = true;
     if (this.formValidation.valid && this.formSubmitted == true) {
@@ -110,8 +124,13 @@ export class EstadoRutaComponent {
     try {
       this.loadingData.update(() => true);
       const formValues = this.formValidation.getRawValue();
-      console.log('envio cuerpo solcitud', formValues);
-      this.srv.registrarEstado(formValues).subscribe({
+      const nombreEstado = this.optionSelected.text;
+      const req = {
+        nombreEstado,
+        ...formValues
+      }
+      console.log('envio cuerpo solcitud', req);
+      this.srv.registrarEstado(req).subscribe({
         next: (data) => {
           console.log('success', data);
           this.customSrv.showToast({
@@ -121,6 +140,7 @@ export class EstadoRutaComponent {
           });
           this.formValidation.reset();
           this.getList();
+
         },
         error: (error) => {
           console.error('error de servicio', error);
@@ -132,9 +152,10 @@ export class EstadoRutaComponent {
           this.loadingData.update(() => false);
         },
         complete:async () => {
-          await new Promise(resolve=>setTimeout(resolve,1000));
+          await new Promise(resolve=>setTimeout(resolve,1400));
           this.loadingData.update(() => false);
           this.formSubmitted = false;
+          this.openRegistreModal.showModal = true;
         },
       });
     } catch (error) {
@@ -220,7 +241,7 @@ export class EstadoRutaComponent {
             type: 'success-white',
             duration: 2000,
           });
-    
+        
         },
         error: (error) => {
           console.error('error de servicio', error);
