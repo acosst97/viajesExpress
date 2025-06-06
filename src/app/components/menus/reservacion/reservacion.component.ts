@@ -44,7 +44,7 @@ protected authSrv    =    inject(AuthService);
  permiso           :    string[]=[];
  reservaPorVencer: ListarReservaciones[] = [];
  constructor(){}
- ngOnInit() {
+ ngOnInit() { 
   this.getListReservation();
   this.tableProps = {
     filter: 1,
