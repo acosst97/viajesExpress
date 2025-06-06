@@ -13,6 +13,8 @@ import { CustomSrvService } from '../../../services/custom-srv.service';
 import { FormvalidationService } from '../../../services/formvalidation.service';
 import { RutasComponent } from "../../rutas/rutas.component";
 import { EstadoRutaComponent } from '../../estado-ruta/estado-ruta.component';
+import { AuthService } from '../../../services/auth.service';
+import { LoginData } from '../../../interfaces/loginRequest';
 
 @Component({
   selector: 'app-services-vehiculos',
@@ -31,6 +33,7 @@ export class ServicesVehiculosComponent {
   formSrv          = inject(FormvalidationService);
   private cdr      = inject(ChangeDetectorRef);
   loadingData      = signal(false);
+  protected authSrv    =    inject(AuthService);
   listServices     :        ListarServicioVehiculoDto[];
   listSrvFilter    :        ListarServicioVehiculoDto[];
   selectedImageBase64:      string | ArrayBuffer | null = null;
@@ -41,7 +44,8 @@ export class ServicesVehiculosComponent {
   formSubmitted    :        boolean = false;
   viewTable        :        boolean = true;
   serviceSelected  :        ListarServicioVehiculoDto;
-
+  loginData           :    LoginData;
+  permiso           :    string[]=[];
  constructor(private customSrv: CustomSrvService){}
  ngOnInit() {
   this.formValidation = this.formSrv.initFormServices();
@@ -59,7 +63,13 @@ export class ServicesVehiculosComponent {
     class: 'non-striped',
   };
    this.cargarServicios();
+   this.loginData  = this.authSrv.obtenerUsuario();
+   this.permiso = this.loginData?.roles || [];
  }
+
+ tieneRol(rol: string): boolean {
+  return this.permiso.includes(rol);
+}
  /**Validacion form */
  getValidatorErroVehiculo(fieldName: string) {
   return this.formSrv.getValidationVehiculo(
@@ -80,7 +90,6 @@ cargarServicios(): void {
     }else{
       this.tableProps.data = []
     }
-  
     console.log("Lista de servicios  vehiculos", this.listServices);
   },
   error:(error)=>{
@@ -94,8 +103,12 @@ cargarServicios(): void {
 //* ------------------------ REGISTRO---------------//
 //NOTE registro
 openRegister() {
-  this.formValidation.reset();
-  this.abriModalRegister.showModal = true
+  if (this.tieneRol('ADMINISTRADOR')) {
+    this.formValidation.reset();
+    this.abriModalRegister.showModal = true
+  }else{
+    this.customSrv.showToast({ text: 'Permiso denegado', type: 'error-white', duration: 2000 })
+  }
 }
   registrarServicio() {
   try {
@@ -184,12 +197,20 @@ tableFlujo(type:string,data:ListarServicioVehiculoDto){
   
  switch (type) {
   case 'edit-service':
-    this.serviceSelected = data;
-    this.pathValuesForm(this.serviceSelected);
-    this.editServiceModal.showModal = true;
+    if (this.tieneRol('ADMINISTRADOR')) {
+      this.serviceSelected = data;
+      this.pathValuesForm(this.serviceSelected);
+      this.editServiceModal.showModal = true;
+    }else{
+      this.customSrv.showToast({ text: 'Permiso denegado', type: 'error-white', duration: 2000 })
+    }
     break;
   case 'question-delete':
-    this.questionModal.showModal = true;
+    if (this.tieneRol('ADMINISTRADOR')) {
+      this.questionModal.showModal = true;
+    }else{
+      this.customSrv.showToast({ text: 'Permiso denegado', type: 'error-white', duration: 2000 })
+    }
     break;
     case 'confirm-delete':
     this.deleteServiceMethod(this.serviceSelected);

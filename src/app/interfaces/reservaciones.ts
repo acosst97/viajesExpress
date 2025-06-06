@@ -30,7 +30,14 @@ export interface CrearReservacion {
     idRuta:number;
 }
 
-export interface Dsad {
-   
-}
+export interface ProcessedReservation {
+    idReservaciones: number;
+    detalle: string;
+    valor: string;
+    fechaReserva: Date; 
+    fechaViaje: Date;  
+    documento: string;
+    nombre: string;
+    statusVencimiento?: string;
+  }
 

@@ -1,28 +1,48 @@
-
 <div class="navbar-vertical">
-    <div class="navbar-header">
-      <i class="fa fa-th-large"></i> <span>DASHBOARD</span>
-      <i class="fa fa-chevron-down"></i> </div>
-    <ul class="navbar-menu">
+  <div class="navbar-header">
+    <img src="/assets/icons/avatar-profile.svg" alt="Perfil" class="profile-pic" />
+    <div class="user-info">
+      <span class="username">Hola {{ usuario?.primerNombre || 'Usuario' }}!</span>
+    </div>
+  </div>
+
+  <ul class="navbar-menu">
+
+    <!-- Usuarios: ADMINISTRADOR, EMPLEADO, CLIENTE -->
+    <ng-container *ngIf="puedeVerUsuarios">
       <li class="nav-item">
         <a [routerLink]="['/dashboard/usuarios']" routerLinkActive="active" class="nav-link">
           <i class="fa fa-users"></i> <span class="link-text">Usuarios</span>
         </a>
       </li>
+    </ng-container>
+  
+    <!-- Vehículos y Servicios: solo ADMINISTRADOR o EMPLEADO -->
+    <ng-container *ngIf="puedeVerVehiculosServicios">
       <li class="nav-item">
         <a [routerLink]="['/dashboard/vehiculos']" routerLinkActive="active" class="nav-link">
-          <i class="fa fa-tasks"></i> <span class="link-text">Vehiculos</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a [routerLink]="['/dashboard/reservaciones']" routerLinkActive="active" class="nav-link">
-          <i class="fa fa-tasks"></i> <span class="link-text">Reservaciones</span>
+          <i class="fa fa-car"></i> <span class="link-text">Vehículos</span>
         </a>
       </li>
       <li class="nav-item">
         <a [routerLink]="['/dashboard/servicios']" routerLinkActive="active" class="nav-link">
-          <i class="fa fa-tasks"></i> <span class="link-text">Servicios</span>
+          <i class="fa fa-cogs"></i> <span class="link-text">Servicios</span>
         </a>
       </li>
-      </ul>
-  </div>
+    </ng-container>
+  
+    <!-- Reservaciones: EMPLEADO o CLIENTE -->
+    <ng-container *ngIf="puedeVerReservaciones">
+      <li class="nav-item">
+        <a [routerLink]="['/dashboard/reservaciones']" routerLinkActive="active" class="nav-link">
+          <i class="fa fa-calendar-alt"></i> <span class="link-text">Reservaciones</span>
+        </a>
+      </li>
+    </ng-container>
+    <!-- <li class="nav-item">
+      <a [routerLink]="['/dashboard/seguridad']" routerLinkActive="active" class="nav-link">
+        <i class="fa fa-shield-alt"></i> <span class="link-text">Seguridad</span>
+      </a>
+    </li> -->
+  </ul>
+</div>

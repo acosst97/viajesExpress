@@ -1,48 +1,48 @@
 @if (showResponseModal) {
-  <div class="popup-alert">
-      <app-alert></app-alert>
-  </div>
-  }
+<div class="popup-alert">
+  <app-alert></app-alert>
+</div>
+}
 
- <div id="usuarios">
+<div id="usuarios">
   <div class="info-top">
     <app-card>
-        <ng-template #body>
-            <div class="box">
-              <div class="icon"></div>
-                Aqui puedes registrar tus roles por si <br> no tienes aun roles para asignación
-               <h4> Registra un nuevo Rol de usuario</h4>
-               <button class="btn btn-info" (click)="openModalRoles('registre-rol')">Formulario</button>
-              
-            </div>
-        </ng-template>
+      <ng-template #body>
+        <div class="box">
+          <div class="icon"></div>
+          Aqui puedes registrar tus roles por si <br> no tienes aun roles para asignación
+          <h4> Registra un nuevo Rol de usuario</h4>
+          <button class="btn btn-info" (click)="openRegistre()">Formulario</button>
+
+        </div>
+      </ng-template>
     </app-card>
     <app-card>
       <ng-template #body>
-              <div class="cont-table-rol">
-                <h3>Lista de roles regustrados actualmente</h3>
-                @if(this.roles){
-                  <app-table [tableProps]="tablePropsRoles">
-                    <ng-template style="background-color: #E7E7E7;" #lastTH>
-                      <th style="background-color: #E7E7E7;">Acciones</th>
-                    </ng-template>
-                    <!-- <ng-template #actions let-data>
+        <div class="cont-table-rol">
+          <h3>Lista de roles registrados actualmente</h3>
+          @if(this.roles){
+          <app-table [tableProps]="tablePropsRoles">
+            <ng-template style="background-color: #E7E7E7;" #lastTH>
+              <th style="background-color: #E7E7E7;">Acciones</th>
+            </ng-template>
+            <!-- <ng-template #actions let-data>
                       <div class="btns" style="display: inline-flex; gap: 10px;">
                         <button class="btn btn-success" (click)="editarUser(data)">Edit</button>
                         <button class="btn btn-info" (click)="openModalRoles('abrir-modal',data)">asignar</button>
                       </div>
                     </ng-template> -->
-                  </app-table>
-                } @else {
-                  <div class="div">no hay data</div>
-                }
-              </div> 
-         </ng-template>
+          </app-table>
+          } @else {
+          <div class="div">no hay data</div>
+          }
+        </div>
+      </ng-template>
     </app-card>
-</div>
-<app-card>
-  <ng-template #body>
-    @if(this.usuarioFilter){
+  </div>
+  <app-card>
+    <ng-template #body>
+      @if(this.usuarioFilter){
       <app-table [tableProps]="tableProps">
         <ng-template style="background-color: #E7E7E7;" #lastTH>
           <th style="background-color: #E7E7E7;">Acciones</th>
@@ -54,139 +54,166 @@
           </div>
         </ng-template>
       </app-table>
-    } @else {
+      } @else {
       <div class="div">no hay data</div>
-    }
-  </ng-template>
+      }
+    </ng-template>
   </app-card>
+</div>
 
- </div>  
-
-
- <app-modal #OpenEdit id="edit" [idDefault]="1">
+<app-modal #OpenEdit id="edit" [idDefault]="1">
   <div class="modal-cont">
-      <div class="form-container">
-          <h2 class="form-title">Actualiza tus datos</h2>
-          <form [formGroup]="editForm" (ngSubmit)="save()">
-              <div class="form-row">
-                  <div>
-                      <label for="codRuta">documento</label>
-                      <input class="form-input" type="text" formControlName="documento" id="documento">
-                      @for (validation of getValidatorError('documento'); track $index) {
-                      <div class="warning" [ngClass]="{ 'green': validation.valid }">
-                          {{ validation.message }}
-                      </div>
-                      }
-                  </div>
-                  <div>
-                      <label for="primerNombre">primer Nombre</label>
-                      <input class="form-input" type="text" id="primerNombre" formControlName="primerNombre">
-                      @for (validation of getValidatorError('primerNombre'); track $index) {
-                      <div class="warning" [ngClass]="{ 'green': validation.valid }">
-                          {{ validation.message }}
-                      </div>
-                      }
-                  </div>
-              </div>
-              <div class="form-row">
-                  <div>
-                      <label for="segundoNombre">Segundo nombre</label>
-                      <input class="form-input" type="text" id="segundoNombre" formControlName="segundoNombre">
-                  </div>
-                  <div>
-                      <label for="primerApellido">primer Apellido:</label>
-                      <input class="form-input" type="text" id="primerApellido" formControlName="primerApellido">
-                      @for (validation of getValidatorError('primerApellido'); track $index) {
-                      <div class="warning" [ngClass]="{ 'green': validation.valid }">
-                          {{ validation.message }}
-                      </div>
-                      }
-                  </div>
-              </div>
-              <div class="form-row">
-                <div>
-                    <label for="segApellido">Segundo Apellido</label>
-                    <input class="form-input" type="text" id="segApellido" formControlName="segApellido">
-                </div>
-                <div>
-                    <label for="experiencia">experiencia:</label>
-                    <input class="form-input" type="text" id="experiencia" formControlName="experiencia">
-                    @for (validation of getValidatorError('experiencia'); track $index) {
-                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
-                        {{ validation.message }}
-                    </div>
-                    }
-                </div>
+    <div class="form-container">
+      <h2 class="form-title">Actualiza tus datos</h2>
+      <form [formGroup]="editForm" (ngSubmit)="save()">
+        <div class="form-row">
+          <div>
+            <label for="codRuta">documento</label>
+            <input class="form-input" type="text" formControlName="documento" id="documento">
+            @for (validation of getValidatorError('documento'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+              {{ validation.message }}
             </div>
-            <div class="form-row">
-              <div>
-                  <label for="telefono">telefono</label>
-                  <input class="form-input" type="text" id="telefono" formControlName="telefono">
-                  @for (validation of getValidatorError('telefono'); track $index) {
-                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
-                        {{ validation.message }}
-                    </div>
-                    }
-              </div>
-              <div>
-                  <label for="correo">primer Apellido:</label>
-                  <input class="form-input" type="text" id="correo" formControlName="correo">
-                  @for (validation of getValidatorError('correo'); track $index) {
-                  <div class="warning" [ngClass]="{ 'green': validation.valid }">
-                      {{ validation.message }}
-                  </div>
-                  }
-              </div>
+            }
           </div>
-              <button type="submit" class="btn btn-success">Confirmar</button>
-              @if (this.loadingData()) {
-                  <div class="global-loader-backdrop">
-                      <img src="/assets/icons/loading.svg" class="rotate-icon" />
-                  </div>
-                  }
-                  @if (this.loadingData()===false) {}
-          </form>
-      </div>
+          <div>
+            <label for="primerNombre">primer Nombre</label>
+            <input class="form-input" type="text" id="primerNombre" formControlName="primerNombre">
+            @for (validation of getValidatorError('primerNombre'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+              {{ validation.message }}
+            </div>
+            }
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="segundoNombre">Segundo nombre</label>
+            <input class="form-input" type="text" id="segundoNombre" formControlName="segundoNombre">
+          </div>
+          <div>
+            <label for="primerApellido">primer Apellido:</label>
+            <input class="form-input" type="text" id="primerApellido" formControlName="primerApellido">
+            @for (validation of getValidatorError('primerApellido'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+              {{ validation.message }}
+            </div>
+            }
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="segApellido">Segundo Apellido</label>
+            <input class="form-input" type="text" id="segApellido" formControlName="segApellido">
+          </div>
+          <div>
+            <label for="experiencia">experiencia:</label>
+            <input class="form-input" type="text" id="experiencia" formControlName="experiencia">
+            @for (validation of getValidatorError('experiencia'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+              {{ validation.message }}
+            </div>
+            }
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="telefono">telefono</label>
+            <input class="form-input" type="text" id="telefono" formControlName="telefono">
+            @for (validation of getValidatorError('telefono'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+              {{ validation.message }}
+            </div>
+            }
+          </div>
+          <div>
+            <label for="correo">primer Apellido:</label>
+            <input class="form-input" type="text" id="correo" formControlName="correo">
+            @for (validation of getValidatorError('correo'); track $index) {
+            <div class="warning" [ngClass]="{ 'green': validation.valid }">
+              {{ validation.message }}
+            </div>
+            }
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success">Confirmar</button>
+        @if (this.loadingData()) {
+        <div class="global-loader-backdrop">
+          <img src="/assets/icons/loading.svg" class="rotate-icon" />
+        </div>
+        }
+        @if (this.loadingData()===false) {}
+      </form>
+    </div>
   </div>
 </app-modal>
 
-  <app-modal #AsingRol id="view-rol">
-    <div class="modal-cont">
-      <div class="icon"></div>
-       <p> Asigna el rol que desees para tus usuarios</p>
-        <app-select [options]="rolesOption" (optionSelected)="onRolSelect($event)"></app-select>
-        <div>
-          <button class="btn btn-success" (click)="openModalRoles('confirm',userSelected)">Confirmar</button>
-        </div>
-      
-        @if (this.loadingData()) {
+<app-modal #AsingRol id="view-rol">
+  <div class="modal-cont">
+    <div class="icon"></div>
+    <div class="list">
+      @if (this.tieneRol('ADMINISTRADOR')) {
+        <p>tus roles actualmente</p>
+      }@else {
+        <p>Roles asignados para este usuario son:</p>
+      }
+      @if(this.userWitRol){
+        @for (item of userWitRol.roles; track $index) {
+          <ul>
+            <li>{{item.nombreRol}} <span class="icon" (click)="openModalDesasociate('question-delete-rol', { idUsuario: userSelected.idUsuario, idRol: item.idRol, nombreRol: item.nombreRol })"></span></li>
+          </ul>
+        }
+      }
+    </div>
+    <p> Asigna el rol que desees para tus usuarios</p>
+    <app-select [options]="rolesOption" (optionSelected)="onRolSelect($event)"></app-select>
+    <div>
+      <button class="btn btn-success" (click)="openModalRoles('confirm',userSelected)">Confirmar</button>
+    </div>
+
+    @if (this.loadingData()) {
+    <div class="global-loader-backdrop">
+      <img src="/assets/icons/loading.svg" class="rotate-icon" />
+    </div>
+    }
+    @if (this.loadingData()===false) {}
+  </div>
+</app-modal>
+
+<app-modal #QuestionModal [idDefault]="1" id="delete">
+  <div class="modal-cont">
+       <div class="icon"> </div>
+      <h2> Estas seguro de eliminar este registro ?</h2>
+      <p>Esta acción no se puede revertir sin embargo puedes volver aignar un nuevo rol a este usuario</p>
+      <button class="btn btn-primary" (click)="openModalDesasociate('confirm-delete-rol', desasociateSelec)">Eliminar</button>
+            @if (this.loadingData()) {
           <div class="global-loader-backdrop">
               <img src="/assets/icons/loading.svg" class="rotate-icon" />
             </div>
       }
       @if (this.loadingData()===false) {}
-    </div>
-  </app-modal>
+  </div>
+</app-modal>
 
-  <app-modal #OpenRegistreRol id="registre-rol" [idDefault]="1">
-    <div class="modal-cont">
-        <div class="form-container">
-            <h2 class="form-title">Registra un nuevo Rol</h2>
-            <div>
-                <div class="form-row">
-                    <div>
-                        <label for="documento">ingresa el rol a crear</label>
-                      <app-select [options]="listaRolesAssing" (optionSelected)="onRolSelect($event)"></app-select>
-                    </div>
-                </div>
-                <button class="btn btn-success" (click)="registreRol()">Confirmar</button>
-                @if (this.loadingData()) {
-                    <div class="global-loader-backdrop">
-                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
-                    </div>
-                    }
-                    @if (this.loadingData()===false) {}
-            </div>
+<app-modal #OpenRegistreRol id="registre-rol" [idDefault]="1">
+  <div class="modal-cont">
+    <div class="form-container">
+      <h2 class="form-title">Registra un nuevo Rol</h2>
+      <div>
+        <div class="form-row">
+          <div>
+            <label for="documento">ingresa el rol a crear</label>
+            <app-select [options]="listaRolesAssing" (optionSelected)="onRolSelect($event)"></app-select>
+          </div>
         </div>
+        <button class="btn btn-success" (click)="registreRol()">Confirmar</button>
+        @if (this.loadingData()) {
+        <div class="global-loader-backdrop">
+          <img src="/assets/icons/loading.svg" class="rotate-icon" />
+        </div>
+        }
+        @if (this.loadingData()===false) {}
+      </div>
     </div>
-  </app-modal>
+  </div>
+</app-modal>

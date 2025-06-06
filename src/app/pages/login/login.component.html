@@ -1,18 +1,16 @@
 <app-nav></app-nav>
-
-
 <section class="page-section bg-light" id="portfolio">
   <div class="container">
     <div class="row">
       <div class="col-lg-4 col-sm-6 mb-4">
         <div class="portfolio-item">
-
           <div class="login">
             <div class="text-center">
               <h1 class="section-heading text-uppercase">Login</h1>
               <h3 class="section-subheading text-muted">Valida tus datos para ingresar al dash board.</h3>
             </div>
             <form [formGroup]="loginForm" (ngSubmit)="login()">
+              <label for="correo">Correo:</label>
               <input type="email" id="correoElectronico" formControlName="correoElectronico" placeholder="Correo">
               <div *ngIf="loginForm.get('correoElectronico')?.invalid && loginForm.get('correoElectronico')?.touched">
                 <div *ngIf="loginForm.get('correoElectronico')?.errors?.['required']" class="error-message">Correo
@@ -20,7 +18,13 @@
                 <div *ngIf="loginForm.get('correoElectronico')?.errors?.['email']" class="error-message">Correo
                   electrónico no válido.</div>
               </div>
-              <input type="password" name="p" placeholder="Contraseña" formControlName="contrasena">
+              <label for="password">Contraseña:</label>
+              <div class="password-wrapper">
+                <input formControlName="contrasena" type="{{newPasswordView ?'text':'password'}}" placeholder="***********">
+                <div class="{{newPasswordView ?'icon-eye-opened':'icon-eye-closed'}}" (click)="showHideNewPassword()"></div>
+            </div>
+              <!-- <input type="{{newPasswordLogin ?'text':'password'}}"
+              placeholder="***********" name="Contraseña" formControlName="contrasena">-->
               <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched"
                 class="error-message">
                 Contraseña es requerida.
@@ -38,6 +42,7 @@
                     <img src="/assets/icons/loading.svg" class="rotate-icon" alt="loading icon" />
                   </div>
                 }
+              @if (this.loadingData()===false) {}
           </div>
         </div>
       </div>
@@ -59,7 +64,7 @@
         <!-- (click)="showModal('confirm-recovery-password')" -->
         <button class="btn btn-primary btn-block btn-large" (click)="generateEmail(this.email)">Confirmar</button>
         <button class="btn btn-primary btn-block btn-large">validar contraseña</button>
-        <p>No recibí ningún correo,Reenviar Mensaje</p>
+        <!-- <p>No recibí ningún correo,Reenviar Mensaje</p> -->
       </div>
     </app-modal>
   </div>
@@ -67,7 +72,8 @@
   <app-modal #AbriModal id="registre" [idDefault]="1">
     <div class="modal-cont">
         <div class="form-container">
-            <h2 class="form-title">Actualiza tus datos</h2>
+            <h2 class="form-title">Registro</h2>
+            <p>Registrate y obten acceso a tus productos y reservaciones</p>
             <form [formGroup]="registroForm" (ngSubmit)="save()">
                 <div class="form-row">
                     <div>
@@ -150,11 +156,12 @@
                     }
                 </div>
                 <div>
+                  
                   <label for="password">Ingresa tu contraseña</label>
-                  <input formControlName="password" type="{{newPasswordView ?'text':'password'}}"
-                            placeholder="***********">
-                        <div class="{{newPasswordView ?'icon-eye-opened':'icon-eye-closed'}}"
-                            (click)="showHideNewPassword()"><div class="icon"></div></div>
+                  <div class="password-wrapper">
+                    <input formControlName="password" type="{{newPasswordView ?'text':'password'}}" placeholder="***********">
+                    <div class="{{newPasswordView ?'icon-eye-opened':'icon-eye-closed'}}" (click)="showHideNewPassword()"></div>
+                </div>
                   @for (validation of getValidatorError('password'); track $index) {
                   <div class="warning" [ngClass]="{ 'green': validation.valid }">
                       {{ validation.message }}
@@ -162,16 +169,14 @@
                   }
               </div>
             </div>
-                <button type="submit" class="btn btn-success">Confirmar</button>
-                @if (this.loadingData()) {
-                    <div class="global-loader-backdrop">
-                        <img src="/assets/icons/loading.svg" class="rotate-icon" />
-                    </div>
-                    }
-                    @if (this.loadingData()===false) {}
+            <button  class="btn btn-success">Confirmar</button>
             </form>
-            <!-- <pre>{{registroForm.value  | json}}</pre>
-            <pre>{{registroForm.status}}</pre> -->
+            @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" />
+                </div>
+                }
+                @if (this.loadingData()===false) {}
         </div>
     </div>
   </app-modal>

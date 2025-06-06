@@ -3,6 +3,7 @@ import { AsignarVehiculo, RegistroVehiculoDTO } from './../interfaces/vehiculo';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../src/environments/environments';
 import {
   CrearServicioVehiculoDto,
   ListarServicioVehiculoDto,
@@ -13,6 +14,7 @@ import {
   ListarReservaciones,
 } from '../interfaces/reservaciones';
 import {
+  DesasociateRol,
   ListarUsuarioDto,
   MensajeDTO,
   Roles,
@@ -25,14 +27,13 @@ import { Vehiculo } from '../interfaces/vehiculo';
   providedIn: 'root',
 })
 export class SrvGenericosService {
-  private apiUsuarios = 'http://localhost:8080/usuarios';
-  private apiUrl = 'http://localhost:8080/services';
-  private apiUrlReserva = 'http://localhost:8080/reservaciones';
-  private apiUrlVehiculos = 'http://localhost:8080/vehiculos';
-  private apiRutas = 'http://localhost:8080/rutas';
-  private apiEstado = 'http://localhost:8080/estado';
+  private apiUsuarios = `${environment.apiBaseUrl}/usuarios`;
+  private apiUrl = `${environment.apiBaseUrl}/services`;
+  private apiUrlReserva = `${environment.apiBaseUrl}/reservaciones`;
+  private apiUrlVehiculos = `${environment.apiBaseUrl}/vehiculos`;
+  private apiRutas = `${environment.apiBaseUrl}/rutas`;
+  private apiEstado = `${environment.apiBaseUrl}/estado`;
   
-
   constructor(private http: HttpClient) {}
 
   //------------ servicios servicios de viaje --------------  //
@@ -87,7 +88,7 @@ export class SrvGenericosService {
     return this.http.put<MensajeDTO>(`${this.apiUsuarios}/actualizar`, usuario);
   }
 
-  // Servicio para asignar/actualizar rol de usuario
+  //* Servicio para asignar/actualizar rol de usuario
   actualizarRolUsuario(data: UpdateUsuarioRolDTO): Observable<MensajeDTO> {
     return this.http.put<MensajeDTO>(
       `${this.apiUsuarios}/actualizar-rol`,
@@ -95,15 +96,18 @@ export class SrvGenericosService {
     );
   }
 
-  //listar roles
+  //LISTAR ROLES
   listarRoles(): Observable<Roles> {
     return this.http.get<Roles>(`${this.apiUsuarios}/listarRoles`);
   }
-  
+  //*REGISTRO ROL
   registrarRol(data:any):Observable<MensajeDTO>{
     console.log("cuerpo",data);
     
     return this.http.post<MensajeDTO>(`${this.apiUsuarios}/registroRol`,data);
+  }
+  desasociateRol(data: UpdateUsuarioRolDTO):Observable<DesasociateRol>{
+     return this.http.post<DesasociateRol>(`${this.apiUsuarios}/desasociar-rol`,data);
   }
   //-------------------------------------------------------//
   //------------ SERVICIOS VEHICULOS -------------- *      //

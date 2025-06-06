@@ -15,6 +15,7 @@ import { CustomSrvService } from '../../services/custom-srv.service';
 import { FormvalidationService } from '../../services/formvalidation.service';
 import { AlertComponent } from '../../components/alert/alert.component';
 import * as CryptoJS from 'crypto-js';
+import { LoginData } from '../../interfaces/loginRequest';
 const SECRET_KEY = 'tu_clave_secreta';
 @Component({
   selector: 'app-login',
@@ -37,12 +38,12 @@ export class LoginComponent {
   loadingData               = signal(false);
   registroForm              : FormGroup;
   loginForm                 : FormGroup;
-  userLogin                 : any;
+  userLogin                 : LoginData;
   formSubmitted             : boolean = false;
   showResponseModal         : boolean = false;
   email                     : FormControl;
   newPasswordView           : boolean;
- 
+  newPasswordLogin          : boolean;
   constructor(
     private authService: AuthService, // Inyecta el servicio
     private router: Router
@@ -83,15 +84,13 @@ export class LoginComponent {
               const token = this.generateToken();
               console.log('Login exitoso', data);
               const jsonString = JSON.stringify(data);
-      const encrypted = CryptoJS.AES.encrypt(jsonString, SECRET_KEY).toString();
-      sessionStorage.setItem('usuario', encrypted);
+              const encrypted = CryptoJS.AES.encrypt(jsonString, SECRET_KEY).toString();
+              sessionStorage.setItem('usuario', encrypted);
               sessionStorage.setItem('authToken', token);
               this.userLogin = data;
-              // sessionStorage.setItem('currentUser', JSON.stringify(data));
               this.router.navigate(['/dashboard']);
               this.loadingData.update(()=>false);
-              
-
+            
             },
             error: (error) => {
               const mensaje = error.error?.mensaje || 'Error desconocido';
@@ -115,9 +114,7 @@ export class LoginComponent {
   }
   registre() {
     try {
-      this.formSubmitted = true;
       this.loadingData.update(()=>true);
-      if (this.registroForm.valid && this.formSubmitted) {
         const registroData = {
           documento: this.registroForm.get('documento')?.value,
           primerNombre: this.registroForm.get('primerNombre')?.value,
@@ -138,6 +135,7 @@ export class LoginComponent {
             this.registroForm.reset();
             this.abriModal.showModal = false;
             this.loadingData.update(()=>false);
+            this.formSubmitted = false;
           },
           error: (error) => {
             const mensaje = error.error?.mensaje || 'Error desconocido';
@@ -147,13 +145,10 @@ export class LoginComponent {
           },
           complete: async () => {
             this.loadingData.update(()=>false);
+            this.formSubmitted = false;
           },
         }
         );
-      } else {
-        this.customSrv.showToast({ text: 'Valida la información', type: 'error-white', duration: 2000 })
-        this.loadingData.update(()=>false);
-      }
     } catch (error) {
       this.customSrv.showToast({ text: 'Error en el servicio', type: 'error-white', duration: 2000 })
       this.loadingData.update(()=>false);
@@ -191,7 +186,10 @@ export class LoginComponent {
   showHideNewPassword() {
     this.newPasswordView = !this.newPasswordView;
   }
- 
+  showHideNewPasswordLogin() {
+    this.newPasswordLogin = !this.newPasswordLogin;
+  }
+
   /**Validacion form */
   getValidatorError(fieldName: string) {
     return this.formSrv.getValidationErrorRecoveryPassword(
@@ -201,6 +199,12 @@ export class LoginComponent {
     );
   }
   save() {
-    this.registre();
+    this.formSubmitted = true;
+    if (this.registroForm.valid && this.formSubmitted) {
+      this.registre();
+    }else{
+      this.customSrv.showToast({ text: 'Valida la información', type: 'error-white', duration: 2000 })
+      this.registroForm.markAllAsTouched();
+    }
   }
 }

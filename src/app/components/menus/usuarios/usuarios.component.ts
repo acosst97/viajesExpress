@@ -1,33 +1,31 @@
-import { red } from './../../../../../node_modules/@colors/colors/index.d';
+
 import { Router } from '@angular/router';
-import { Component, inject, Inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import {
   ListarUsuarioDto,
   RolDto,
-  RolEnum,
   Roles,
   selectOptions,
   UpdateUsuarioDTO,
 } from '../../../interfaces/usuarios';
 import { SrvGenericosService } from '../../../services/srv-genericos.service';
-import { filter, firstValueFrom } from 'rxjs';
+import {  firstValueFrom } from 'rxjs';
 import { Table } from '../../../interfaces/table';
 import { TableComponent } from '../../table/table.component';
 import { CommonModule } from '@angular/common';
 import {
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
   FormBuilder,
 } from '@angular/forms';
 import { ModalComponent } from '../../modal/modal.component';
-import { log } from 'console';
 import { SelectComponent } from "../../select/select.component";
 import { CardComponent } from "../../card/card.component";
 import { CustomSrvService } from '../../../services/custom-srv.service';
 import { AlertComponent } from '../../alert/alert.component';
 import { FormvalidationService } from '../../../services/formvalidation.service';
+import { AuthService } from '../../../services/auth.service';
+import { LoginData } from '../../../interfaces/loginRequest';
 
 @Component({
   selector: 'app-usuarios',
@@ -40,22 +38,29 @@ export class UsuariosComponent implements OnInit {
   @ViewChild('OpenEdit') openEdit: any;
   @ViewChild('AsingRol') asingRolModal: any;
   @ViewChild('OpenRegistreRol') openRegistreRol: any;
+  @ViewChild('QuestionModal') questionModal: any;
+  
   srv               = inject(SrvGenericosService);
   customSrv         = inject(CustomSrvService);
   formSrv           = inject(FormvalidationService);
+  authSrv           = inject(AuthService);
   loadingData       = signal(false);
   tableProps        : Table;
   tablePropsRoles   : Table;
   editForm          : FormGroup;
   usuario           : ListarUsuarioDto[];
+  userWitRol        : ListarUsuarioDto
   usuarioFilter     : any[];
+  loginData         : LoginData;
+  permiso           : string[]=[];
   roles             : RolDto[] ;
   rolesOption       : selectOptions[] = [];
   rolSelected       : selectOptions;
   userSelected      : ListarUsuarioDto;
   EditError         : string = '';
-  formSubmitted     :        boolean = false;
-  showResponseModal :        boolean = false;
+  formSubmitted     : boolean = false;
+  showResponseModal : boolean = false;
+  desasociateSelec  : any;
   listaRolesAssing  :selectOptions[] = [
     { text: "ADMINISTRADOR" },
     { text: "EMPLEADO" },
@@ -88,8 +93,13 @@ export class UsuariosComponent implements OnInit {
     this.customSrv.toast$.subscribe((message) => {
       this.showResponseModal = !!message;
     });
+    this.loginData  = this.authSrv.obtenerUsuario();
+    this.permiso = this.loginData?.roles || [];
+   
   }
-
+  tieneRol(rol: string): boolean {
+    return this.permiso.includes(rol);
+  }
   /**Validacion form */
   getValidatorError(fieldName: string) {
     return this.formSrv.getValidationRutasEstados(
@@ -100,16 +110,20 @@ export class UsuariosComponent implements OnInit {
     try {
       const data: any = await firstValueFrom(this.srv.listarUsuarios());
       console.log('data usuarios', data);
-      this.usuario = data.usuarios;
+      let usersToList = data.usuarios; 
+      this.userWitRol = data.usuarios;
+      console.log('data usuarios wir rol',  this.userWitRol); 
+      const userRoles = this.loginData.roles;
+      const esAdministrador = userRoles.includes('ADMINISTRADOR');
+      // Si NO es administrador, solo ve su propio registro
+      if (!esAdministrador) {
+        usersToList = usersToList.filter((user: any) => user.idUsuario === this.loginData.idUsuario);
+      }
+      this.usuario = usersToList;
       if (this.usuario.length>0) {
-        // const usuariosConRol = this.usuario.filter((data: ListarUsuarioDto) => {
-        //   return data.rolId !== null && data.rolId !== undefined; // Filtra si rolId no es nulo
-        //   // Si quieres filtrar por un rol específico:
-        //   // return data.rolNombre === 'ADMINISTRADOR';
-        // });
       this.usuarioFilter = this.usuario.map((data:any)=>{
       const {idUsuario, documento,primerNombre,segundoNombre,
-        primerApellido,segApellido,telefono,correo,experiencia,rolId,rolNombre,...d
+        primerApellido,segApellido,telefono,correo,experiencia,roles,...d
        } = data
        const nombreCompleto = `${primerNombre} ${primerApellido}`;
       return {
@@ -118,8 +132,7 @@ export class UsuariosComponent implements OnInit {
         nombre:nombreCompleto,
         telefono,
         correo,
-        experiencia,
-        rol:rolNombre
+        experiencia
       }
       })  
       this.tableProps.data = this.usuarioFilter;
@@ -243,20 +256,33 @@ export class UsuariosComponent implements OnInit {
       this.loadingData.update(()=>false);
     }
   }
+  openRegistre(){
+    if (this.tieneRol('ADMINISTRADOR')) {
+      this.openRegistreRol.showModal = true;
+  }else{
+      this.customSrv.showToast({ text: 'Permiso denegado', type: 'error-white', duration: 2000 })
+  }
+  }
   openModalRoles(type:string,data?:any){
      this.userSelected = data;
+     this.userWitRol = this.usuario.find((user: any) => user.idUsuario === data.idUsuario); 
+     console.log("data wit rol" , "***" , this.userWitRol);
     switch (type) {
       case 'abrir-modal':
-        this.asingRolModal.showModal = true;
+        if (this.tieneRol('ADMINISTRADOR')) {
+          this.asingRolModal.showModal = true;
+        }else{
+          this.customSrv.showToast({ text: 'Permiso denegado', type: 'error-white', duration: 2000 })
+        }
         break;
       case 'confirm':
         this.confirmAsigRol(this.userSelected);
         break;
-        case 'registre-rol':
-          this.openRegistreRol.showModal = true;
-          break;
+
     }
   }
+
+ 
   confirmAsigRol(user:ListarUsuarioDto){
     this.loadingData.update(()=>true);
   const req = {
@@ -320,7 +346,70 @@ export class UsuariosComponent implements OnInit {
       this.customSrv.showToast({ text: "falló la solicitud", type: 'error-white', duration: 2000 });
       this.loadingData.update(()=>false);
     }
-   
   }
-  constructor(private router: Router, private fb: FormBuilder) {}
+
+  openModalDesasociate(type: string, data: { idUsuario: number, idRol: number, nombreRol: string }) {
+    this.desasociateSelec = data;
+    switch (type) {
+      case 'question-delete-rol':
+        const usuarioLogueado = this.authSrv.obtenerUsuario();
+        const esPropio = usuarioLogueado.idUsuario === data.idUsuario;
+    
+        if (esPropio && data.nombreRol === 'ADMINISTRADOR') {
+          this.customSrv.showToast({
+            text: 'No puedes eliminarte tu propio rol de ADMINISTRADOR.',
+            type: 'error-white',
+            duration: 2500
+          });
+          return;
+        }
+  
+        this.questionModal.showModal = true;
+        break;
+  
+      case 'confirm-delete-rol':
+        this.confirmDesasociateRol(this.desasociateSelec);
+        break;
+    }
+  }
+  confirmDesasociateRol(data: { idUsuario: number, idRol: number }) {
+    try {
+      this.loadingData.update(() => true);
+  
+      const request = {
+        idUsuario: data.idUsuario,
+        idRol: data.idRol
+      };
+  
+      this.srv.desasociateRol(request).subscribe({
+        next:async (response) => {
+          this.customSrv.showToast({
+            text: 'Rol eliminado con éxito',
+            type: 'success-white',
+            duration: 2000
+          });
+
+        },
+        error: (error) => {
+          this.loadingData.update(() => false);
+          const mensaje = error?.error?.mensaje || 'Servicio no disponible';
+          this.customSrv.showToast({ text: mensaje, type: 'error-white', duration: 2000 });
+        },
+        complete: async () => {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          this.loadingData.update(() => false);
+          this.questionModal.showModal = false;
+          this.listarUsuarios();
+        }
+      });
+    } catch (error) {
+      this.loadingData.update(() => false);
+      this.customSrv.showToast({
+        text: 'Falló la solicitud',
+        type: 'error-white',
+        duration: 2000
+      });
+    }
+  }
+  constructor() {}
 }

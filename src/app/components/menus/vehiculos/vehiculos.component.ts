@@ -1,4 +1,4 @@
-import { Usuario } from './../../../interfaces/loginRequest';
+import { LoginData, Usuario } from './../../../interfaces/loginRequest';
 
 
 import { Component, computed, effect, inject, signal, ViewChild } from '@angular/core';
@@ -19,6 +19,7 @@ import { SelectComponent } from "../../select/select.component";
 import { ListarUsuarioDto, selectOptions } from '../../../interfaces/usuarios';
 import { resolve } from 'node:path';
 import { CustomSrvService } from '../../../services/custom-srv.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-vehiculos',
@@ -33,25 +34,26 @@ export class VehiculosComponent {
  @ViewChild('ViewInfoModal') viewInfoModal: any;
  @ViewChild('DocSelected') docSelected: any;
  @ViewChild('QuestionModal') questionModal: any;
- dataSrv      =    inject(DataService);
- veSrv        =    inject(SrvGenericosService);
- formSrv      =    inject(FormvalidationService);
- 
- loadingData   =    signal(false);
- tableProps    :   Table;
- listVehiculos :   Vehiculo[];
- vehifilter    :   Vehiculo[];
- usuario       :   ListarUsuarioDto[];
- vehiSelected  :   Vehiculo;  
- formRegistro  :   FormGroup;
- formEdit      :   FormGroup;
- formSubmitted :   boolean = false;
- userOption    :   selectOptions[] = [];
- usuarioSelected:  selectOptions;
- fileName      :   string | null = null;
- showResponseModal:boolean = false;
- seguroAVencer: any = null;
- 
+ dataSrv            =    inject(DataService);
+ veSrv              =    inject(SrvGenericosService);
+ formSrv            =    inject(FormvalidationService);
+ protected authSrv  =   inject(AuthService);
+ loadingData        =    signal(false);
+ tableProps         :   Table;
+ listVehiculos      :   Vehiculo[];
+ vehifilter         :   Vehiculo[];
+ usuario            :   ListarUsuarioDto[];
+ vehiSelected       :   Vehiculo;  
+ formRegistro       :   FormGroup;
+ formEdit           :   FormGroup;
+ formSubmitted      :   boolean = false;
+ userOption         :   selectOptions[] = [];
+ usuarioSelected    :   selectOptions;
+ fileName           :   string | null = null;
+ showResponseModal  :   boolean = false;
+ seguroAVencer      :   any = null;
+ loginData          :   LoginData;
+ permiso            :   string[]=[];
 
  public docUsuarios = computed(() => this.dataSrv.getUsuarios());
  
@@ -73,6 +75,8 @@ export class VehiculosComponent {
  this.customSrv.toast$.subscribe((message) => {
   this.showResponseModal = !!message;
 });
+this.loginData  = this.authSrv.obtenerUsuario();
+this.permiso = this.loginData?.roles || [];
  }
  constructor(private customSrv: CustomSrvService){
   effect(() => {
@@ -80,6 +84,10 @@ export class VehiculosComponent {
     console.log('data detailsUser  changed:', detailsUser);
   });
  }
+
+ tieneRol(rol: string): boolean {
+  return this.permiso.includes(rol);
+}
 
  getValidatorErroVehiculo(fieldName: string) {
   return this.formSrv.getValidationVehiculo(
@@ -291,32 +299,39 @@ onSubmit(): void {
     }
   }
   asigneConfirm(data:Vehiculo){
-   try {
-    this.loadingData.update(()=>true);
-    const id = data.idVehiculo;
-    const usuario = this.usuarioSelected.id;
-    const Dto = {
-    idVehiculo: id,
-    documentoUsuario: usuario
-    }
-     this.veSrv.asignVehicle(Dto).subscribe({
-      next: (data) => {
-        console.log("Asignación completa exitoso", data);
-      },
-      error: (err) => {
-        console.error("Error al registrar el vehículo", err);
+    if (this.tieneRol('ADMINISTRADOR')) {
+      try {
+        this.loadingData.update(()=>true);
+        const id = data.idVehiculo;
+        const usuario = this.usuarioSelected.id;
+        const Dto = {
+        idVehiculo: id,
+        documentoUsuario: usuario
+        }
+         this.veSrv.asignVehicle(Dto).subscribe({
+          next: (data) => {
+            this.customSrv.showToast({ text: 'Asignación Exitosa', type: 'error-white', duration: 3000 })
+            console.log("Asignación completa exitoso", data);
+          },
+          error: (err) => {
+            console.error("Error al registrar el vehículo", err);
+            this.loadingData.update(()=>false); 
+          },
+          complete:async()=>{ this.loadingData.update(()=>false);
+            await new Promise(resolve=> setTimeout(resolve,2000));
+            this.viewInfoModal.showModal = false;
+            this.listarVehiculoSrv();
+            this.loadingData.update(()=>false); 
+           }
+         });
+       } catch (error) {
+        console.log("error de servicio",error);
         this.loadingData.update(()=>false); 
-      },
-      complete:()=>{ this.loadingData.update(()=>false);
-        this.viewInfoModal.showModal = false;
-        this.listarVehiculoSrv();
+        
        }
-     });
-   } catch (error) {
-    console.log("error de servicio",error);
-    this.loadingData.update(()=>false); 
-    
-   }
+    }else{
+      this.customSrv.showToast({ text: 'Permiso denegado', type: 'error-white', duration: 2000 })
+    }
   }
   downloadVehicleDocument(): void {
     if (this.vehiSelected && this.vehiSelected.base64 && this.vehiSelected.documentacion) {
@@ -367,8 +382,12 @@ onSubmit(): void {
     this.vehiSelected = data;
     switch (type) {
       case 'question':
-        this.questionModal.showModal = true;
-        console.log('onfo vehi', this.vehiSelected);
+        if (this.tieneRol('ADMINISTRADOR')) {
+          this.questionModal.showModal = true;
+          console.log('onfo vehi', this.vehiSelected);
+        }else{
+          this.customSrv.showToast({ text: 'Permiso denegado', type: 'error-white', duration: 2000 })
+        }
         break;
     case 'confirm-delete':
       this.eliminarVehiculoSrv();

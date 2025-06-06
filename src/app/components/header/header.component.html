@@ -1,7 +1,22 @@
 <div class="header-container">
-    <h1>Bienvenido al Dashboard</h1>
-    <p>Aquí encontrarás información importante.</p>
+  <div style="display: flex; align-items: center;">
+    <i class="fa fa-chart-line dashboard-icon"></i>
+    <div>
+      <h1>Bienvenido al Dashboard</h1>
+      <p>Gestiona la información de tu empresa.</p>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <div class="user-info">
+      <img src="/assets/icons/avatar.svg" alt="Usuario" class="avatar" />
+      @if (usuario) {
+        <span>{{ usuario.primerNombre + " " + usuario.primerApellido }}</span>
+      }
+   
+    </div>
     <button (click)="logout()" class="logout-button">
       <i class="fa fa-sign-out-alt"></i> Cerrar Sesión
     </button>
   </div>
+</div>

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { LoginData } from '../../interfaces/loginRequest';
 
 @Component({
   selector: 'app-header',
@@ -9,11 +11,14 @@ import { Router } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  constructor(private router: Router) { }
-
+  constructor(private router: Router,private authSrv:AuthService) { }
+   usuario:LoginData;
   logout() {
-    // Aquí podrías agregar lógica para limpiar la sesión del usuario
-    localStorage.removeItem('token'); // Ejemplo: eliminar un token del localStorage
-    this.router.navigate(['/home']); // Redirige al usuario a la ruta '/home'
+    localStorage.removeItem('token'); 
+    this.router.navigate(['/home']);
+    this.authSrv.cerrarSesion();
+  }
+  ngOnInit(): void {
+ this.usuario  = this.authSrv.obtenerUsuario();
   }
 }

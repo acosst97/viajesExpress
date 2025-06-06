@@ -11,8 +11,10 @@ import { DataService } from '../../../services/data.service';
 import { FormvalidationService } from '../../../services/formvalidation.service';
 import { Table } from '../../../interfaces/table';
 import { firstValueFrom } from 'rxjs';
-import { ListarReservaciones } from '../../../interfaces/reservaciones';
+import { ListarReservaciones, ProcessedReservation } from '../../../interfaces/reservaciones';
 import { CustomSrvService } from '../../../services/custom-srv.service';
+import { LoginData } from '../../../interfaces/loginRequest';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-reservacion',
@@ -26,17 +28,21 @@ export class ReservacionComponent {
   @ViewChild('ViewDataModal') viewDataModal: any;
   @ViewChild('AsingRol')       asingRolModal: any;
   @ViewChild('QuestionModal')  questionModal: any;
- dataSrv         =    inject(DataService);
- customSrv       =    inject(CustomSrvService);
- service         =    inject(SrvGenericosService);
- formSrv         =    inject(FormvalidationService);
- 
- loadingData     =    signal(false);
- tableProps      :    Table;
- reservaFilter   :    ListarReservaciones[];
- listReservas    :    ListarReservaciones[];
- reservaSelected :    ListarReservaciones;
- showResponseModal :  boolean = false;
+ dataSrv             =    inject(DataService);
+ customSrv           =    inject(CustomSrvService);
+ service             =    inject(SrvGenericosService);
+ formSrv             =    inject(FormvalidationService);
+protected authSrv    =    inject(AuthService);
+ loadingData         =    signal(false);
+ tableProps          :    Table;
+ reservaFilter       :    ListarReservaciones[];
+ listReservas        :    ListarReservaciones[];
+ reservaSelected     :    ListarReservaciones;
+ reservaFilterNew    :    ProcessedReservation[] = [];
+ showResponseModal   :    boolean = false;
+ loginData           :    LoginData;
+ permiso           :    string[]=[];
+ reservaPorVencer: ListarReservaciones[] = [];
  constructor(){}
  ngOnInit() {
   this.getListReservation();
@@ -53,7 +59,14 @@ export class ReservacionComponent {
   this.customSrv.toast$.subscribe((message) => {
     this.showResponseModal = !!message;
   });
+  this.loginData  = this.authSrv.obtenerUsuario();
+  this.permiso = this.loginData?.roles || [];
+
  }
+
+ tieneRol(rol: string): boolean {
+  return this.permiso.includes(rol);
+}
  async getListReservation(){
  try {
      const data: any = await firstValueFrom(this.service.ListarReservaciones());
@@ -73,6 +86,16 @@ export class ReservacionComponent {
             ...data
           };
         });
+        const hoy = new Date();
+this.reservaPorVencer = this.reservaFilter.filter((reserva) => {
+  const fechaViaje = new Date(reserva.fechaViaje);
+  const diffTime = fechaViaje.getTime() - hoy.getTime();
+  const diffDays = diffTime / (1000 * 3600 * 24);
+  console.log('Reservas por vencer:', this.reservaPorVencer);
+
+  // Está por vencer si faltan 10 días o menos y aún no ha pasado
+  return diffDays <= 10 && diffDays >= 0;
+});
         this.tableProps.data = this.reservaFilter;
        }else{
         this.tableProps.data = [];
@@ -82,14 +105,16 @@ export class ReservacionComponent {
      console.log('error user', error);
    }
  }
-   
- 
 
  openDelete(type:string, data:any){
   this.reservaSelected = data;
   switch (type) {
     case 'eliminar':
-      this.questionModal.showModal = true;
+      if (this.tieneRol('ADMINISTRADOR')) {
+        this.questionModal.showModal = true;
+      }else{
+        this.customSrv.showToast({ text: 'Permiso denegado', type: 'error-white', duration: 2000 })
+      }
       break;
       case 'confirm-delete':
        this.deleteConfirm(this.reservaSelected.idReservaciones);
@@ -133,6 +158,8 @@ export class ReservacionComponent {
     this.viewDataModal.showModal = true;
   }
  }
+
+ 
 
 
 }

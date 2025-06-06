@@ -20,6 +20,14 @@ export interface Usuario {
   reservaciones: any[];
 }
 
+export interface LoginData {
+  idUsuario:      number;
+  primerNombre:   string;
+  primerApellido: string;
+  correo:         string;
+  roles:          string[];
+}
+
 export interface RegistroRequest {
   primerNombre: string;
   segundoNombre?: string;

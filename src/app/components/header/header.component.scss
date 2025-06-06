@@ -1,14 +1,14 @@
 .header-container {
     background-color: #e0e0e0;
     padding: 20px;
-    text-align: left; /* Ajusta la alineación según tu diseño */
+    text-align: left; 
     display: flex;
-    justify-content: space-between; /* Espacia el título y el botón */
+    justify-content: space-between; 
     align-items: center;
   }
   
   h1 {
-    color: #555;
+    color: #378fbf;
     margin-bottom: 0;
   }
   
@@ -18,7 +18,7 @@
   }
   
   .logout-button {
-    background-color: #5d98d9;; /* Rojo para indicar acción de salida */
+    background-color: #5d98d9;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -38,4 +38,25 @@
   .logout-button i {
     margin-right: 8px;
     font-size: 1em;
+  }
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+  }
+
+  .dashboard-icon {
+    font-size: 2em;
+    color: #5d98d9;
+    margin-right: 15px;
   }

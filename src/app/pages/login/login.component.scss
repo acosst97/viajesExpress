@@ -137,6 +137,40 @@ body {
 	margin: 0px 0 0 -150px;
 	width: 300px;
 	height: 300px;
+	> div {
+		width: 100%;
+	  }
+	  .password-wrapper {
+		  position: relative;
+		  display: flex;
+		  align-items: center;
+		}
+  
+		.password-wrapper input[formControlName="password"] {
+		  width: 100%; 
+		  padding-right: 40px; 
+		  box-sizing: border-box; 
+		}
+  
+		.icon-eye-opened,
+		.icon-eye-closed {
+		  position: absolute;
+		  right: 10px; 
+		  cursor: pointer;
+		  height: 16px;
+		  width: 22px;
+		  background-size: contain;
+		  background-repeat: no-repeat;
+		  margin: 0;
+		}
+  
+		.icon-eye-opened {
+		  background-image: url("/assets/icons/eye.svg");
+		}
+  
+		.icon-eye-closed {
+		  background-image: url("/assets/icons/eye-closed.svg");
+		}
 }
 
 .login h1 {
@@ -208,7 +242,39 @@ input:focus {
   
 		> div {
 		  width: 100%;
+		  position: relative;
 		}
+		.password-wrapper {
+			position: relative; 
+			display: flex; 
+			align-items: center; 
+		  }
+	
+		  .password-wrapper input[formControlName="password"] {
+			width: 100%; 
+			padding-right: 40px;
+			box-sizing: border-box; 
+		  }
+	
+		  .icon-eye-opened,
+		  .icon-eye-closed {
+			position: absolute; 
+			right: 10px; 
+			cursor: pointer;
+			height: 16px;
+			width: 22px;
+			background-size: contain;
+			background-repeat: no-repeat;
+			margin: 0;
+		  }
+	
+		  .icon-eye-opened {
+			background-image: url("/assets/icons/eye.svg");
+		  }
+	
+		  .icon-eye-closed {
+			background-image: url("/assets/icons/eye-closed.svg");
+		  }
 	  }
   
 	  label {

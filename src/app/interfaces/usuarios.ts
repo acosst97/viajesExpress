@@ -2,15 +2,15 @@ export interface ListarUsuarioDto {
   idUsuario:      number;
   documento:      string;
   primerNombre:   string;
-  segundoNombre:  null;
+  segundoNombre:  string;
   primerApellido: string;
-  segApellido:    null;
+  segApellido:    string;
   telefono:       string;
   correo:         string;
   experiencia:    number;
-  rolId:          null;
-  rolNombre:      null;
+  roles:          Role[];
 }
+
 export enum RolEnum {
   ADMINISTRADOR = "ADMINISTRADOR",
   EMPLEADO = "EMPLEADO",
@@ -65,4 +65,11 @@ export interface Roles {
 export interface Role {
   idRol:     number;
   nombreRol: string;
+}
+
+export interface DesasociateRol{
+  success: boolean,
+  message: string,
+  idUsuario: number,
+  idRol: number
 }

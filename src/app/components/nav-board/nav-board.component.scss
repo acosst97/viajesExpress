@@ -1,66 +1,76 @@
 .navbar-vertical {
-    background-color:#14212c;
-    color: #cbd5e0; 
-    width: 220px; 
-    height: 100vh; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    padding-top: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
-  }
+  background-color: #14212c;
+  color: #cbd5e0;
+  width: 220px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+}
 
-  .navbar-header {
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
+.navbar-header {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
 
-  .navbar-header i {
-    margin-right: 10px;
-    font-size: 1.2em;
-  }
+.profile-pic {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
 
-  .navbar-header span {
-    font-weight: bold;
-    font-size: 1.1em;
-  }
+.username {
+  font-weight: bold;
+  font-size: 0.95em;
+  color: #f0f0f0;
+}
 
-  .navbar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
+.navbar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
-  .nav-item {
-    margin-bottom: 10px;
-  }
+.nav-item {
+  margin-bottom: 12px;
+}
 
-  .nav-link {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    text-decoration: none;
-    color: #cbd5e0;
-    transition: background-color 0.3s ease; 
-  }
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: #cbd5e0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  width: 99%;
+}
 
-  .nav-link:hover {
-    background-color:  #1a3347; 
-  }
+.nav-link:hover {
+  background-color:#257ea1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+}
 
-  .nav-link i {
-    margin-right: 15px;
-    font-size: 1em;
-  }
+.nav-link i {
+  margin-right: 12px;
+  font-size: 1.1em;
+}
 
-  .link-text {
-    font-size: 0.9em;
-  }
+.link-text {
+  font-size: 0.9em;
+}
 
-  .nav-link.active {
-    background-color: #4a5568; /* Color para el enlace activo */
-    color: #fff;
-    font-weight: bold;
-  }
+.nav-link.active {
+  background-color: #257ea1;
+  color: #ffffff;
+  font-weight: bold;
+  border-left: 4px solid #5d98d9;
+}

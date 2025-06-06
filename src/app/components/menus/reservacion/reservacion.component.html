@@ -14,9 +14,20 @@
         <app-card>
             <ng-template #body>
                 <div class="box">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod hic tempore at architecto ducimus
-                    quam, perferendis sunt ratione ab earum nam nostrum doloremque. Sed, culpa autem ipsam incidunt
-                    facilis corrupti.
+                    @if (reservaPorVencer.length > 0) {
+                        <div>
+                            <p>⚠️ Las siguientes reservas tienen fecha de viaje en menos de 10 días:  </p>
+                            <ul  class="alerta-vencimiento">
+                              <li *ngFor="let reserva of reservaPorVencer">
+                      
+                                {{ reserva.fechaReserva }} - {{ reserva.fechaViaje }}
+                              </li>
+                            </ul>
+                          </div>
+                    }@else {
+                        <p> Mantente al dia con tus pagos y reservaciones  </p>                      
+                    }
+               
                 </div>
             </ng-template>
 

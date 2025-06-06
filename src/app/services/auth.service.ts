@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { interval, Observable, Subscription } from 'rxjs';
-import { LoginRequest, RegistroRequest, Usuario } from '../interfaces/loginRequest';
+import { LoginData, LoginRequest, RegistroRequest, Usuario } from '../interfaces/loginRequest';
 const SECRET_KEY = 'tu_clave_secreta';
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class AuthService {
     return this.http.post<Usuario>(`${this.apiUrl}/registro`, userData);
   }
 
-  login(credentials: LoginRequest): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.apiUrl}/login`, credentials);
+  login(credentials: LoginRequest): Observable<LoginData> {
+    return this.http.post<LoginData>(`${this.apiUrl}/login`, credentials);
   }
 
   recoveryPassword(correo: string): Observable<any> {
@@ -92,7 +92,6 @@ export class AuthService {
   obtenerUsuario(): any {
     const encrypted = sessionStorage.getItem('usuario');
     if (!encrypted) return null;
-
     const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);
     return JSON.parse(decrypted);
