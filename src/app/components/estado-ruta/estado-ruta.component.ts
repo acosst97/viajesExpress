@@ -45,7 +45,7 @@ export class EstadoRutaComponent {
   estadoSelected    :       Estados;
   listEstado        :       Estados[];
   estadoOption      :       selectOptions[]=[]
-  estadoOptionRegis: selectOptions[] = [
+  estadoOptionRegis :       selectOptions[] = [
   { id: 1, text: 'ACTIVO' },
   { id: 2, text: 'INACTIVO' },
   { id: 3, text: "PENDIENTE" },
@@ -175,8 +175,10 @@ export class EstadoRutaComponent {
       this.loadingData.update(() => true);
       const idEstado = this.estadoSelected.idEstado
       const formValues = this.formValidation.getRawValue();
+     const nombreEstado = this.optionSelected.text;
       const object = {
         idEstado,
+        nombreEstado,
         ...formValues
       }
       console.log('envio cuerpo solcitud', object);
@@ -187,7 +189,6 @@ export class EstadoRutaComponent {
             type: 'success-white',
             duration: 2000,
           });
-          
         },
         error: (error) => {
           console.error('error de servicio', error);

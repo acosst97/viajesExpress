@@ -127,7 +127,7 @@
             }
           </div>
           <div>
-            <label for="correo">primer Apellido:</label>
+            <label for="correo">Correo Eletronico(desabilitado):</label>
             <input class="form-input" type="text" id="correo" formControlName="correo">
             @for (validation of getValidatorError('correo'); track $index) {
             <div class="warning" [ngClass]="{ 'green': validation.valid }">

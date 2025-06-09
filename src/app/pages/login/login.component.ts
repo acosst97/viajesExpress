@@ -51,6 +51,8 @@ export class LoginComponent {
     private router: Router
   ) {}
   ngOnInit(): void {
+    this.authService.clearToken();
+    this.authService.cerrarSesion();
     this.registroForm = this.formSrv.formRegistreUser();
     this.loginForm = new FormGroup({
       correoElectronico: new FormControl('', [

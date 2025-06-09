@@ -642,7 +642,15 @@ progress {
   margin-right: auto;
   margin-left: auto;
 }
-
+.container .icon{
+      width: 34px;
+      height: 30px;
+      background-image: url("/assets/icons/logoExpress.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin-left: 50%;
+    
+}
 @media (min-width: 576px) {
   .container-sm, .container {
     max-width: 540px;
@@ -10948,7 +10956,7 @@ header.masthead {
   padding-bottom: 6rem;
   text-align: center;
   color: #ebdc63;;
-  background-image: url("/assets/img/header.png");
+  background-image: url("/assets/img/logoExpress-removebg.png");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;

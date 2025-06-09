@@ -14,7 +14,9 @@ export class HeaderComponent {
   constructor(private router: Router,private authSrv:AuthService) { }
    usuario:LoginData;
   logout() {
-    localStorage.removeItem('token'); 
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    sessionStorage.removeItem('token');
     this.router.navigate(['/home']);
     this.authSrv.cerrarSesion();
   }

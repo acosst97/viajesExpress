@@ -59,11 +59,9 @@
             <form [formGroup]="formValidation" (ngSubmit)="onSubmitEdit()">
                 <div>
                     <label for="nombreEstado">Nombre del estado</label>
-                    <input class="form-input" type="text" id="nombreEstado" formControlName="nombreEstado">
-                    @for (validation of getValidatorErrors('nombreEstado'); track $index) {
-                    <div class="warning" [ngClass]="{ 'green': validation.valid }">
-                        {{ validation.message }}
-                    </div>
+                    <app-select #OptionEstado [options]="estadoOptionRegis" (optionSelected)="onSelelec($event)"></app-select>
+                    @if (!OptionEstado.selectOption ) {
+                        <div class="warning">por favor selecciona un estado</div>
                     }
                 </div>
                 <div>

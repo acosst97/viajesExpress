@@ -23,6 +23,7 @@ import { CardComponent } from '../card/card.component';
 import { FormvalidationService } from '../../services/formvalidation.service';
 import { selectOptions } from '../../interfaces/usuarios';
 import { SelectComponent } from "../select/select.component";
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -58,11 +59,14 @@ export class HomeComponent {
     private formSrv: FormvalidationService,
     private srv: SrvGenericosService,
     private router: Router,
-    private customSrv: CustomSrvService
+    private customSrv: CustomSrvService,
+     private authSrv: AuthService
   ) {}
 
   ngOnInit(): void {
     this.optioRutas = [];
+    this.authSrv.clearToken();
+    this.authSrv.cerrarSesion();
     this.reservacionForm = this.formSrv.initFormReservas();
     this.cargarServicios();
     this.getListRutas();

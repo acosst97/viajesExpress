@@ -205,9 +205,9 @@ fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
     return this.fb.group({
       capacidad: ['', [
         Validators.required,
-        Validators.pattern(/^[0-9]+$/), // Capacidad debería ser solo números
+        Validators.pattern(/^[0-9]+$/), 
         Validators.min(1),
-        Validators.max(100) // Ejemplo de rango
+        Validators.max(100) 
       ]],
       documentacion: ['', [
         Validators.required,
@@ -225,7 +225,7 @@ fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
       seguroVig: ['', [
         Validators.required,
         // Validators.pattern(/^\d{2}\/\d{2}\/\d{4}$/), // Formato dd/mm/aaaa
-        // Aquí podrías agregar un validador personalizado para fechas futuras si lo necesitas
+     // validador personalizado 
       ]],
       modelo: ['', [
         Validators.required,
