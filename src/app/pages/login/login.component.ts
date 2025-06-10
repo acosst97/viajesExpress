@@ -101,7 +101,6 @@ export class LoginComponent {
               this.customSrv.showToast({ text: mensaje, type: 'error-white', duration: 2000 });
               console.error('Error en el login', error);
               this.loadingData.update(() => false);
-
             },
             complete: async () => {
               this.customSrv.showToast({ text: 'Redirigiendo...', type: 'success-white', duration: 2000 })
@@ -109,7 +108,6 @@ export class LoginComponent {
               this.loadingData.update(()=>false);
             },
           }
-        
         );
     } else {
       this.customSrv.showToast({ text: 'Valida la información', type: 'error-white', duration: 2000 })

@@ -1,123 +1,122 @@
 #recovery-password {
-    .modal {
-        align-items: center;
-        background-color: gainsboro;
-        display: flex;
-        font-family: Arial, Helvetica, sans-serif;
-        justify-content: center;
-        left: 0;
-        bottom: 0;
-        position: fixed;
-        right: 0;
-        top: 0;
-        z-index: 2;
+  .modal {
+    align-items: center;
+    background-color: gainsboro;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    left: 0;
+    bottom: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 2;
 
-        .warning {
-            color: red;
-        }
-
-        .green {
-            color: green;
-        }
-
-        .blue-label {
-            color: rgb(20, 20, 55);
-            font-size: 0.875em;
-        }
-
-        .modal-cont {
-            overflow: auto;
-            background-color: #fff;
-            gap: 3%;
-            border-radius: 16px;
-            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1490196078);
-            display: flex;
-            height: 81vh;
-            min-height: 588px;
-            min-width: 454px;
-            padding: 2% 5%;
-            width: 34vw;
-            flex-direction: column;
-            justify-content: space-around;
-
-            .title {
-                .icon {
-
-                    height: 94px;
-                    margin: auto;
-                    width: 106px;
-                }
-
-                p {
-                    font-weight: normal;
-                }
-            }
-
-            .cont {
-                display: grid;
-                gap: 10%;
-
-                .ohinput-pw {
-                    align-items: center;
-                    border-radius: 5px;
-                    border: 1px solid rgb(22, 22, 76);
-                    display: flex;
-                    height: 35px;
-                    justify-content: space-between;
-                    width: auto;
-
-                    .icon-lock {
-                        // background: url() no-repeat center / cover;
-                        height: 16px;
-                        margin: 8px 8px 8px 10px;
-                        width: 20px;
-                    }
-
-                    input[type="number"],
-                    input[type="text"],
-                    input[type="password"] {
-                        border: none;
-                        border-left: 1px solid rgb(20, 20, 55);
-                        height: 24px;
-                        padding: 0 8px;
-                        width: 100%;
-
-                        &:focus-visible {
-                            outline: none;
-                        }
-
-                        &::-ms-reveal {
-                            display: none;
-                        }
-                    }
-
-                    .icon-eye-opened {
-                        cursor: pointer;
-                        height: 16px;
-                        margin: 9px 8px 8px;
-                        transition: 0.3s;
-                        width: 22px;
-                    }
-
-
-                }
-            }
-
-
-        }
+    .warning {
+      color: red;
     }
+
+    .green {
+      color: green;
+    }
+
+    .blue-label {
+      color: rgb(20, 20, 55);
+      font-size: 0.875em;
+    }
+
+    .modal-cont {
+      overflow: auto;
+      background-color: #fff;
+      gap: 3%;
+      border-radius: 16px;
+      box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1490196078);
+      display: flex;
+      height: 81vh;
+      min-height: 588px;
+      min-width: 454px;
+      padding: 2% 5%;
+      width: 34vw;
+      flex-direction: column;
+      justify-content: space-around;
+
+      .title {
+        .icon {
+          height: 94px;
+          margin: auto;
+          width: 106px;
+        }
+
+        p {
+          font-weight: normal;
+        }
+      }
+
+      .cont {
+        display: grid;
+        gap: 10%;
+
+        .ohinput-pw {
+          align-items: center;
+          border-radius: 5px;
+          border: 1px solid rgb(22, 22, 76);
+          display: flex;
+          height: 35px;
+          justify-content: space-between;
+          width: auto;
+
+          .icon-lock {
+            background-image: url("/assets/icons/eye.svg");
+            background-size: contain;
+            background-repeat: no-repeat;
+            height: 16px;
+            margin: 8px 8px 8px 10px;
+            width: 20px;
+          }
+
+          input[type="number"],
+          input[type="text"],
+          input[type="password"] {
+            border: none;
+            border-left: 1px solid rgb(20, 20, 55);
+            height: 24px;
+            padding: 0 8px;
+            width: 100%;
+
+            &:focus-visible {
+              outline: none;
+            }
+
+            &::-ms-reveal {
+              display: none;
+            }
+          }
+
+          .icon-eye-opened {
+            cursor: pointer;
+            height: 16px;
+            margin: 9px 8px 8px;
+            transition: 0.3s;
+            width: 22px;
+          }
+        }
+      }
+    }
+  }
 }
 
 .gif {
-    background: black url(http://superstorefinder.net/support/wp-content/uploads/2018/01/blue_loading.gif) no-repeat center / 100px;
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    opacity: 0.4;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: black
+    url(http://superstorefinder.net/support/wp-content/uploads/2018/01/blue_loading.gif)
+    no-repeat center / 100px;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.4;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

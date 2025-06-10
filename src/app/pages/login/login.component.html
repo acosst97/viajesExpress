@@ -57,12 +57,11 @@
         <div class="input-label">
           <p class="blue-label">Correo Electrónico</p>
           <input [formControl]="email" class="ohinput" type="email" placeholder="correoelectrónico@empresa.com.co" fo>
-
         </div>
         <p>Sigue los pasos que encontrarás allí para reestablecer tu contraseña</p>
         <!-- (click)="showModal('confirm-recovery-password')" -->
         <button class="btn btn-primary btn-block btn-large" (click)="generateEmail(this.email)">Confirmar</button>
-        <button class="btn btn-primary btn-block btn-large">validar contraseña</button>
+        <!-- <button class="btn btn-primary btn-block btn-large">validar contraseña</button> -->
         <!-- <p>No recibí ningún correo,Reenviar Mensaje</p> -->
       </div>
     </app-modal>

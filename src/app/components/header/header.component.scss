@@ -45,6 +45,7 @@
     gap: 10px;
     font-weight: bold;
     color: #333;
+    cursor: pointer;
   }
   
   .avatar {
@@ -59,4 +60,86 @@
     font-size: 2em;
     color: #5d98d9;
     margin-right: 15px;
+  }
+#password-recovery-modal {
+	width: 100vw;
+	display: flex;
+	justify-content: space-evenly;
+	margin: -70px 27px 11px -9px;
+
+	.modal-cont {
+		align-content: space-evenly;
+		display: grid;
+		gap: 16px;
+		height: 519px;
+		justify-items: center;
+		line-height: 28px;
+		padding: 60px 52px 28px;
+		text-align: center;
+		width: 504px;
+
+		.icon {
+
+			height: 32px;
+			width: 32px;
+		}
+
+		h3 {
+			font-size: 1.25em;
+		}
+
+		.icon-eye-opened {
+			cursor: pointer;
+			height: 16px;
+			margin: 9px 8px 8px;
+			transition: 0.3s;
+			width: 22px;
+			.icon{
+				width: 24px;
+				height: 24px;
+				background-image: url("/assets/icons/eye.svg");
+				background-size: contain;
+				background-repeat: no-repeat;	
+			}
+		}
+		.input-label {
+
+			.blue-label {
+				color: rgb(75, 75, 137);
+				font-size: 0.875em;
+				text-align: left;
+			}
+
+			.ohinput {
+				width: 300px;
+			}
+		}
+
+		p:last-of-type {
+			color: rgb(62, 70, 162);
+			cursor: pointer;
+
+			&:hover {
+				color: rgb(25, 36, 69)
+			}
+		}
+	}
+}
+
+  #profile{
+    .modal-cont{
+      padding: 45px;
+      height: 250px;
+      width: 350px;
+      .table{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        p{
+          text-align: end;
+        }
+        b{
+          text-align: start;
+        }
+      }
+    }
   }

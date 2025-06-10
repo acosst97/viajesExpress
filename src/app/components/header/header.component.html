@@ -8,15 +8,54 @@
   </div>
 
   <div style="display: flex; align-items: center; gap: 15px;">
-    <div class="user-info">
+    <div class="user-info" (click)="openProfile()">
       <img src="/assets/icons/avatar.svg" alt="Usuario" class="avatar" />
       @if (usuario) {
-        <span>{{ usuario.primerNombre + " " + usuario.primerApellido }}</span>
+      <span>{{ usuario.primerNombre + " " + usuario.primerApellido }}</span>
       }
-   
+
     </div>
     <button (click)="logout()" class="logout-button">
       <i class="fa fa-sign-out-alt"></i> Cerrar Sesión
     </button>
   </div>
 </div>
+
+<app-modal #Profile id="profile">
+  <div class="modal-cont">
+    <div class="table">
+      @if (usuario) {
+      <b>Nombre</b>
+      <p>{{usuario.primerNombre + ' ' + usuario.primerApellido}}</p>
+      <b>Correo</b>
+      <p>{{usuario.correo}}</p>
+      }
+    </div>
+    <div>
+      <P>Deseas cambiar tu Contraseña ?</P>
+      <button class="btn btn-info" (click)="openRecovery()">recuperar</button>
+    </div>
+  </div>
+</app-modal>
+<app-modal #RecoveryModal id="password-recovery-modal">
+  <div class="modal-cont">
+    <div class="icon"></div>
+    <h3>Olvidaste tu Contraseña</h3>
+    <p>Enviaremos un link de recuperación<br> a tu Correo Electrónico registrado:</p>
+    <div class="input-label">
+      <p class="blue-label">Correo Electrónico</p>
+      <input [formControl]="email" class="ohinput" type="email" placeholder="correoelectrónico@empresa.com.co" fo>
+
+    </div>
+    <p>Sigue los pasos que encontrarás allí para reestablecer tu contraseña</p>
+    <!-- (click)="showModal('confirm-recovery-password')" -->
+    <button class="btn btn-primary btn-block btn-large" (click)="generateEmail(this.email)">Confirmar</button>
+    @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" alt="loading icon" />
+                  </div>
+                }
+              @if (this.loadingData()===false) {}
+    <!-- <p>No recibí ningún correo,Reenviar Mensaje</p> -->
+  </div>
+</app-modal>

@@ -1,4 +1,9 @@
 <!-- *Modal Recovery password -->
+@if (showResponseModal) {
+<div class="popup-alert">
+  <app-alert></app-alert>
+</div>
+}
 
 <!--*Modal Recovery password  Confirmacion-->
 <div id="recovery-password">
@@ -18,7 +23,7 @@
                         <input formControlName="recoveryKey" type="{{newPasswordView ?'text':'password'}}" name=""
                             placeholder="***********" (copy)="disableCopy($event)" (paste)="disablePaste($event)"
                             (contextmenu)="disableContextMenu($event)">
-                        <div class="{{newPasswordView ?'icon-eye-opened':'icon-eye-closed'}}"
+                        <div class="{{newPasswordView ?'icon-lock':'icon-lock'}}"
                             (click)="showHideNewPassword()"></div>
                     </div>
                     <div *ngFor="let validation of getErrorRecoveryPassword('recoveryKey')">
@@ -28,13 +33,13 @@
                     </div>
                 </div>
                 <div>
-                    <p class="blue-label">Token</p>
+                    <p class="blue-label">Confirmar Contraseña</p>
                     <div class="ohinput-pw">
                         <div class="icon-lock"></div>
                         <input formControlName="recoveryconfirm" type="{{repeatPasswordView ?'text':'password'}}"
                             placeholder="***********" (copy)="disableCopy($event)" (paste)="disablePaste($event)"
                             (contextmenu)="disableContextMenu($event)">
-                        <div class="{{repeatPasswordView ?'icon-eye-opened':'icon-eye-closed'}}"
+                        <div class="{{repeatPasswordView ?'icon-lock':'icon-lock'}}"
                             (click)="showHideRepeatPassword()"></div>
                     </div>
                     @if (validRecoveryForm.hasError('noCoincide')) {
@@ -49,12 +54,11 @@
                         La contraseña debe contener:<br>
                         Mínimo 8 caracteres<br>
                         Al menos una mayúscula<br>
-                        Un carácter especial #$%&
                     </p>
                 </div>
             </form>
-            <div class="align-btn">
-                <button [disabled]="loadingData()" class="btn-general" (click)="onSubmitRecoveryConfirm()">
+            <div class="align-btn" style="margin-top: 12px;">
+                <button [disabled]="loadingData()" class="btn btn-success" (click)="onSubmitRecoveryConfirm()">
                     Cambiar contraseña
                 </button>
                 @if (loadingData()) {

@@ -5,11 +5,12 @@ import { FormvalidationService } from '../../services/formvalidation.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomSrvService } from '../../services/custom-srv.service';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-recovery',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule,AlertComponent],
   templateUrl: './recovery.component.html',
   styleUrl: './recovery.component.scss'
 })
@@ -63,18 +64,32 @@ export class RecoveryComponent {
   //   //************** Servicio  confirmacion Recovery Pássword  **********               //                                                                                   
   //-------------------------------------------------------------------------------------- //
   async recoveryPasswordConfirm() {
+      this.loadingData.update(() => true);
     const password = this.validRecoveryForm.get('recoveryKey').value;
-  
     try {
-      const response: string = await this.authSrv.restablecerContrasena(this.token, password).toPromise();
-      this.customSrv.showToast({ text: response, type: 'success-white', duration: 2000 });
-      console.log('Contraseña restablecida con éxito', response);
-      alert(response);
-      this.router.navigate(['/login']);
-  
+     this.authSrv.restablecerContrasena(this.token, password).subscribe({
+      next: async(res) => {
+          console.log('response email', res);
+           this.customSrv.showToast({ text: 'Contraseña Actualizada correctamente', type: 'success-white', duration: 2000 });
+           await new Promise(resolve=>setTimeout(resolve,1500));
+          this.router.navigate(['/login']);
+        },
+        error:(error) => {
+             const mensaje = error?.error.mensaje || 'Error en la consulta';
+           console.log('response recovery',error);
+          this.loadingData.update(() => false);
+           this.customSrv.showToast({ text: mensaje, type: 'error-white', duration: 2000 });
+        },
+        complete: async () => {
+          await new Promise(resolve=>setTimeout(resolve,1500));
+          this.loadingData.update(() => false);
+        },
+      });
     } catch (error) {
+            this.customSrv.showToast({ text: "Error en la solicitud", type: 'error-white', duration: 2000 });
       console.error('Error al restablecer la contraseña', error);
       alert('Ocurrió un error. Intenta de nuevo más tarde');
+      this.loadingData.update(() => false);
     }
   }
   //NOTE Validacion Formulario Recovery
