@@ -48,24 +48,28 @@
 
     </div>
   </div>
-  <div id="password-recovery-modal">
-    <app-modal #RecoveryModal>
-      <div class="modal-cont">
-        <div class="icon"></div>
-        <h3>Olvidaste tu Contraseña</h3>
-        <p>Enviaremos un link de recuperación<br> a tu Correo Electrónico registrado:</p>
-        <div class="input-label">
-          <p class="blue-label">Correo Electrónico</p>
-          <input [formControl]="email" class="ohinput" type="email" placeholder="correoelectrónico@empresa.com.co" fo>
-        </div>
-        <p>Sigue los pasos que encontrarás allí para reestablecer tu contraseña</p>
-        <!-- (click)="showModal('confirm-recovery-password')" -->
-        <button class="btn btn-primary btn-block btn-large" (click)="generateEmail(this.email)">Confirmar</button>
-        <!-- <button class="btn btn-primary btn-block btn-large">validar contraseña</button> -->
-        <!-- <p>No recibí ningún correo,Reenviar Mensaje</p> -->
-      </div>
-    </app-modal>
+ <app-modal #RecoveryModal id="password-recovery-modal">
+  <div class="modal-cont">
+    <div class="icon"></div>
+    <h3>Olvidaste tu Contraseña</h3>
+    <p>Enviaremos un link de recuperación<br> a tu Correo Electrónico registrado:</p>
+    <div class="input-label">
+      <p class="blue-label">Correo Electrónico</p>
+      <input [formControl]="email" class="ohinput" type="email" placeholder="correoelectrónico@empresa.com.co" fo>
+
+    </div>
+    <p>Sigue los pasos que encontrarás allí para reestablecer tu contraseña</p>
+    <!-- (click)="showModal('confirm-recovery-password')" -->
+    <button class="btn btn-primary btn-block btn-large" (click)="generateEmail(this.email)">Confirmar</button>
+    @if (this.loadingData()) {
+                <div class="global-loader-backdrop">
+                    <img src="/assets/icons/loading.svg" class="rotate-icon" alt="loading icon" />
+                  </div>
+                }
+              @if (this.loadingData()===false) {}
+    <!-- <p>No recibí ningún correo,Reenviar Mensaje</p> -->
   </div>
+</app-modal>
 </section>
   <app-modal #AbriModal id="registre" [idDefault]="1">
     <div class="modal-cont">

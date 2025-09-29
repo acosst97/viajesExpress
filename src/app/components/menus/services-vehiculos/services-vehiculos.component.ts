@@ -121,7 +121,7 @@ openRegister() {
         console.log("res registro Servicio",res)
        this.cargarServicios(); 
        await new Promise(resolve=>setTimeout(resolve,2000));
-       this.abriModalRegister.showModal = false;
+   
        this.loadingData.update(()=>false);
        this.selectedImageBase64 = null;
       },
@@ -130,11 +130,13 @@ openRegister() {
         this.customSrv.showToast({ text: 'fallo la Solicitud', type: 'error-white', duration: 2000 })
         this.loadingData.update(()=>false);
       },
-      complete:()=> {
+      complete:async()=> {
+        await new Promise(resolve=>setTimeout(resolve,1500));
         this.formValidation.reset();
         this.loadingData.update(()=>false)
         this.formSubmitted = false;
         this.selectedImageBase64 = null;
+        this.abriModalRegister.showModal = false;
       }
     });
   } catch (error) {

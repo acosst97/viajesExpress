@@ -158,26 +158,32 @@ export class LoginComponent {
    
   }
 
-  generateEmail(emailControl: FormControl) {
-    console.log('emaio', emailControl.value);
-    if (emailControl.valid) {
-      this.authService
-        .recoveryPassword(emailControl.value)
-        .pipe(
-          tap((response) => {
-            console.log('Correo enviado exitosamente', response);
-          }),
-          catchError((error) => {
-            console.error('Error al solicitar recuperación', error);
-
-            return of(null);
-          })
-        )
-        .subscribe();
-    } else {
-      console.log('El correo electrónico no es válido.');
-    }
-  }
+   generateEmail(emailControl: FormControl) {
+     this.loadingData.update(() => true);
+     console.log('email', emailControl.value);
+     if (emailControl.valid) {
+       this.authService.recoveryPassword(emailControl.value).subscribe({
+         next: (res) => {
+           console.log('response email', res);
+              this.customSrv.showToast({ text: 'Se ha enviado un enlace a tu correo electrónico', type: 'success-white', duration: 2000 });
+         },
+         error:(error) => {
+           const mensaje = error?.error.mensaje || 'Error en la consulta';
+            console.log('response email',error);
+           this.loadingData.update(() => false);
+            this.customSrv.showToast({ text: mensaje, type: 'error-white', duration: 2000 });
+         },
+         complete: async () => {
+           await new Promise(resolve=>setTimeout(resolve,1500));
+           this.loadingData.update(() => false);
+           this.recoveryModal.showModal = false;
+         },
+       });
+     } else {
+       console.log('El correo electrónico no es válido.');
+       this.customSrv.showToast({ text: 'campo Invalido', type: 'error-white', duration: 2000 });
+     }
+   }
   openRecovery() {
     this.recoveryModal.showModal = true;
   }
