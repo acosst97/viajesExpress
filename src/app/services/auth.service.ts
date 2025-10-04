@@ -5,14 +5,17 @@ import * as CryptoJS from 'crypto-js';
 import { interval, Observable, Subscription } from 'rxjs';
 import { LoginData, LoginRequest, RegistroRequest, Usuario } from '../interfaces/loginRequest';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environments';
+
+
 const SECRET_KEY = 'tu_clave_secreta';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/usuarios';
-  private urlAuth = 'http://localhost:8080/auth';
+ private apiUrl = `${environment.apiBaseUrl}/usuarios`; 
+  private urlAuth = `${environment.apiBaseUrl}/auth`;
   protected isBrowser: boolean;
 
   registrarUsuario(userData: RegistroRequest): Observable<Usuario> {

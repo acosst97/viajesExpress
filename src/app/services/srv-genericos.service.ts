@@ -12,7 +12,6 @@ import {
 } from '../interfaces/serviciosVehiculos';
 import {
   CrearReservacion,
-  ListarReservaciones,
 } from '../interfaces/reservaciones';
 import {
   DesasociateRol,

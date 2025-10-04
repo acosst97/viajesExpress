@@ -342,7 +342,7 @@ fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
     }
     if (validationErrors.length > 0) {
       return validationErrors;
-    } 
+    }  
  
     else if (control?.valid && (formSubmitted || control?.touched || control?.dirty)) {
       return [{ message: 'Campo válido', valid: true }];

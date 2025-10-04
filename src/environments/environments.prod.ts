@@ -1,4 +1,4 @@
-export const environment = {
+export const Environment = {
     production: true,
-    apiBaseUrl: 'https://api.midominio.com'  // dominio real en producción
+    apiBaseUrl: 'https://modest-vibrancy-production.up.railway.app'
 };
