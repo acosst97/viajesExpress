@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:viajesExpress": "node dist/viajes-express/server/server.mjs",
-    "start": "node dist/demo-angular/server/server.mjs"
+    "start": "node dist/viajes-express/server/server.mjs" 
   },
   "private": true,
   "dependencies": {
